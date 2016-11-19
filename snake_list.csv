@@ -2,7 +2,9 @@ id,species,url,raster_path
 1,Acanthophis_antarcticus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_antarcticus.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_antarcticus.tif
 2,Acanthophis_laevis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_laevis.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_laevis.tif
 3,Acanthophis_rugosus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_rugosus.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_rugosus.tif
-4,Acanthophis_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_spp.tif
+4,Acanthophis_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_praelongus.tif
+4,Acanthophis_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_pyrrhus.tif
+4,Acanthophis_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_wellsi.tif
 5,Agkistrodon_bilineatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Agkistrodon_bilineatus.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Agkistrodon_bilineatus.tif
 6,Agkistrodon_contortrix,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Agkistrodon_contortrix.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Agkistrodon_contortrix.tif
 7,Agkistrodon_piscivorus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Agkistrodon_piscivorus.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Agkistrodon_piscivorus.tif
