@@ -6,11 +6,11 @@ require(utils)
 
 # get snakes (list of snakes species on WHO website, as csv)
 # list was compiled from copying source data
-snakes <- read.csv("Z:/users/joshua/Snakebite/snake_list.csv",
+snakes <- read.csv("Z:/users/joshua/Snakebite/snakebite/snake_list.csv",
                    stringsAsFactors = FALSE)
 
 # list spp
-species_list <- as.list(snakes$species)
+species_list <- as.list(unique(snakes$species))
 
 # loop through and grab pdfs from website
 for(i in 1:length(species_list)){
