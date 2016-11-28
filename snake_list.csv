@@ -43,10 +43,10 @@ id,species,url,raster_path
 32,Bothrocophias_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrocophias_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrocophias_campbolli.tif
 32,Bothrocophias_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrocophias_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrocophias_colombianus.tif
 32,Bothrocophias_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrocophias_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrocophias_myersi.tif
-33,Bothrops_alternatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_alternatus.pdf,
-34,Bothrops_ammodytoides,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_ammodytoides.pdf,
-35,Bothrops_asper,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_asper.pdf,
-36,Bothrops_atrox,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_atrox.pdf,
+33,Bothrops_alternatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_alternatus.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrops_alternatus.tif
+34,Bothrops_ammodytoides,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_ammodytoides.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrops_ammodytoides.tif
+35,Bothrops_asper,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_asper.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrops_asper.tif
+36,Bothrops_atrox,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_atrox.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrops_atrox.tif
 37,Bothrops_bilineatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_bilineatus.pdf,
 38,Bothrops_brazili,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_brazili.pdf,
 39,Bothrops_caribbaeus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_caribbaeus.pdf,
