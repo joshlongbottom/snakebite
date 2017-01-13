@@ -1,250 +1,250 @@
-id,species,url,raster_path
-1,Acanthophis_antarcticus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_antarcticus.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_antarcticus.tif
-2,Acanthophis_laevis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_laevis.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_laevis.tif
-3,Acanthophis_rugosus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_rugosus.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_rugosus.tif
-4,Acanthophis_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_praelongus.tif
-4,Acanthophis_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_pyrrhus.tif
-4,Acanthophis_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_wellsi.tif
-5,Agkistrodon_bilineatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Agkistrodon_bilineatus.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Agkistrodon_bilineatus.tif
-6,Agkistrodon_contortrix,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Agkistrodon_contortrix.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Agkistrodon_contortrix.tif
-7,Agkistrodon_piscivorus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Agkistrodon_piscivorus.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Agkistrodon_piscivorus.tif
-8,Agkistrodon_taylori,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Agkistrodon_taylori.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Agkistrodon_taylori.tif
-9,Atheris_broadleyi,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atheris_broadleyi.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Atheris_broadleyi.tif
-10,Atheris_chlorechis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atheris_chlorechis.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Atheris_chlorechis.tif
-11,Atheris_squamigera,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atheris_squamigera.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Atheris_squamigera.tif
-12,Atractaspis_andersonii,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atractaspis_andersonii.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Atractaspis_andersonii.tif
-13,Atractaspis_bibronii,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atractaspis_bibronii.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Atractaspis_bibronii.tif
-14,Atractaspis_engaddensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atractaspis_engaddensis.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Atractaspis_engaddensis.tif
-15,Atractaspis_fallax,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atractaspis_fallax.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Atractaspis_fallax.tif
-16,Atractaspis_irregularis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atractaspis_irregularis.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Atractaspis_irregularis.tif
-17,Atropoides_mexicanus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atropoides_mexicanus.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Atropoides_mexicanus.tif
-18,Atropoides_occidus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atropoides_occidus.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Atropoides_occidus.tif
-19,Atropoides_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atropoides_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Atropoides_indomitus.tif
-19,Atropoides_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atropoides_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Atropoides_nummifer.tif
-19,Atropoides_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atropoides_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Atropoides_olmec.tif
-19,Atropoides_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atropoides_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Atropoides_picadoi.tif
-20,Austrelaps_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Austrelaps_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Austrelaps_spp.tif
-21,Bitis_arietans,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bitis_arietans.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bitis_arietans.tif
-22,Bitis_gabonica,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bitis_gabonica.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bitis_gabonica.tif
-23,Bitis_nasicornis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bitis_nasicornis.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bitis_nasicornis.tif
-24,Bitis_parviocula,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bitis_parviocula.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bitis_parviocula.tif
-25,Bitis_rhinoceros,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bitis_rhinoceros.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bitis_rhinoceros.tif
-26,Bothriechis_lateralis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothriechis_lateralis.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothriechis_lateralis.tif
-27,Bothriechis_marchi,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothriechis_marchi.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothriechis_marchi.tif
-28,Bothriechis_schlegelii,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothriechis_schlegelii.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothriechis_schlegelii.tif
-29,Bothriechis_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothriechis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothriechis_bicolor.tif
-29,Bothriechis_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothriechis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothriechis_nigrovirdis.tif
-29,Bothriechis_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothriechis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothriechis_rowleyi.tif
-29,Bothriechis_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothriechis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothriechis_supracifiaris.tif
-29,Bothriechis_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothriechis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothriechis_surffer.tif
-29,Bothriechis_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothriechis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothriechis_thalassinus.tif
-30,Bothrocophias_hyoprora,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrocophias_hyoprora.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrocophias_hyoprora.tif
-31,Bothrocophias_microphthalmus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrocophias_microphthalmus.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrocophias_microphthalmus.tif
-32,Bothrocophias_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrocophias_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrocophias_campbolli.tif
-32,Bothrocophias_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrocophias_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrocophias_colombianus.tif
-32,Bothrocophias_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrocophias_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrocophias_myersi.tif
-33,Bothrops_alternatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_alternatus.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrops_alternatus.tif
-34,Bothrops_ammodytoides,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_ammodytoides.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrops_ammodytoides.tif
-35,Bothrops_asper,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_asper.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrops_asper.tif
-36,Bothrops_atrox,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_atrox.pdf,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrops_atrox.tif
-37,Bothrops_bilineatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_bilineatus.pdf,
-38,Bothrops_brazili,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_brazili.pdf,
-39,Bothrops_caribbaeus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_caribbaeus.pdf,
-40,Bothrops_cf_atrox,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_cf_atrox.pdf,
-41,Bothrops_diporus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_diporus.pdf,
-42,Bothrops_jararaca,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_jararaca.pdf,
-43,Bothrops_jararacussu,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_jararacussu.pdf,
-44,Bothrops_jonathani,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_jonathani.pdf,
-45,Bothrops_lanceolatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_lanceolatus.pdf,
-46,Bothrops_leucurus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_leucurus.pdf,
-47,Bothrops_mattogrossensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_mattogrossensis.pdf,
-48,Bothrops_moojeni,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_moojeni.pdf,
-49,Bothrops_neuwiedi,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_neuwiedi.pdf,
-50,Bothrops_pictus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_pictus.pdf,
-51,Bothrops_pubescens,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_pubescens.pdf,
-52,Bothrops_sanctaecrucis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_sanctaecrucis.pdf,
-53,Bothrops_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_spp.pdf,
-54,Bothrops_taeniatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_taeniatus.pdf,
-55,Bothrops_venezuelensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_venezuelensis.pdf,
-56,Bungarus_bungaroides,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_bungaroides.pdf,
-57,Bungarus_caeruleus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_caeruleus.pdf,
-58,Bungarus_candidus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_candidus.pdf,
-59,Bungarus_ceylonicus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_ceylonicus.pdf,
-60,Bungarus_fasciatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_fasciatus.pdf,
-61,Bungarus_flaviceps,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_flaviceps.pdf,
-62,Bungarus_lividus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_lividus.pdf,
-63,Bungarus_magnimaculatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_magnimaculatus.pdf,
-64,Bungarus_multicinctus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_multicinctus.pdf,
-65,Bungarus_niger,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_niger.pdf,
-66,Bungarus_sindanus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_sindanus.pdf,
-67,Bungarus_slowinskii,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_slowinskii.pdf,
-68,Bungarus_walli,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_walli.pdf,
-69,Calliophis_bivirgatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Calliophis_bivirgatus.pdf,
-70,Calliophis_intestinalis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Calliophis_intestinalis.pdf,
-71,Calloselasma_rhodostoma,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Calloselasma_rhodostoma.pdf,
-72,Cerastes_cerastes,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cerastes_cerastes.pdf,
-73,Cerastes_gasperettii,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cerastes_gasperettii.pdf,
-74,Cerrophidion_godmani,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cerrophidion_godmani.pdf,
-75,Cerrophidion_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cerrophidion_spp.pdf,
-76,Crotalus_adamanteus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_adamanteus.pdf,
-77,Crotalus_atrox,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_atrox.pdf,
-78,Crotalus_basiliscus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_basiliscus.pdf,
-79,Crotalus_durissus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_durissus.pdf,
-80,Crotalus_horridus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_horridus.pdf,
-81,Crotalus_molossus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_molossus.pdf,
-82,Crotalus_oreganus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_oreganus.pdf,
-83,Crotalus_ruber,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_ruber.pdf,
-84,Crotalus_scutulatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_scutulatus.pdf,
-85,Crotalus_simus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_simus.pdf,
-86,Crotalus_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_spp.pdf,
-87,Crotalus_totonacus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_totonacus.pdf,
-88,Crotalus_tzabcan,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_tzabcan.pdf,
-89,Crotalus_viridis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_viridis.pdf,
-90,Cryptelytrops_albolabris,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cryptelytrops_albolabris.pdf,
-91,Cryptelytrops_erythrurus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cryptelytrops_erythrurus.pdf,
-92,Cryptelytrops_insularis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cryptelytrops_insularis.pdf,
-93,Cryptelytrops_macrops,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cryptelytrops_macrops.pdf,
-94,Cryptelytrops_purpureomaculatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cryptelytrops_purpureomaculatus.pdf,
-95,Cryptelytrops_septentrionalis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cryptelytrops_septentrionalis.pdf,
-96,Daboia_deserti,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Daboia_deserti.pdf,
-97,Daboia_mauritanica,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Daboia_mauritanica.pdf,
-98,Daboia_palaestinae,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Daboia_palaestinae.pdf,
-99,Daboia_russelii,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Daboia_russelii.pdf,
-100,Daboia_siamensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Daboia_siamensis.pdf,
-101,Deinagkistrodon_acutus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Deinagkistrodon_acutus.pdf,
-102,Dendroaspis_angusticeps,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Dendroaspis_angusticeps.pdf,
-103,Dendroaspis_jamesoni,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Dendroaspis_jamesoni.pdf,
-104,Dendroaspis_polylepis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Dendroaspis_polylepis.pdf,
-105,Dendroaspis_viridis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Dendroaspis_viridis.pdf,
-106,Dispholidus_typus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Dispholidus_typus.pdf,
-107,Echis_borkini,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_borkini.pdf,
-108,Echis_carinatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_carinatus.pdf,
-109,Echis_coloratus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_coloratus.pdf,
-110,Echis_hughesi,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_hughesi.pdf,
-111,Echis_jogeri,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_jogeri.pdf,
-112,Echis_khosatzkii,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_khosatzkii.pdf,
-113,Echis_leucogaster,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_leucogaster.pdf,
-114,Echis_megalocephalus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_megalocephalus.pdf,
-115,Echis_ocellatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_ocellatus.pdf,
-116,Echis_omanensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_omanensis.pdf,
-117,Echis_pyramidum,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_pyramidum.pdf,
-118,Eristocophis_macmahoni,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Eristocophis_macmahoni.pdf,
-119,Gloydius_blomhoffi,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Gloydius_blomhoffi.pdf,
-120,Gloydius_brevicaudus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Gloydius_brevicaudus.pdf,
-121,Gloydius_halys,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Gloydius_halys.pdf,
-122,Gloydius_halys_caucasicus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Gloydius_halys_caucasicus.pdf,
-123,Gloydius_himalayanus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Gloydius_himalayanus.pdf,
-124,Gloydius_intermedius,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Gloydius_intermedius.pdf,
-125,Gloydius_tsushimaensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Gloydius_tsushimaensis.pdf,
-126,Gloydius_ussuriensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Gloydius_ussuriensis.pdf,
-127,Hemachatus_haemachatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Hemachatus_haemachatus.pdf,
-128,Himalayophis_tibetanus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Himalayophis_tibetanus.pdf,
-129,Hoplocephalus_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Hoplocephalus_spp.pdf,
-130,Hypnale_hypnale,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Hypnale_hypnale.pdf,
-131,Hypnale_nepa,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Hypnale_nepa.pdf,
-132,Lachesis_acrochorda,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Lachesis_acrochorda.pdf,
-133,Lachesis_melanocephala,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Lachesis_melanocephala.pdf,
-134,Lachesis_muta,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Lachesis_muta.pdf,
-135,Lachesis_stenophyrs,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Lachesis_stenophyrs.pdf,
-136,Macrovipera_lebetina,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Macrovipera_lebetina.pdf,
-137,Macrovipera_schweizeri,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Macrovipera_schweizeri.pdf,
-138,Micropechis_ikaheka,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micropechis_ikaheka.pdf,
-139,Micruroides_euryxanthus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micruroides_euryxanthus.pdf,
-140,Micrurus_circinalis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_circinalis.pdf,
-141,Micrurus_corallinus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_corallinus.pdf,
-142,Micrurus_fulvius,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_fulvius.pdf,
-143,Micrurus_lemniscatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_lemniscatus.pdf,
-144,Micrurus_mipartitus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_mipartitus.pdf,
-145,Micrurus_nigrocinctus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_nigrocinctus.pdf,
-146,Micrurus_spixii,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_spixii.pdf,
-147,Micrurus_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_spp.pdf,
-148,Micrurus_surinamensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_surinamensis.pdf,
-149,Micrurus_tener,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_tener.pdf,
-150,Montivipera_raddei,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Montivipera_raddei.pdf,
-151,Montivipera_xanthina,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Montivipera_xanthina.pdf,
-152,Naja_anchietae,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_anchietae.pdf,
-153,Naja_annulata,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_annulata.pdf,
-154,Naja_annulifera,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_annulifera.pdf,
-155,Naja_arabica,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_arabica.pdf,
-156,Naja_ashei,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_ashei.pdf,
-157,Naja_atra,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_atra.pdf,
-158,Naja_christyi,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_christyi.pdf,
-159,Naja_haje,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_haje.pdf,
-160,Naja_kaouthia,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_kaouthia.pdf,
-161,Naja_katiensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_katiensis.pdf,
-162,Naja_mandalayensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_mandalayensis.pdf,
-163,Naja_melanoleuca,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_melanoleuca.pdf,
-164,Naja_mossambica,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_mossambica.pdf,
-165,Naja_naja,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_naja.pdf,
-166,Naja_nigricincta,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_nigricincta.pdf,
-167,Naja_nigricollis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_nigricollis.pdf,
-168,Naja_nivea,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_nivea.pdf,
-169,Naja_nubiae,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_nubiae.pdf,
-170,Naja_oxiana,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_oxiana.pdf,
-171,Naja_pallida,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_pallida.pdf,
-172,Naja_philippinensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_philippinensis.pdf,
-173,Naja_sagittifera,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_sagittifera.pdf,
-174,Naja_samarensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_samarensis.pdf,
-175,Naja_senegalensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_senegalensis.pdf,
-176,Naja_siamensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_siamensis.pdf,
-177,Naja_sputatrix,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_sputatrix.pdf,
-178,Naja_sumatrana,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_sumatrana.pdf,
-179,Notechis_scutatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Notechis_scutatus.pdf,
-180,Ophiophagus_hannah,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Ophiophagus_hannah.pdf,
-181,Ophryacus_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Ophryacus_spp.pdf,
-182,Oxyuranus_microlepidotus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Oxyuranus_microlepidotus.pdf,
-183,Oxyuranus_scutellatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Oxyuranus_scutellatus.pdf,
-184,Oxyuranus_temporalis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Oxyuranus_temporalis.pdf,
-185,Parias_flavomaculatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Parias_flavomaculatus.pdf,
-186,Parias_sumatranus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Parias_sumatranus.pdf,
-187,Porthidium_lansbergii,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Porthidium_lansbergii.pdf,
-188,Porthidium_nasutum,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Porthidium_nasutum.pdf,
-189,Porthidium_ophryomegas,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Porthidium_ophryomegas.pdf,
-190,Porthidium_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Porthidium_spp.pdf,
-191,Proatheris_superciliaris,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Proatheris_superciliaris.pdf,
-192,Protobothrops_elegans,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Protobothrops_elegans.pdf,
-193,Protobothrops_flavoviridis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Protobothrops_flavoviridis.pdf,
-194,Protobothrops_jerdonii,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Protobothrops_jerdonii.pdf,
-195,Protobothrops_kaulbacki,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Protobothrops_kaulbacki.pdf,
-196,Protobothrops_mangshanensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Protobothrops_mangshanensis.pdf,
-197,Protobothrops_mucrosquamatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Protobothrops_mucrosquamatus.pdf,
-198,Pseudechis_australis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudechis_australis.pdf,
-199,Pseudechis_papuanus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudechis_papuanus.pdf,
-200,Pseudechis_rossignolii,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudechis_rossignolii.pdf,
-201,Pseudechis_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudechis_spp.pdf,
-202,Pseudocerastes_fieldi,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudocerastes_fieldi.pdf,
-203,Pseudocerastes_persicus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudocerastes_persicus.pdf,
-204,Pseudohaje_goldii,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudohaje_goldii.pdf,
-205,Pseudohaje_nigra,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudohaje_nigra.pdf,
-206,Pseudonaja_affinis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudonaja_affinis.pdf,
-207,Pseudonaja_aspidorhyncha,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudonaja_aspidorhyncha.pdf,
-208,Pseudonaja_mengdeni,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudonaja_mengdeni.pdf,
-209,Pseudonaja_nuchalis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudonaja_nuchalis.pdf,
-210,Pseudonaja_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudonaja_spp.pdf,
-211,Pseudonaja_textilis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudonaja_textilis.pdf,
-212,Rhabdophis_tigrinus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Rhabdophis_tigrinus.pdf,
-213,Sistrurus_catenatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Sistrurus_catenatus.pdf,
-214,Sistrurus_miliarius,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Sistrurus_miliarius.pdf,
-215,Thelotornis_capensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Thelotornis_capensis.pdf,
-216,Thelotornis_kirtlandii,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Thelotornis_kirtlandii.pdf,
-217,Thelotornis_mossambicanus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Thelotornis_mossambicanus.pdf,
-218,Thelotornis_usambaricus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Thelotornis_usambaricus.pdf,
-219,Trimeresurus_gramineus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Trimeresurus_gramineus.pdf,
-220,Trimeresurus_malabaricus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Trimeresurus_malabaricus.pdf,
-221,Trimeresurus_trigonocephalus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Trimeresurus_trigonocephalus.pdf,
-222,Tropidechis_carinatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Tropidechis_carinatus.pdf,
-223,Tropidolaemus_philippensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Tropidolaemus_philippensis.pdf,
-224,Tropidolaemus_subannulatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Tropidolaemus_subannulatus.pdf,
-225,Vipera_ammodytes,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_ammodytes.pdf,
-226,Vipera_aspis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_aspis.pdf,
-227,Vipera_berus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_berus.pdf,
-228,Vipera_eriwanensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_eriwanensis.pdf,
-229,Vipera_latastei,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_latastei.pdf,
-230,Vipera_nikolskii,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_nikolskii.pdf,
-231,Vipera_renardi,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_renardi.pdf,
-232,Vipera_seoanei,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_seoanei.pdf,
-233,Vipera_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_spp.pdf,
-234,Vipera_ursinii,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_ursinii.pdf,
-235,Viridovipera_stejnegeri,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Viridovipera_stejnegeri.pdf,
-236,Walterinnesia_aegyptia,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Walterinnesia_aegyptia.pdf,
-237,Walterinnesia_morgani,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Walterinnesia_morgani.pdf,
+id,species,split_spp,url,shapefile_path,raster_path
+1,Acanthophis_antarcticus,Acanthophis_antarcticus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_antarcticus.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Acanthophis_antarcticus.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_antarcticus.tif
+2,Acanthophis_laevis,Acanthophis_laevis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_laevis.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Acanthophis_laevis.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_laevis.tif
+3,Acanthophis_rugosus,Acanthophis_rugosus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_rugosus.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Acanthophis_rugosus.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_rugosus.tif
+4,Acanthophis_spp,Acanthophis_praelongus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Acanthophis_praelongus.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_praelongus.tif
+4,Acanthophis_spp,Acanthophis_pyrrhus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Acanthophis_pyrrhus.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_pyrrhus.tif
+4,Acanthophis_spp,Acanthophis_wellsi,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Acanthophis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Acanthophis_wellsi.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Acanthophis_wellsi.tif
+5,Agkistrodon_bilineatus,Agkistrodon_bilineatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Agkistrodon_bilineatus.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Agkistrodon_bilineatus.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Agkistrodon_bilineatus.tif
+6,Agkistrodon_contortrix,Agkistrodon_contortrix,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Agkistrodon_contortrix.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Agkistrodon_contortrix.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Agkistrodon_contortrix.tif
+7,Agkistrodon_piscivorus,Agkistrodon_piscivorus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Agkistrodon_piscivorus.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Agkistrodon_piscivorus.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Agkistrodon_piscivorus.tif
+8,Agkistrodon_taylori,Agkistrodon_taylori,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Agkistrodon_taylori.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Agkistrodon_taylori.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Agkistrodon_taylori.tif
+9,Atheris_broadleyi,Atheris_broadleyi,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atheris_broadleyi.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Atheris_broadleyi.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Atheris_broadleyi.tif
+10,Atheris_chlorechis,Atheris_chlorechis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atheris_chlorechis.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Atheris_chlorechis.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Atheris_chlorechis.tif
+11,Atheris_squamigera,Atheris_squamigera,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atheris_squamigera.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Atheris_squamigera.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Atheris_squamigera.tif
+12,Atractaspis_andersonii,Atractaspis_andersonii,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atractaspis_andersonii.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Atractaspis_andersonii.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Atractaspis_andersonii.tif
+13,Atractaspis_bibronii,Atractaspis_bibronii,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atractaspis_bibronii.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Atractaspis_bibronii.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Atractaspis_bibronii.tif
+14,Atractaspis_engaddensis,Atractaspis_engaddensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atractaspis_engaddensis.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Atractaspis_engaddensis.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Atractaspis_engaddensis.tif
+15,Atractaspis_fallax,Atractaspis_fallax,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atractaspis_fallax.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Atractaspis_fallax.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Atractaspis_fallax.tif
+16,Atractaspis_irregularis,Atractaspis_irregularis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atractaspis_irregularis.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Atractaspis_irregularis.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Atractaspis_irregularis.tif
+17,Atropoides_mexicanus,Atropoides_mexicanus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atropoides_mexicanus.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Atropoides_mexicanus.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Atropoides_mexicanus.tif
+18,Atropoides_occidus,Atropoides_occidus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atropoides_occidus.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Atropoides_occidus.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Atropoides_occidus.tif
+19,Atropoides_spp,Atropoides_indomitus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atropoides_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Atropoides_indomitus.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Atropoides_indomitus.tif
+19,Atropoides_spp,Atropoides_nummifer,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atropoides_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Atropoides_nummifer.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Atropoides_nummifer.tif
+19,Atropoides_spp,Atropoides_olmec,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atropoides_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Atropoides_olmec.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Atropoides_olmec.tif
+19,Atropoides_spp,Atropoides_picadoi,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Atropoides_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Atropoides_picadoi.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Atropoides_picadoi.tif
+20,Austrelaps_spp,Austrelaps_spp,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Austrelaps_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Austrelaps_spp.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Austrelaps_spp.tif
+21,Bitis_arietans,Bitis_arietans,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bitis_arietans.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bitis_arietans.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bitis_arietans.tif
+22,Bitis_gabonica,Bitis_gabonica,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bitis_gabonica.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bitis_gabonica.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bitis_gabonica.tif
+23,Bitis_nasicornis,Bitis_nasicornis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bitis_nasicornis.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bitis_nasicornis.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bitis_nasicornis.tif
+24,Bitis_parviocula,Bitis_parviocula,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bitis_parviocula.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bitis_parviocula.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bitis_parviocula.tif
+25,Bitis_rhinoceros,Bitis_rhinoceros,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bitis_rhinoceros.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bitis_rhinoceros.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bitis_rhinoceros.tif
+26,Bothriechis_lateralis,Bothriechis_lateralis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothriechis_lateralis.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothriechis_lateralis.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothriechis_lateralis.tif
+27,Bothriechis_marchi,Bothriechis_marchi,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothriechis_marchi.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothriechis_marchi.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothriechis_marchi.tif
+28,Bothriechis_schlegelii,Bothriechis_schlegelii,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothriechis_schlegelii.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothriechis_schlegelii.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothriechis_schlegelii.tif
+29,Bothriechis_spp,Bothriechis_bicolor,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothriechis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothriechis_bicolor.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothriechis_bicolor.tif
+29,Bothriechis_spp,Bothriechis_nigrovirdis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothriechis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothriechis_nigrovirdis.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothriechis_nigrovirdis.tif
+29,Bothriechis_spp,Bothriechis_rowleyi,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothriechis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothriechis_rowleyi.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothriechis_rowleyi.tif
+29,Bothriechis_spp,Bothriechis_supracifiaris,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothriechis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothriechis_supracifiaris.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothriechis_supracifiaris.tif
+29,Bothriechis_spp,Bothriechis_surffer,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothriechis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothriechis_surffer.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothriechis_surffer.tif
+29,Bothriechis_spp,Bothriechis_thalassinus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothriechis_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothriechis_thalassinus.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothriechis_thalassinus.tif
+30,Bothrocophias_hyoprora,Bothrocophias_hyoprora,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrocophias_hyoprora.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrocophias_hyoprora.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrocophias_hyoprora.tif
+31,Bothrocophias_microphthalmus,Bothrocophias_microphthalmus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrocophias_microphthalmus.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrocophias_microphthalmus.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrocophias_microphthalmus.tif
+32,Bothrocophias_spp,Bothrocophias_campbolli,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrocophias_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrocophias_campbolli.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrocophias_campbolli.tif
+32,Bothrocophias_spp,Bothrocophias_colombianus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrocophias_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrocophias_colombianus.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrocophias_colombianus.tif
+32,Bothrocophias_spp,Bothrocophias_myersi,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrocophias_spp.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrocophias_myersi.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrocophias_myersi.tif
+33,Bothrops_alternatus,Bothrops_alternatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_alternatus.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrops_alternatus.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrops_alternatus.tif
+34,Bothrops_ammodytoides,Bothrops_ammodytoides,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_ammodytoides.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrops_ammodytoides.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrops_ammodytoides.tif
+35,Bothrops_asper,Bothrops_asper,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_asper.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrops_asper.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrops_asper.tif
+36,Bothrops_atrox,Bothrops_atrox,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_atrox.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrops_atrox.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrops_atrox.tif
+37,Bothrops_bilineatus,Bothrops_bilineatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_bilineatus.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrops_bilineatus.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrops_bilineatus.tif
+38,Bothrops_brazili,Bothrops_brazili,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_brazili.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrops_brazili.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrops_brazili.tif
+39,Bothrops_caribbaeus,Bothrops_caribbaeus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_caribbaeus.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrops_caribbaeus.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrops_caribbaeus.tif
+40,Bothrops_cf_atrox,Bothrops_cf_atrox,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_cf_atrox.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrops_cf_atrox.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrops_cf_atrox.tif
+41,Bothrops_diporus,Bothrops_diporus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_diporus.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrops_diporus.shp,Z:/users/joshua/Snakebite/WHO EOR rasters/Bothrops_diporus.tif
+42,Bothrops_jararaca,Bothrops_jararaca,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_jararaca.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrops_jararaca.shp,
+43,Bothrops_jararacussu,Bothrops_jararacussu,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_jararacussu.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrops_jararacussu.shp,
+44,Bothrops_jonathani,Bothrops_jonathani,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_jonathani.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrops_jonathani.shp,
+45,Bothrops_lanceolatus,Bothrops_lanceolatus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_lanceolatus.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrops_lanceolatus.shp,
+46,Bothrops_leucurus,Bothrops_leucurus,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_leucurus.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrops_leucurus.shp,
+47,Bothrops_mattogrossensis,Bothrops_mattogrossensis,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_mattogrossensis.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrops_mattogrossensis.shp,
+48,Bothrops_moojeni,Bothrops_moojeni,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_moojeni.pdf,Z:/users/joshua/Snakebite/WHO EOR shapefiles/Bothrops_moojeni.shp,
+49,Bothrops_neuwiedi,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_neuwiedi.pdf,,
+50,Bothrops_pictus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_pictus.pdf,,
+51,Bothrops_pubescens,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_pubescens.pdf,,
+52,Bothrops_sanctaecrucis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_sanctaecrucis.pdf,,
+53,Bothrops_spp,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_spp.pdf,,
+54,Bothrops_taeniatus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_taeniatus.pdf,,
+55,Bothrops_venezuelensis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bothrops_venezuelensis.pdf,,
+56,Bungarus_bungaroides,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_bungaroides.pdf,,
+57,Bungarus_caeruleus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_caeruleus.pdf,,
+58,Bungarus_candidus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_candidus.pdf,,
+59,Bungarus_ceylonicus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_ceylonicus.pdf,,
+60,Bungarus_fasciatus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_fasciatus.pdf,,
+61,Bungarus_flaviceps,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_flaviceps.pdf,,
+62,Bungarus_lividus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_lividus.pdf,,
+63,Bungarus_magnimaculatus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_magnimaculatus.pdf,,
+64,Bungarus_multicinctus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_multicinctus.pdf,,
+65,Bungarus_niger,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_niger.pdf,,
+66,Bungarus_sindanus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_sindanus.pdf,,
+67,Bungarus_slowinskii,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_slowinskii.pdf,,
+68,Bungarus_walli,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Bungarus_walli.pdf,,
+69,Calliophis_bivirgatus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Calliophis_bivirgatus.pdf,,
+70,Calliophis_intestinalis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Calliophis_intestinalis.pdf,,
+71,Calloselasma_rhodostoma,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Calloselasma_rhodostoma.pdf,,
+72,Cerastes_cerastes,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cerastes_cerastes.pdf,,
+73,Cerastes_gasperettii,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cerastes_gasperettii.pdf,,
+74,Cerrophidion_godmani,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cerrophidion_godmani.pdf,,
+75,Cerrophidion_spp,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cerrophidion_spp.pdf,,
+76,Crotalus_adamanteus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_adamanteus.pdf,,
+77,Crotalus_atrox,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_atrox.pdf,,
+78,Crotalus_basiliscus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_basiliscus.pdf,,
+79,Crotalus_durissus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_durissus.pdf,,
+80,Crotalus_horridus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_horridus.pdf,,
+81,Crotalus_molossus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_molossus.pdf,,
+82,Crotalus_oreganus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_oreganus.pdf,,
+83,Crotalus_ruber,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_ruber.pdf,,
+84,Crotalus_scutulatus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_scutulatus.pdf,,
+85,Crotalus_simus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_simus.pdf,,
+86,Crotalus_spp,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_spp.pdf,,
+87,Crotalus_totonacus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_totonacus.pdf,,
+88,Crotalus_tzabcan,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_tzabcan.pdf,,
+89,Crotalus_viridis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Crotalus_viridis.pdf,,
+90,Cryptelytrops_albolabris,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cryptelytrops_albolabris.pdf,,
+91,Cryptelytrops_erythrurus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cryptelytrops_erythrurus.pdf,,
+92,Cryptelytrops_insularis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cryptelytrops_insularis.pdf,,
+93,Cryptelytrops_macrops,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cryptelytrops_macrops.pdf,,
+94,Cryptelytrops_purpureomaculatus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cryptelytrops_purpureomaculatus.pdf,,
+95,Cryptelytrops_septentrionalis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Cryptelytrops_septentrionalis.pdf,,
+96,Daboia_deserti,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Daboia_deserti.pdf,,
+97,Daboia_mauritanica,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Daboia_mauritanica.pdf,,
+98,Daboia_palaestinae,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Daboia_palaestinae.pdf,,
+99,Daboia_russelii,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Daboia_russelii.pdf,,
+100,Daboia_siamensis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Daboia_siamensis.pdf,,
+101,Deinagkistrodon_acutus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Deinagkistrodon_acutus.pdf,,
+102,Dendroaspis_angusticeps,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Dendroaspis_angusticeps.pdf,,
+103,Dendroaspis_jamesoni,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Dendroaspis_jamesoni.pdf,,
+104,Dendroaspis_polylepis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Dendroaspis_polylepis.pdf,,
+105,Dendroaspis_viridis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Dendroaspis_viridis.pdf,,
+106,Dispholidus_typus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Dispholidus_typus.pdf,,
+107,Echis_borkini,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_borkini.pdf,,
+108,Echis_carinatus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_carinatus.pdf,,
+109,Echis_coloratus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_coloratus.pdf,,
+110,Echis_hughesi,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_hughesi.pdf,,
+111,Echis_jogeri,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_jogeri.pdf,,
+112,Echis_khosatzkii,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_khosatzkii.pdf,,
+113,Echis_leucogaster,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_leucogaster.pdf,,
+114,Echis_megalocephalus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_megalocephalus.pdf,,
+115,Echis_ocellatus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_ocellatus.pdf,,
+116,Echis_omanensis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_omanensis.pdf,,
+117,Echis_pyramidum,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Echis_pyramidum.pdf,,
+118,Eristocophis_macmahoni,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Eristocophis_macmahoni.pdf,,
+119,Gloydius_blomhoffi,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Gloydius_blomhoffi.pdf,,
+120,Gloydius_brevicaudus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Gloydius_brevicaudus.pdf,,
+121,Gloydius_halys,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Gloydius_halys.pdf,,
+122,Gloydius_halys_caucasicus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Gloydius_halys_caucasicus.pdf,,
+123,Gloydius_himalayanus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Gloydius_himalayanus.pdf,,
+124,Gloydius_intermedius,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Gloydius_intermedius.pdf,,
+125,Gloydius_tsushimaensis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Gloydius_tsushimaensis.pdf,,
+126,Gloydius_ussuriensis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Gloydius_ussuriensis.pdf,,
+127,Hemachatus_haemachatus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Hemachatus_haemachatus.pdf,,
+128,Himalayophis_tibetanus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Himalayophis_tibetanus.pdf,,
+129,Hoplocephalus_spp,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Hoplocephalus_spp.pdf,,
+130,Hypnale_hypnale,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Hypnale_hypnale.pdf,,
+131,Hypnale_nepa,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Hypnale_nepa.pdf,,
+132,Lachesis_acrochorda,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Lachesis_acrochorda.pdf,,
+133,Lachesis_melanocephala,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Lachesis_melanocephala.pdf,,
+134,Lachesis_muta,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Lachesis_muta.pdf,,
+135,Lachesis_stenophyrs,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Lachesis_stenophyrs.pdf,,
+136,Macrovipera_lebetina,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Macrovipera_lebetina.pdf,,
+137,Macrovipera_schweizeri,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Macrovipera_schweizeri.pdf,,
+138,Micropechis_ikaheka,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micropechis_ikaheka.pdf,,
+139,Micruroides_euryxanthus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micruroides_euryxanthus.pdf,,
+140,Micrurus_circinalis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_circinalis.pdf,,
+141,Micrurus_corallinus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_corallinus.pdf,,
+142,Micrurus_fulvius,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_fulvius.pdf,,
+143,Micrurus_lemniscatus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_lemniscatus.pdf,,
+144,Micrurus_mipartitus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_mipartitus.pdf,,
+145,Micrurus_nigrocinctus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_nigrocinctus.pdf,,
+146,Micrurus_spixii,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_spixii.pdf,,
+147,Micrurus_spp,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_spp.pdf,,
+148,Micrurus_surinamensis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_surinamensis.pdf,,
+149,Micrurus_tener,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Micrurus_tener.pdf,,
+150,Montivipera_raddei,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Montivipera_raddei.pdf,,
+151,Montivipera_xanthina,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Montivipera_xanthina.pdf,,
+152,Naja_anchietae,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_anchietae.pdf,,
+153,Naja_annulata,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_annulata.pdf,,
+154,Naja_annulifera,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_annulifera.pdf,,
+155,Naja_arabica,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_arabica.pdf,,
+156,Naja_ashei,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_ashei.pdf,,
+157,Naja_atra,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_atra.pdf,,
+158,Naja_christyi,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_christyi.pdf,,
+159,Naja_haje,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_haje.pdf,,
+160,Naja_kaouthia,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_kaouthia.pdf,,
+161,Naja_katiensis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_katiensis.pdf,,
+162,Naja_mandalayensis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_mandalayensis.pdf,,
+163,Naja_melanoleuca,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_melanoleuca.pdf,,
+164,Naja_mossambica,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_mossambica.pdf,,
+165,Naja_naja,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_naja.pdf,,
+166,Naja_nigricincta,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_nigricincta.pdf,,
+167,Naja_nigricollis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_nigricollis.pdf,,
+168,Naja_nivea,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_nivea.pdf,,
+169,Naja_nubiae,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_nubiae.pdf,,
+170,Naja_oxiana,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_oxiana.pdf,,
+171,Naja_pallida,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_pallida.pdf,,
+172,Naja_philippinensis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_philippinensis.pdf,,
+173,Naja_sagittifera,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_sagittifera.pdf,,
+174,Naja_samarensis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_samarensis.pdf,,
+175,Naja_senegalensis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_senegalensis.pdf,,
+176,Naja_siamensis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_siamensis.pdf,,
+177,Naja_sputatrix,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_sputatrix.pdf,,
+178,Naja_sumatrana,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Naja_sumatrana.pdf,,
+179,Notechis_scutatus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Notechis_scutatus.pdf,,
+180,Ophiophagus_hannah,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Ophiophagus_hannah.pdf,,
+181,Ophryacus_spp,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Ophryacus_spp.pdf,,
+182,Oxyuranus_microlepidotus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Oxyuranus_microlepidotus.pdf,,
+183,Oxyuranus_scutellatus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Oxyuranus_scutellatus.pdf,,
+184,Oxyuranus_temporalis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Oxyuranus_temporalis.pdf,,
+185,Parias_flavomaculatus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Parias_flavomaculatus.pdf,,
+186,Parias_sumatranus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Parias_sumatranus.pdf,,
+187,Porthidium_lansbergii,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Porthidium_lansbergii.pdf,,
+188,Porthidium_nasutum,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Porthidium_nasutum.pdf,,
+189,Porthidium_ophryomegas,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Porthidium_ophryomegas.pdf,,
+190,Porthidium_spp,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Porthidium_spp.pdf,,
+191,Proatheris_superciliaris,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Proatheris_superciliaris.pdf,,
+192,Protobothrops_elegans,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Protobothrops_elegans.pdf,,
+193,Protobothrops_flavoviridis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Protobothrops_flavoviridis.pdf,,
+194,Protobothrops_jerdonii,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Protobothrops_jerdonii.pdf,,
+195,Protobothrops_kaulbacki,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Protobothrops_kaulbacki.pdf,,
+196,Protobothrops_mangshanensis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Protobothrops_mangshanensis.pdf,,
+197,Protobothrops_mucrosquamatus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Protobothrops_mucrosquamatus.pdf,,
+198,Pseudechis_australis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudechis_australis.pdf,,
+199,Pseudechis_papuanus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudechis_papuanus.pdf,,
+200,Pseudechis_rossignolii,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudechis_rossignolii.pdf,,
+201,Pseudechis_spp,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudechis_spp.pdf,,
+202,Pseudocerastes_fieldi,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudocerastes_fieldi.pdf,,
+203,Pseudocerastes_persicus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudocerastes_persicus.pdf,,
+204,Pseudohaje_goldii,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudohaje_goldii.pdf,,
+205,Pseudohaje_nigra,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudohaje_nigra.pdf,,
+206,Pseudonaja_affinis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudonaja_affinis.pdf,,
+207,Pseudonaja_aspidorhyncha,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudonaja_aspidorhyncha.pdf,,
+208,Pseudonaja_mengdeni,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudonaja_mengdeni.pdf,,
+209,Pseudonaja_nuchalis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudonaja_nuchalis.pdf,,
+210,Pseudonaja_spp,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudonaja_spp.pdf,,
+211,Pseudonaja_textilis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Pseudonaja_textilis.pdf,,
+212,Rhabdophis_tigrinus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Rhabdophis_tigrinus.pdf,,
+213,Sistrurus_catenatus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Sistrurus_catenatus.pdf,,
+214,Sistrurus_miliarius,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Sistrurus_miliarius.pdf,,
+215,Thelotornis_capensis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Thelotornis_capensis.pdf,,
+216,Thelotornis_kirtlandii,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Thelotornis_kirtlandii.pdf,,
+217,Thelotornis_mossambicanus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Thelotornis_mossambicanus.pdf,,
+218,Thelotornis_usambaricus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Thelotornis_usambaricus.pdf,,
+219,Trimeresurus_gramineus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Trimeresurus_gramineus.pdf,,
+220,Trimeresurus_malabaricus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Trimeresurus_malabaricus.pdf,,
+221,Trimeresurus_trigonocephalus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Trimeresurus_trigonocephalus.pdf,,
+222,Tropidechis_carinatus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Tropidechis_carinatus.pdf,,
+223,Tropidolaemus_philippensis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Tropidolaemus_philippensis.pdf,,
+224,Tropidolaemus_subannulatus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Tropidolaemus_subannulatus.pdf,,
+225,Vipera_ammodytes,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_ammodytes.pdf,,
+226,Vipera_aspis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_aspis.pdf,,
+227,Vipera_berus,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_berus.pdf,,
+228,Vipera_eriwanensis,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_eriwanensis.pdf,,
+229,Vipera_latastei,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_latastei.pdf,,
+230,Vipera_nikolskii,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_nikolskii.pdf,,
+231,Vipera_renardi,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_renardi.pdf,,
+232,Vipera_seoanei,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_seoanei.pdf,,
+233,Vipera_spp,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_spp.pdf,,
+234,Vipera_ursinii,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Vipera_ursinii.pdf,,
+235,Viridovipera_stejnegeri,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Viridovipera_stejnegeri.pdf,,
+236,Walterinnesia_aegyptia,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Walterinnesia_aegyptia.pdf,,
+237,Walterinnesia_morgani,,http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Large/map_Walterinnesia_morgani.pdf,,
