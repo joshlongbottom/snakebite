@@ -5,6 +5,7 @@ rm(list = ls())
 # load required packages
 require(dismo)
 require(raster)
+require(plotmath)
 
 # load function
 vector.is.empty <- function(x) return(length(x) == 0)
@@ -41,9 +42,22 @@ for(i in 1:length(species_list)){
     # read in shapefile
     shape <- shapefile(shape_path)
     
-    # define title for the plot
-    title <- as.character(species)
+    # get unique country ISO codes
+    iso <- unique(shape@data$COUNTRY_ID)
+        # remove NAs
+        iso <- iso[!is.na(iso)]
+        # get string of all countries for snake distribution
+        countries <- paste(iso, collapse = ", ")
     
+    if(nchar(countries) > 34){
+      
+        countries <- 'More than 7 countries'
+    
+        }    
+    
+    # define species name    
+    title <- sub$split_spp    
+            
     # split the species into 'genus' and 'spp'
     split <- as.data.frame(strsplit(title, "_"))
     genus <- as.character(split[rownames(split) == '1', ])
@@ -60,6 +74,9 @@ for(i in 1:length(species_list)){
       spp <- paste(temp_1, temp_2)
       
     }
+    
+    # define title for the plot
+    title <- paste(genus, spp, sep = " ")
     
     # get gbif presence for that species
     # if the shapefile is for a group of species, only get genus results from gbif
@@ -92,11 +109,27 @@ for(i in 1:length(species_list)){
       }
     }
     
+    # add number of data points to plot as a y axis
+    if(vector.is.empty(locations) == FALSE) {
+      
+      row_length <- nrow(locations)
+    
+    } else {
+      
+      row_length <- 0
+      
+    }
+    
+    # records text
+    records <- paste(row_length, 'records obtained from GBIF', sep = " ")
+    
     # if there are records, plot them on top of shapefile
     if(vector.is.empty(locations) == FALSE){
       
     # plot shapefile
-    plot(shape, main = title)
+    plot(shape, main = title, 
+                xlab = countries,
+                ylab = records)
     
     # plot coordinates
     points(locations$lon, locations$lat, pch = 20, cex = 0.5, col = "red")
@@ -104,7 +137,9 @@ for(i in 1:length(species_list)){
     } else{
       
     # just plot the shapefile
-    plot(shape, main = title)  
+    plot(shape, main = title, 
+                xlab = countries,
+                ylab = records)  
     
       }
   }
