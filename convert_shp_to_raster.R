@@ -8,7 +8,7 @@ require(raster)
 list <- as.list(list.files("Z:/users/joshua/Snakebite/WHO EOR shapefiles/", 
                            pattern = '*shp$'))
 
-# loop through and convert pdf files into png
+# loop through and convert shape files 
 for(i in 1:length(list)){
   
   # get file name
