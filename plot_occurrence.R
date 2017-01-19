@@ -14,6 +14,8 @@ species_sheet <- read.csv('Z:/users/joshua/Snakebite/snakebite/snake_list.csv',
                           stringsAsFactors = FALSE)
 
 admin0 <- shapefile('Z:/users/joshua/Snakebite/World shapefiles/admin2013_0.shp')
+africa <- shapefile('Z:/users/joshua/Africa shapefiles/Africa_admin0_FAO.shp')
+america <- shapefile('Z:/users/joshua/Snakebite/World shapefiles/America.shp')
 
 # get a list of the unique snake species 
 species_list <- unique(species_sheet$split_spp)
@@ -51,6 +53,18 @@ for(i in 1:length(species_list)){
         countries <- paste(iso, collapse = ", ")
     
     country_shp <- admin0[admin0@data$COUNTRY_ID %in% iso, ]    
+    
+    if('USA' %in% iso){
+      
+      country_shp <- america
+    }
+    
+    africa_list <- c('Bitis_arietans')
+    
+    if(species %in% africa_list){
+      
+      country_shp <- africa
+    }
         
     if(nchar(countries) > 34){
       
@@ -130,7 +144,8 @@ for(i in 1:length(species_list)){
     if(vector.is.empty(locations) == FALSE){
     
     plot(country_shp, 
-         col = 'grey', 
+         col = 'grey',
+         border = 'white',
          main = title, 
          xlab = countries,
          ylab = records)  
@@ -147,7 +162,8 @@ for(i in 1:length(species_list)){
       
     # just plot the shapefile
     plot(country_shp, 
-         col = 'grey', 
+         col = 'grey',
+         border = 'white',
          main = title, 
          xlab = countries,
          ylab = records)   
