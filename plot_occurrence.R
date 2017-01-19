@@ -5,7 +5,6 @@ rm(list = ls())
 # load required packages
 require(dismo)
 require(raster)
-require(plotmath)
 
 # load function
 vector.is.empty <- function(x) return(length(x) == 0)
@@ -13,6 +12,8 @@ vector.is.empty <- function(x) return(length(x) == 0)
 # read in snake species list
 species_sheet <- read.csv('Z:/users/joshua/Snakebite/snakebite/snake_list.csv',
                           stringsAsFactors = FALSE)
+
+admin0 <- shapefile('Z:/users/joshua/Snakebite/World shapefiles/admin2013_0.shp')
 
 # get a list of the unique snake species 
 species_list <- unique(species_sheet$split_spp)
@@ -25,7 +26,7 @@ species_list <- as.list(species_list[!(species_list == "")])
 pdf('Z:/users/joshua/Snakebite/species_occurrence_plots.pdf',                    
     width = 8.27,
     height = 11.29)
-par(mfrow = c(4, 3))
+par(mfrow = c(3, 2))
 
 # loop through and populate pdf with species occurrence plots
 for(i in 1:length(species_list)){
@@ -49,6 +50,8 @@ for(i in 1:length(species_list)){
         # get string of all countries for snake distribution
         countries <- paste(iso, collapse = ", ")
     
+    country_shp <- admin0[admin0@data$COUNTRY_ID %in% iso, ]    
+        
     if(nchar(countries) > 34){
       
         countries <- 'More than 7 countries'
@@ -125,11 +128,17 @@ for(i in 1:length(species_list)){
     
     # if there are records, plot them on top of shapefile
     if(vector.is.empty(locations) == FALSE){
-      
+    
+    plot(country_shp, 
+         col = 'grey', 
+         main = title, 
+         xlab = countries,
+         ylab = records)  
+        
     # plot shapefile
-    plot(shape, main = title, 
-                xlab = countries,
-                ylab = records)
+    plot(shape,
+         add = TRUE,
+         col = "blue")
     
     # plot coordinates
     points(locations$lon, locations$lat, pch = 20, cex = 0.5, col = "red")
@@ -137,9 +146,17 @@ for(i in 1:length(species_list)){
     } else{
       
     # just plot the shapefile
-    plot(shape, main = title, 
-                xlab = countries,
-                ylab = records)  
+    plot(country_shp, 
+         col = 'grey', 
+         main = title, 
+         xlab = countries,
+         ylab = records)   
+    
+    # plot shapefile
+    plot(shape,
+         add = TRUE,
+         col = "blue")
+ 
     
       }
   }
