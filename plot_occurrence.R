@@ -45,6 +45,9 @@ for(i in 1:length(species_list)){
     # read in shapefile
     shape <- shapefile(shape_path)
     
+    # inform progress
+    message(paste('generating occurrence plot', i, 'of', length(species_list), sep = " "))
+    
     # get unique country ISO codes
     iso <- unique(shape@data$COUNTRY_ID)
         # remove NAs
