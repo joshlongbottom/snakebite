@@ -174,7 +174,10 @@ for(i in 1:length(species_list)){
          col = "blue")
  
     
-      }
+    }
+    
+    rm(spp_data,
+       locations)
   }
   
 dev.off()  
