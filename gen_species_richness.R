@@ -24,6 +24,9 @@ for (i in 1:length(list)){
   # extend the extent to match the global raster
   snake_ext <- extend(snake_rast, global, value = NA)
   
+  # inform progress
+  message(paste('stacking raster', i, 'of', length(list), sep = " "))
+  
   # stack the rasters
   if(i == 1){
   
