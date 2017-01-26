@@ -50,8 +50,9 @@ for(i in 1:length(species_list)){
     
     # get unique country ISO codes
     iso <- unique(shape@data$COUNTRY_ID)
-        # remove NAs
+        # remove NAs and unassigned countries (XXX)
         iso <- iso[!is.na(iso)]
+        iso <- iso[!(iso == 'XXX')]
         # get string of all countries for snake distribution
         countries <- paste(iso, collapse = ", ")
     
@@ -111,9 +112,7 @@ for(i in 1:length(species_list)){
     }
     
     # if spp_data is not an empty dataframe get unique lat/longs for the species
-    if(vector.is.empty(spp_data) == FALSE) {
-      
-      if('lat' %in% colnames(spp_data)){
+    if((vector.is.empty(spp_data) == FALSE) & 'lat' %in% colnames(spp_data)) {
       
       locations <- unique(spp_data[c('lat', 'lon')])
     
@@ -127,8 +126,7 @@ for(i in 1:length(species_list)){
       locations <- NULL
           
       }
-    }
-    
+
     # add number of data points to plot as a y axis
     if(vector.is.empty(locations) == FALSE) {
       
