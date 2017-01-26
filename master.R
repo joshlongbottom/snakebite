@@ -1,6 +1,9 @@
 # master script
 # script to loop through each separate file, and generate surfaces
 
+# clear workspace
+rm(list = ls())
+
 # convert shapes to raster
 source('Z:/users/joshua/Snakebite/snakebite/convert_shp_to_raster.R')
 
