@@ -25,6 +25,9 @@ for(i in 1:length(list)){
   # read in a 5 km x 5 km raster to use as a template to rasterize by
   raster_mask <- raster("Z:/users/joshua/Snakebite/raster_mask/CoastGlobal_5k.tif")
   
+  # inform progress
+  message(paste('rasterizing file', i, 'of', length(list), sep = " "))
+  
   # open shapefile
   snake_shape <- shapefile(paths)
   
