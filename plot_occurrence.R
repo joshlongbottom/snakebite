@@ -25,7 +25,7 @@ species_list <- as.list(species_list[!(species_list == "")])
 # of WHO EOR converted shapefile
 
 # start a plotting window
-pdf('Z:/users/joshua/Snakebite/species_occurrence_plots.pdf',                    
+pdf('Z:/users/joshua/Snakebite/output/species_occurrence_plots/species_occurrence_plots.pdf',                    
     width = 8.27,
     height = 11.29)
 par(mfrow = c(3, 2))
