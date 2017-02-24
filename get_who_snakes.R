@@ -25,7 +25,7 @@ for(i in 1:length(species_list)){
                    sep = "")
   
   # specify outpath
-  outpath <- paste("Z:/users/joshua/Snakebite/WHO EOR maps/",
+  outpath <- paste("Z:/users/joshua/Snakebite/WHO EOR PDFs/",
                    spp_name,
                    ".pdf",
                    sep = "")
