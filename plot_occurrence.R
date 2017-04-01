@@ -5,6 +5,7 @@ rm(list = ls())
 # load required packages
 require(dismo)
 require(raster)
+require(maptools)
 
 # load function
 vector.is.empty <- function(x) return(length(x) == 0)
@@ -14,7 +15,7 @@ species_sheet <- read.csv('Z:/users/joshua/Snakebite/snakebite/snake_list.csv',
                           stringsAsFactors = FALSE)
 
 admin0 <- shapefile('Z:/users/joshua/Snakebite/World shapefiles/admin2013_0.shp')
-africa <- shapefile('Z:/users/joshua/Africa shapefiles/Africa_admin0_FAO.shp')
+africa <- shapefile('Z:/users/joshua/Snakebite/World shapefiles/Africa.shp')
 america <- shapefile('Z:/users/joshua/Snakebite/World shapefiles/America.shp')
 
 # get a list of the unique snake species 
@@ -25,7 +26,7 @@ species_list <- as.list(species_list[!(species_list == "")])
 # of WHO EOR converted shapefile
 
 # start a plotting window
-pdf('Z:/users/joshua/Snakebite/output/species_occurrence_plots/species_occurrence_plots.pdf',                    
+pdf('Z:/users/joshua/Snakebite/output/species_occurrence_plots/species_occurrence_plots_Y2017M04D01.pdf',                    
     width = 8.27,
     height = 11.29)
 par(mfrow = c(3, 2))
@@ -75,6 +76,17 @@ for(i in 1:length(species_list)){
         countries <- 'More than 7 countries'
     
         }    
+    
+    # dissolve polygons
+    n_polys <- as.numeric(nrow(shape@data))
+    ids <- shape@data$ADMN_LEVEL  
+    
+    if(n_polys > 1){
+      
+      shape <- unionSpatialPolygons(shape, ids)
+    
+    }
+    
     
     # define species name    
     title <- sub$split_spp    
@@ -154,7 +166,12 @@ for(i in 1:length(species_list)){
     # plot shapefile
     plot(shape,
          add = TRUE,
-         col = "blue")
+         col = "dodgerblue2",
+         border = 'blue',
+         lty = 2)
+    plot(country_shp,
+         add = TRUE,
+         border = 'white')
     
     # plot coordinates
     points(locations$lon, locations$lat, pch = 20, cex = 0.5, col = "red")
@@ -172,9 +189,13 @@ for(i in 1:length(species_list)){
     # plot shapefile
     plot(shape,
          add = TRUE,
-         col = "blue")
+         col = "dodgerblue2",
+         border = 'blue',
+         lty = 2)
+    plot(country_shp,
+         add = TRUE,
+         border = 'white')
  
-    
     }
     
     rm(spp_data,
