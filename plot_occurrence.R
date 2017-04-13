@@ -6,6 +6,7 @@ rm(list = ls())
 require(dismo)
 require(raster)
 require(maptools)
+require(rgeos)
 
 # load function
 vector.is.empty <- function(x) return(length(x) == 0)
@@ -26,7 +27,7 @@ species_list <- as.list(species_list[!(species_list == "")])
 # of WHO EOR converted shapefile
 
 # start a plotting window
-pdf('Z:/users/joshua/Snakebite/output/species_occurrence_plots/species_occurrence_plots_Y2017M04D01.pdf',                    
+pdf('Z:/users/joshua/Snakebite/output/species_occurrence_plots/species_occurrence_plots_Y2017M04D13.pdf',                    
     width = 8.27,
     height = 11.29)
 par(mfrow = c(3, 2))
@@ -56,7 +57,9 @@ for(i in 1:length(species_list)){
         iso <- iso[!(iso == 'XXX')]
         # get string of all countries for snake distribution
         countries <- paste(iso, collapse = ", ")
-    
+        countries_raw <- countries
+        
+    # create a shapefile of countries for each species
     country_shp <- admin0[admin0@data$COUNTRY_ID %in% iso, ]    
     
     if('USA' %in% iso){
@@ -64,7 +67,8 @@ for(i in 1:length(species_list)){
       country_shp <- america
     }
     
-    africa_list <- c('Bitis_arietans')
+    africa_list <- c('Bitis_arietans', 'Bitis_gabonica', 'Bitis_nasicornis', 'Bitis_rhinoceros', 'Atractaspis_irregularis', 
+                     'Dendroaspis_polylepis', 'Dispholidus_typus', 'Naja_melanoleuca', 'Naja_nigricollis')
     
     if(species %in% africa_list){
       
@@ -83,10 +87,10 @@ for(i in 1:length(species_list)){
     
     if(n_polys > 1){
       
+      shape <- gBuffer(shape, byid = TRUE, width = 0)
       shape <- unionSpatialPolygons(shape, ids)
     
     }
-    
     
     # define species name    
     title <- sub$split_spp    
@@ -110,16 +114,30 @@ for(i in 1:length(species_list)){
     
     # define title for the plot
     title <- paste(genus, spp, sep = " ")
+    species_n <- paste(genus, spp, sep = "_")
+    
+    # create a dataframe of each country within a species' range
+    spec_dist <- as.data.frame(cbind(species_n, countries_raw))
+
+    if(i == 1){
+      
+      spp_countries <- spec_dist
+      
+    } else {
+      
+      spp_countries <- rbind(spp_countries,
+                             spec_dist)
+    }
     
     # get gbif presence for that species
-    # if the shapefile is for a group of species, only get genus results from gbif
+    # if the shapefile is for a group of species, don't grab results from gbif
     if(spp != 'spp'){
     
       spp_data <- gbif(genus, spp, end = 100000)
     
       } else {
       
-      spp_data <- gbif(genus, '', end = 100000)  
+      spp_data <- NA  
     
     }
     
@@ -130,9 +148,13 @@ for(i in 1:length(species_list)){
     
       # if there are records, remove any NAs
       locations <- locations[!is.na(locations$lat), ]
-    
       locations <- locations[!is.na(locations$lon), ]
     
+      # write out the data points
+      dat_path <- paste('Z:/users/joshua/Snakebite/output/species_occurrence_plots/species data/', species_n, '.csv', sep = "")
+      write.csv(spp_data,
+                dat_path)
+      
       } else {
         
       locations <- NULL
@@ -161,20 +183,23 @@ for(i in 1:length(species_list)){
          border = 'white',
          main = title, 
          xlab = countries,
-         ylab = records)  
+         ylab = records,
+         lwd = 0.3)  
         
     # plot shapefile
     plot(shape,
          add = TRUE,
          col = "dodgerblue2",
          border = 'blue',
-         lty = 2)
+         lty = 1,
+         lwd = 0.3)
     plot(country_shp,
          add = TRUE,
-         border = 'white')
+         border = 'white',
+         lwd = 0.3)
     
     # plot coordinates
-    points(locations$lon, locations$lat, pch = 20, cex = 0.5, col = "red")
+    points(locations$lon, locations$lat, pch = 20, cex = 0.2, col = "red")
     
     } else{
       
@@ -184,17 +209,20 @@ for(i in 1:length(species_list)){
          border = 'white',
          main = title, 
          xlab = countries,
-         ylab = records)   
+         ylab = records,
+         lwd = 0.3)   
     
     # plot shapefile
     plot(shape,
          add = TRUE,
          col = "dodgerblue2",
          border = 'blue',
-         lty = 2)
+         lty = 1,
+         lwd = 0.3)
     plot(country_shp,
          add = TRUE,
-         border = 'white')
+         border = 'white',
+         lwd = 0.3)
  
     }
     
