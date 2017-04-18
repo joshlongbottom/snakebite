@@ -15,9 +15,12 @@ vector.is.empty <- function(x) return(length(x) == 0)
 species_sheet <- read.csv('Z:/users/joshua/Snakebite/snakebite/snake_list.csv',
                           stringsAsFactors = FALSE)
 
+# read in shapefiles
 admin0 <- shapefile('Z:/users/joshua/Snakebite/World shapefiles/admin2013_0.shp')
 africa <- shapefile('Z:/users/joshua/Snakebite/World shapefiles/Africa.shp')
 america <- shapefile('Z:/users/joshua/Snakebite/World shapefiles/America.shp')
+latin_america <- shapefile('Z:/users/joshua/Snakebite/World shapefiles/Latin_America.shp')
+america_mex <- shapefile('Z:/users/joshua/Snakebite/World shapefiles/USA_MEX.shp')
 
 # get a list of the unique snake species 
 species_list <- unique(species_sheet$split_spp)
@@ -25,9 +28,8 @@ species_list <- as.list(species_list[!(species_list == "")])
 
 # for every species in the list, grab occurrence records from gbif, and plot ontop
 # of WHO EOR converted shapefile
-
 # start a plotting window
-pdf('Z:/users/joshua/Snakebite/output/species_occurrence_plots/species_occurrence_plots_Y2017M04D13.pdf',                    
+pdf('Z:/users/joshua/Snakebite/output/species_occurrence_plots/species_occurrence_plots_Y2017M04D18.pdf',                    
     width = 8.27,
     height = 11.29)
 par(mfrow = c(3, 2))
@@ -68,18 +70,49 @@ for(i in 1:length(species_list)){
     }
     
     africa_list <- c('Bitis_arietans', 'Bitis_gabonica', 'Bitis_nasicornis', 'Bitis_rhinoceros', 'Atractaspis_irregularis', 
-                     'Dendroaspis_polylepis', 'Dispholidus_typus', 'Naja_melanoleuca', 'Naja_nigricollis')
+                     'Dendroaspis_polylepis', 'Dispholidus_typus', 'Naja_melanoleuca', 'Naja_nigricollis', 'Atractaspis_bibronii',
+                     'Dendroaspis_angusticeps', 'Dendroaspis_jamesoni', 'Dendroaspis_polylepis', 'Dendroaspis_viridis', 'Echis_leucogaster',
+                     'Echis_ocellatus', 'Echis_pyramidum', 'Hemachatus_haemachatus', 'Naja_anchietae', 'Naja_annulata', 
+                     'Naja_annulifera', 'Naja_haje', 'Naja_katiensis', 'Naja_mossambica', 'Naja_nivea', 'Pseudohaje_goldii',
+                     'Thelotornis_capensis', 'Thelotornis_kirklandii', 'Thelotornis_mossambicanus')
     
     if(species %in% africa_list){
       
       country_shp <- africa
     }
-        
+    
+    latin_america_list <- c('Bothrocophias_hyoprora', 'Bothrocophias_microphthalmus', 'Bothrops_alternatus', 
+                            'Bothrops_ammodytoides', 'Bothrops_attrox', 'Bothrops_bilineatus', 'Bothrops_brazili',
+                            'Bothrops_diporus', 'Bothrops_jararaca', 'Bothrops_jararacussu', 'Bothrops_mattogrossensis',
+                            'Bothrops_moojeni', 'Bothrops_neuwiedi', 'Bothrops_pubescens', 'Bothrops_spp','Bothrops_taeniatus',
+                            'Crotalus_durissus', 'Lachesis_muta', 'Micrurus_corallinus', 'Micrurus_lemniscatus', 'Micrurus_spixii')
+    
+    if(species %in% latin_america_list){
+      
+      country_shp <- latin_america
+    }
+     
+    usa_mex <- c('Crotalus_atrox', 'Crotalus_molossus', 'Crotalus_oreganus', 'Crotalus_ruber', 'Crotalus_scutulatus',
+                 'Crotalus_spp', 'Crotalus_viridis', 'Micruroides_euryxanthus', 'Micrurus_fulvius', 'Micrurus_tener', 
+                 'Sistrurus_catenatus')
+    
+    if(species %in% usa_mex){
+      
+      country_shp <- america_mex
+    }
+       
     if(nchar(countries) > 34){
       
         countries <- 'More than 7 countries'
     
         }    
+    
+    # if Russia is in ISO, sub out
+    if('RUS' %in% iso){
+      
+      country_shp <- country_shp[!country_shp@data$COUNTRY_ID == 'RUS', ] 
+    
+      }
     
     # dissolve polygons
     n_polys <- as.numeric(nrow(shape@data))
@@ -144,7 +177,7 @@ for(i in 1:length(species_list)){
     # if spp_data is not an empty dataframe get unique lat/longs for the species
     if((vector.is.empty(spp_data) == FALSE) & 'lat' %in% colnames(spp_data)) {
       
-      locations <- unique(spp_data[c('lat', 'lon')])
+      locations <- unique(spp_data[c('lat', 'lon', 'year')])
     
       # if there are records, remove any NAs
       locations <- locations[!is.na(locations$lat), ]
@@ -154,6 +187,11 @@ for(i in 1:length(species_list)){
       dat_path <- paste('Z:/users/joshua/Snakebite/output/species_occurrence_plots/species data/', species_n, '.csv', sep = "")
       write.csv(spp_data,
                 dat_path)
+      
+      na_dates <- locations[is.na(locations$year), ]
+      non_na <- locations[!is.na(locations$year), ]
+      post_08 <- non_na[non_na$year >= 2008, ]
+      pre_08 <- non_na[non_na$year < 2008, ]
       
       } else {
         
@@ -175,57 +213,51 @@ for(i in 1:length(species_list)){
     # records text
     records <- paste(row_length, 'records obtained from GBIF', sep = " ")
     
+    # plot ranges, starting with background
+    plot(country_shp, 
+         col = 'grey',
+         border = 'white',
+         main = bquote(~italic(.(title))), 
+         lwd = 0.3)  
+    
+    title(ylab = records, xlab = countries, line = 0)
+    
+    # plot shapefile
+    plot(shape,
+         add = TRUE,
+         col = '#4775B5',
+         border = '#686868',
+         lty = 1,
+         lwd = 0.3)
+    plot(country_shp,
+         add = TRUE,
+         border = 'white',
+         lwd = 0.3)
+    
     # if there are records, plot them on top of shapefile
     if(vector.is.empty(locations) == FALSE){
-    
-    plot(country_shp, 
-         col = 'grey',
-         border = 'white',
-         main = title, 
-         xlab = countries,
-         ylab = records,
-         lwd = 0.3)  
-        
-    # plot shapefile
-    plot(shape,
-         add = TRUE,
-         col = "dodgerblue2",
-         border = 'blue',
-         lty = 1,
-         lwd = 0.3)
-    plot(country_shp,
-         add = TRUE,
-         border = 'white',
-         lwd = 0.3)
-    
-    # plot coordinates
-    points(locations$lon, locations$lat, pch = 20, cex = 0.2, col = "red")
-    
-    } else{
       
-    # just plot the shapefile
-    plot(country_shp, 
-         col = 'grey',
-         border = 'white',
-         main = title, 
-         xlab = countries,
-         ylab = records,
-         lwd = 0.3)   
+      if(vector.is.empty(na_dates) == FALSE){
+        points(na_dates$lon, na_dates$lat, pch = 20, cex = 0.2, col = '#FFFFBF')
+        
+      }
+      
+      if(vector.is.empty(pre_08) == FALSE){
+      points(pre_08$lon, pre_08$lat, pch = 20, cex = 0.2, col = '#F59D6E')
     
-    # plot shapefile
-    plot(shape,
-         add = TRUE,
-         col = "dodgerblue2",
-         border = 'blue',
-         lty = 1,
-         lwd = 0.3)
-    plot(country_shp,
-         add = TRUE,
-         border = 'white',
-         lwd = 0.3)
- 
-    }
-    
+      } 
+      
+      if(vector.is.empty(post_08) == FALSE){
+        points(post_08$lon, post_08$lat, pch = 20, cex = 0.2, col = '#D93529')
+        
+      }
+        }
+  
+    # add legend to plot
+    legend('bottomleft', c("No date","Pre-2008", "Post-2008"), pch = 20,
+          col = c("#FFFFBF","#F59D6E", "#D93529"), bty = 'n')
+
+    # clear environment a little
     rm(spp_data,
        locations)
   }
