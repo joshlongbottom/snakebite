@@ -14,9 +14,8 @@ Packages:
 9. utils
 
 ## Description
-Expert opinion range (EOR) maps for medically important snake species were obtained from the WHO antivenom database (http://apps.who.int/bloodproducts/snakeantivenoms/database/). ~'get_who_snakes'
+Expert opinion range (EOR) maps for medically important snake species were obtained from the WHO antivenom database (http://apps.who.int/bloodproducts/snakeantivenoms/database/). ~'get_who_snakes.R'
 
 Each EOR map was digitized using ArcMAP, and a shapefile was created for each unique species per map. 
 
-stack these maps to give a count of the
-number of venomous snake species per 5 km x 5 km cell.
+These digitized ranges were then converted to raster format (~convert_shp_to_raster.R), and stacked (~gen_species_richness.R) to give a count of the number of venomous snake species per 5 km x 5 km cell.
