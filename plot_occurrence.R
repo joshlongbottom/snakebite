@@ -26,17 +26,34 @@ america_mex <- shapefile('Z:/users/joshua/Snakebite/World shapefiles/USA_MEX.shp
 species_list <- unique(species_sheet$split_spp)
 species_list <- as.list(species_list[!(species_list == "")])
 
+africa_list <- c('Bitis_arietans', 'Bitis_gabonica', 'Bitis_nasicornis', 'Bitis_rhinoceros', 'Atractaspis_irregularis', 
+                 'Dendroaspis_polylepis', 'Dispholidus_typus', 'Naja_melanoleuca', 'Naja_nigricollis', 'Atractaspis_bibronii',
+                 'Dendroaspis_angusticeps', 'Dendroaspis_jamesoni', 'Dendroaspis_polylepis', 'Dendroaspis_viridis', 'Echis_leucogaster',
+                 'Echis_ocellatus', 'Echis_pyramidum', 'Hemachatus_haemachatus', 'Naja_anchietae', 'Naja_annulata', 
+                 'Naja_annulifera', 'Naja_haje', 'Naja_katiensis', 'Naja_mossambica', 'Naja_nivea', 'Pseudohaje_goldii',
+                 'Thelotornis_capensis', 'Thelotornis_kirklandii', 'Thelotornis_mossambicanus')
+
+latin_america_list <- c('Bothrocophias_hyoprora', 'Bothrocophias_microphthalmus', 'Bothrops_alternatus', 
+                        'Bothrops_ammodytoides', 'Bothrops_attrox', 'Bothrops_bilineatus', 'Bothrops_brazili',
+                        'Bothrops_diporus', 'Bothrops_jararaca', 'Bothrops_jararacussu', 'Bothrops_mattogrossensis',
+                        'Bothrops_moojeni', 'Bothrops_neuwiedi', 'Bothrops_pubescens', 'Bothrops_spp','Bothrops_taeniatus',
+                        'Crotalus_durissus', 'Lachesis_muta', 'Micrurus_corallinus', 'Micrurus_lemniscatus', 'Micrurus_spixii')
+
+usa_mex <- c('Crotalus_atrox', 'Crotalus_molossus', 'Crotalus_oreganus', 'Crotalus_ruber', 'Crotalus_scutulatus',
+             'Crotalus_spp', 'Crotalus_viridis', 'Micruroides_euryxanthus', 'Micrurus_fulvius', 'Micrurus_tener', 
+             'Sistrurus_catenatus')
+
 # for every species in the list, grab occurrence records from gbif, and plot ontop
 # of WHO EOR converted shapefile
 # start a plotting window
-pdf('Z:/users/joshua/Snakebite/output/species_occurrence_plots/species_occurrence_plots_Y2017M04D18.pdf',                    
+pdf('Z:/users/joshua/Snakebite/output/species_occurrence_plots/species_occurrence_plots_Y2017M04D19_v2.pdf',                    
     width = 8.27,
     height = 11.29)
 par(mfrow = c(3, 2))
 
 # loop through and populate pdf with species occurrence plots
-for(i in 1:length(species_list)){
-  
+#for(i in 1:length(species_list)){
+for(i in 1:length(species_list)){ 
     # specify species
     species <- species_list[i]
     
@@ -69,32 +86,15 @@ for(i in 1:length(species_list)){
       country_shp <- america
     }
     
-    africa_list <- c('Bitis_arietans', 'Bitis_gabonica', 'Bitis_nasicornis', 'Bitis_rhinoceros', 'Atractaspis_irregularis', 
-                     'Dendroaspis_polylepis', 'Dispholidus_typus', 'Naja_melanoleuca', 'Naja_nigricollis', 'Atractaspis_bibronii',
-                     'Dendroaspis_angusticeps', 'Dendroaspis_jamesoni', 'Dendroaspis_polylepis', 'Dendroaspis_viridis', 'Echis_leucogaster',
-                     'Echis_ocellatus', 'Echis_pyramidum', 'Hemachatus_haemachatus', 'Naja_anchietae', 'Naja_annulata', 
-                     'Naja_annulifera', 'Naja_haje', 'Naja_katiensis', 'Naja_mossambica', 'Naja_nivea', 'Pseudohaje_goldii',
-                     'Thelotornis_capensis', 'Thelotornis_kirklandii', 'Thelotornis_mossambicanus')
-    
     if(species %in% africa_list){
       
       country_shp <- africa
     }
     
-    latin_america_list <- c('Bothrocophias_hyoprora', 'Bothrocophias_microphthalmus', 'Bothrops_alternatus', 
-                            'Bothrops_ammodytoides', 'Bothrops_attrox', 'Bothrops_bilineatus', 'Bothrops_brazili',
-                            'Bothrops_diporus', 'Bothrops_jararaca', 'Bothrops_jararacussu', 'Bothrops_mattogrossensis',
-                            'Bothrops_moojeni', 'Bothrops_neuwiedi', 'Bothrops_pubescens', 'Bothrops_spp','Bothrops_taeniatus',
-                            'Crotalus_durissus', 'Lachesis_muta', 'Micrurus_corallinus', 'Micrurus_lemniscatus', 'Micrurus_spixii')
-    
     if(species %in% latin_america_list){
       
       country_shp <- latin_america
     }
-     
-    usa_mex <- c('Crotalus_atrox', 'Crotalus_molossus', 'Crotalus_oreganus', 'Crotalus_ruber', 'Crotalus_scutulatus',
-                 'Crotalus_spp', 'Crotalus_viridis', 'Micruroides_euryxanthus', 'Micrurus_fulvius', 'Micrurus_tener', 
-                 'Sistrurus_catenatus')
     
     if(species %in% usa_mex){
       
@@ -177,8 +177,15 @@ for(i in 1:length(species_list)){
     # if spp_data is not an empty dataframe get unique lat/longs for the species
     if((vector.is.empty(spp_data) == FALSE) & 'lat' %in% colnames(spp_data)) {
       
-      locations <- unique(spp_data[c('lat', 'lon', 'year')])
-    
+      if('year' %in% colnames(spp_data)){
+      
+        locations <- unique(spp_data[c('lat', 'lon', 'year')])
+      
+        } else {
+      
+          locations <- unique(spp_data[c('lat', 'lon')]) 
+      }
+      
       # if there are records, remove any NAs
       locations <- locations[!is.na(locations$lat), ]
       locations <- locations[!is.na(locations$lon), ]
@@ -188,6 +195,9 @@ for(i in 1:length(species_list)){
       write.csv(spp_data,
                 dat_path)
       
+      # if year is present, split by year
+      if('year' %in% colnames(locations)){
+      
       na_dates <- locations[is.na(locations$year), ]
       non_na <- locations[!is.na(locations$year), ]
       post_08 <- non_na[non_na$year >= 2008, ]
@@ -195,8 +205,16 @@ for(i in 1:length(species_list)){
       
       } else {
         
-      locations <- NULL
-          
+        na_dates <- locations
+        non_na <- NULL
+        post_08 <- NULL
+        pre_08 <- NULL
+        
+      }
+      
+    } else {
+      
+        locations <- NULL
       }
 
     # add number of data points to plot as a y axis
@@ -259,7 +277,15 @@ for(i in 1:length(species_list)){
 
     # clear environment a little
     rm(spp_data,
-       locations)
+       locations,
+       na_dates,
+       non_na,
+       post_08,
+       pre_08)
   }
   
 dev.off()  
+
+write.csv(spp_countries,
+          'Z:/users/joshua/Snakebite/output/species_occurrence_plots/species_country_list.csv',
+          row.names = FALSE)
