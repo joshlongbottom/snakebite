@@ -3,19 +3,19 @@ Code for the generation of a venomous snake species richness surface, identifyin
 
 ## Dependancies
 Packages:
-1. dismo
-2. raster
-3. maptools
-4. rgeos
-5. rgdal
-6. pdftools
-7. foreign
-8. spatstat
-9. utils
-10. spocc
-11. seegSDM
-12. ggplot2
-13. reshape2
+1. dismo (https://cran.r-project.org/web/packages/dismo/index.html)
+2. raster (https://cran.r-project.org/web/packages/raster/index.html)
+3. maptools (https://cran.r-project.org/web/packages/maptools/index.html)
+4. rgeos (https://cran.r-project.org/web/packages/rgeos/index.html)
+5. rgdal (https://cran.r-project.org/web/packages/rgdal/index.html)
+6. pdftools (https://cran.r-project.org/web/packages/pdftools/index.html)
+7. foreign (https://cran.r-project.org/web/packages/foreign/index.html)
+8. spatstat (https://cran.r-project.org/web/packages/spatstat/index.html)
+9. utils (https://cran.r-project.org/web/packages/R.utils/index.html)
+10. spocc (https://cran.r-project.org/web/packages/spocc/index.html)
+11. seegSDM (https://github.com/SEEG-Oxford/seegSDM)
+12. ggplot2 (https://cran.r-project.org/web/packages/ggplot2/index.html)
+13. reshape2 (https://cran.r-project.org/web/packages/reshape2/index.html)
 
 ## Description
 Expert opinion range (EOR) maps for medically important snake species were obtained from the WHO antivenom database (http://apps.who.int/bloodproducts/snakeantivenoms/database/). ~'get_who_snakes.R'
