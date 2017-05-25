@@ -21,7 +21,6 @@ species_sheet <- species_sheet[!(species_sheet$shapefile_path == ""), ]
 # read in continent shapefiles
 admin0 <- shapefile('World shapefiles/admin2013_0.shp')
 africa <- shapefile('World shapefiles/Africa.shp')
-america <- shapefile('World shapefiles/America.shp')
 latin_america <- shapefile('World shapefiles/Latin_America.shp')
 america_mex <- shapefile('World shapefiles/USA_MEX.shp')
 
@@ -85,11 +84,7 @@ for(i in 1:length(species_list)){
     # create a shapefile of countries for each species
     country_shp <- admin0[admin0@data$COUNTRY_ID %in% iso, ]    
     
-    if('USA' %in% iso){
-      
-      country_shp <- america
-    }
-    
+
     if(species %in% africa_list){
       
       country_shp <- africa
@@ -110,13 +105,6 @@ for(i in 1:length(species_list)){
         countries <- 'More than 7 countries'
     
         }    
-    
-    # if Russia is in ISO, sub out until I've created a specific shapefile excluding far North-east
-    if('RUS' %in% iso){
-      
-      country_shp <- country_shp[!country_shp@data$COUNTRY_ID == 'RUS', ] 
-    
-      }
     
     # dissolve polygons
     n_polys <- as.numeric(nrow(shape@data))
