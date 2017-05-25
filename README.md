@@ -7,7 +7,7 @@ Project is currently in progress. Main themes of the project:
 - Compare this surface with disease burden estimates and antivenom availability data
 
 ## Description
-Expert opinion range (EOR) maps for medically important snake species were obtained from the WHO antivenom database (http://apps.who.int/bloodproducts/snakeantivenoms/database/). ~'get_who_snakes.R'
+Expert opinion range (EOR) maps for medically important snake species were obtained from the WHO antivenom database (http://apps.who.int/bloodproducts/snakeantivenoms/database/). **~'get_who_snakes.R'**
 
 Example EOR map:
 
@@ -15,13 +15,21 @@ Example EOR map:
 
 Each EOR map was digitized using ArcMAP, and a shapefile was created for each unique species per map.
 
-These digitized ranges were then converted to raster format (~convert_shp_to_raster.R), and stacked (~gen_species_richness.R) to give a count of the number of venomous snake species per 5 km x 5 km cell.
-
 Example digitization and rasterization process:
 
-![Alt text](https://preview.ibb.co/kZX4Lv/Mapping_venomous_snake_species_richness.png "Acanthophis antarcticus EOR map")
+![Alt text](https://preview.ibb.co/kZX4Lv/Mapping_venomous_snake_species_richness.png "Digitised Micrurus lemniscatus EOR map")
 
-Utilizing the spocc package, species occurrence data was obtained for each species. Using this species occurrence data, multivariate environmental suitability surfaces were generated for each species, in order to validate the existing EOR map.
+Utilizing the spocc package, species occurrence data was then obtained for each species (n = ~277) **~'plot_occurrence_spocc.R'**. Through a combination of digitised EOR maps, and species occurrence data obtained via spocc, Multivariate Environmental Suitability Surfaces (MESS) were generated for each species **~'gen_mess.R'**. These surfaces were used to validate any new occurrence data outside of the currently accepted EOR, and informed a process generating a new species range.
+
+Example ocurrence data trawl:
+
+![Alt text](https://preview.ibb.co/hzvVtF/Grab_occurrence.png "Occurrence data grabbing example")
+
+Example MESS surface (in progress, Acanthophis antarcticus):
+
+![Alt text](https://image.ibb.co/j3vr0v/Example_MESS.png "Acanthophis antarcticus MESS (in progress)")
+
+The newly created ranges were then converted to raster format (**~'convert_shp_to_raster.R'**), and stacked (**~'gen_species_richness.R'**) to give a count of the number of venomous snake species per 5 km x 5 km cell.
 
 ## Dependancies
 Packages:
