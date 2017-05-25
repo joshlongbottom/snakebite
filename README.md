@@ -19,7 +19,7 @@ Example digitization and rasterization process:
 
 ![Alt text](https://preview.ibb.co/kZX4Lv/Mapping_venomous_snake_species_richness.png "Digitised Micrurus lemniscatus EOR map")
 
-Utilizing the spocc package, species occurrence data was then obtained for each species (n = ~277) **~'plot_occurrence_spocc.R'**. Through a combination of digitised EOR maps, and species occurrence data obtained via spocc, Multivariate Environmental Suitability Surfaces (MESS) were generated for each species **~'gen_mess.R'**. These surfaces were used to validate any new occurrence data outside of the currently accepted EOR, and informed a process generating a new species range.
+Utilizing the spocc package, species occurrence data was then obtained for each species (n = 277) **~'plot_occurrence_spocc.R'**. Through a combination of digitised EOR maps, and species occurrence data obtained via spocc, Multivariate Environmental Suitability Surfaces (MESS) were generated for each species **~'gen_mess.R'**. These surfaces were used to validate any new occurrence data outside of the currently accepted EOR, and informed a process generating a new species range.
 
 Example ocurrence data trawl:
 
