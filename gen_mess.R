@@ -2,47 +2,49 @@
 rm(list = ls ())
 
 # load packages
-pacman::p_load(raster, dismo, rgeos, seegSDM, maptools, ggplot2, colorRamps, reshape2, dplyr)
-
-# set working directory
-setwd('Z:/users/joshua/Snakebite/')
+pacman::p_load(raster, dismo, rgeos, seegSDM, maptools, ggplot2, colorRamps, reshape2, dplyr, foreach, doMC)
 
 # load functions
-source('snakebite/bespoke_functions.R')
+source('code/bespoke_functions_cluster.R')
 
 # read in a list of the covariates to be used in the model
-cov_list <- read.csv('rasters/covariates_for_model.csv',
+cov_list <- read.csv('data/raw/raster/covariates_for_model_cluster.csv',
                      stringsAsFactors = FALSE)
 
 # read in snakelist
-snake_list <- read.csv('snakebite/snake_list.csv',
+snake_list <- read.csv('data/raw/snake_list_cluster.csv',
                        stringsAsFactors = FALSE)
 
 # read in admin 0
-admin_0 <- shapefile('World shapefiles/admin2013_0.shp')
+admin_0 <- shapefile('data/raw/world_shapefiles/admin2013_0.shp')
 
 # list species for which we have occurrence data
-spp_list <- list.files('output/species_occurrence_plots/species data/',
+spp_list <- list.files('data/raw/species_data/',
                        pattern = '*_raw.csv$',
                        full.names = FALSE)
 
 # specify outpath for distribution plots
-distribution_path <- 'output/species_mess_maps/distribution plots/'
+distribution_path <- 'output/distribution_plots/'
 
 # specify outpath for MESS geotiffs
-geotif_mess <- 'output/species_mess_maps/files/'
+geotif_mess <- 'output/mess_geotiff/'
 
+# specify outpath for MESS pngs
+png_mess <- 'output/mess_png/'
 
-# loop through and create stacks for each extent
-# for(i in 1:length(spp_list)){
-for(i in 1:1){
-  
+# specify outpath for MESS evaluation
+mess_eval <- 'output/mess_evaluation/'
+
+# loop through and create a MESS for each species, including plots showing 
+# variance within environmental covariates across referenced occurrence data
+for(i in 1:length(spp_list)){
+
   # get species info from spp_list
   spp_name <- as.character(spp_list[i])
   spp_name <- gsub('_raw.csv', '', spp_name)
   
   # inform progress
-  message(paste('processing file ', i, ' of length ', length(spp_list), ' (', spp_name, ') ', sep = ""))
+  message(paste('processing species ', i, ' of ', length(spp_list), ' (', spp_name, ') ', Sys.time(), sep = ""))
   
   sub <- snake_list[snake_list$split_spp == spp_name, ]
 
@@ -58,11 +60,20 @@ for(i in 1:1){
   # get presence records for species
   locations <- load_occurrence(spp_name, range)
   
+  if(nrow(locations) !=0){
+    
   # get an index for occurrence records within species' range
   records_inside <- !is.na(over(locations, as(range, "SpatialPolygons")))
   
   records_outside <- as.data.frame(locations[records_inside == FALSE, ])
   records_inside <- as.data.frame(locations[records_inside == TRUE, ])
+  
+  } else {
+    
+  records_inside <- locations  
+  records_outside <- locations  
+  
+  }
   
   # generate a MESS, using a prerequisite of a minimum of 5 data points within the species range
   if(nrow(records_inside) >= 5){
@@ -73,22 +84,16 @@ for(i in 1:1){
   # subsample from this extracted covariate data, to generate 1000 bootstraps
   # then plot the distribution of the max and mix values for each covariate
   # to measure variation in the input data
-  covariate_stats <- measure_variance(1000, 
+  covariate_stats <- measure_variance(n_boot = 1000, 
                                       covs_extract,
                                       distribution_path,
                                       spp_name)
 
-  # create conservative mess map, and time the process
-  start_time <- Sys.time()
-  
+  # create conservative mess map
+  # inform progress
+  message(paste('generating conservative MESS', ' (', spp_name, ') ', Sys.time(), sep = ""))
   suppressWarnings(conservative_mess_map <- mess(covs, covariate_stats, full = TRUE))
-  
-  end_time <- Sys.time()
-  
-  conservative_mess_time <- end_time - start_time
-  
-  message(paste('conservative MESS for', spp_name, 'generated in:', conservative_mess_time, 'minute(s)'))
-  
+
   # make binary, interpolation/extrapolation surface for the conservative mess
   tmp <- conservative_mess_map[['rmess']] >= 0
   raw_mess <- conservative_mess_map[['rmess']]
@@ -104,84 +109,38 @@ for(i in 1:1){
               format = 'GTiff', 
               overwrite = TRUE)
   
-  outpath_2 <- paste(geotif_mess, spp_name, 'conservative_raw', sep = '')
+  outpath_2 <- paste(geotif_mess, spp_name, '_conservative_raw', sep = '')
   writeRaster(raw_mess_masked, 
               file = outpath_2, 
               format = 'GTiff', 
               overwrite = TRUE)
   
-  # generate the 1000 MESS surface (uh-oh), and time
-  start_time <- Sys.time()
+  # generate the 1000 MESS surface (uh-oh)
+  # run function, specify number of bootstraps, and number of reference points
+  message(paste('generating bootstrapped MESS', ' (', spp_name, ') ', Sys.time(), sep = ""))
+  bootstrapped_mess <- the_1000_mess_project(n_boot = 10,
+                                             in_parallel = TRUE,
+                                             n_cores = 50,
+                                             covs_extract = covs_extract, 
+                                             covs = covs,
+                                             occ_dat = records_inside,
+                                             eval_plot = TRUE,
+                                             plot_outpath = mess_eval)
   
-  # run function, specify number of bootstraps
-  bootstrapped_mess <- the_1000_mess_project(10, covs_extract, covs)
+  # write bootstrapped mess to disk
+  outpath_3 <- paste(geotif_mess, spp_name, '_bootstrapped', sep = '')
+  writeRaster(bootstrapped_mess, 
+              file = outpath_3, 
+              format = 'GTiff', 
+              overwrite = TRUE)
   
-  end_time <- Sys.time()
-  
-  bootstrapped_mess_time <- end_time - start_time
-  
-  message(paste('bootstrapped MESS for', spp_name, '(10 straps) generated in:', conservative_mess_time, 'minute(s)'))
-  
-  # create a plotting window to plot both of the surfaces
-  png_name <- paste('output/species_mess_maps/', spp_name, '_species_mess_map_', Sys.Date(), '.png', sep = "")
-
-  png(png_name,
-      width = 450,
-      height = 250,
-      units = 'mm',
-      res = 300)
-  par(mfrow = c(1, 2))
-  
-  # plot the conservative MESS
-  title <- gsub('_', ' ', spp_name)
-  
-  plot(tmp_masked, 
-       main = bquote(~italic(.(title))),
-       legend = FALSE,
-       axes = FALSE, 
-       box = FALSE)
-  plot(range,
-       add = TRUE,
-       border = 'black',
-       lty = 1,
-       lwd = 1)
-  plot(ext,
-       add = TRUE,
-       border = 'gray45',
-       lty = 1,
-       lwd = 0.5)
-  
-  title(xlab = 'Conservative MESS', line = 0)
-  
-  # add points on top
-  points(records_outside$longitude, records_outside$latitude, pch = 20, cex = 0.75, col = '#D93529')
-  points(records_inside$longitude, records_inside$latitude, pch = 20, cex = 0.75, col = 'blue')
-  
-  legend('bottomleft', c("Interpolation","Extrapolation", "Within range", "Outside range"), 
-         pch = c(15, 15, 20, 20),
-         col = c("springgreen4","gainsboro", "blue", "#D93529"), bty = 'n')
-  
-  # plot the 1000-MESS MESS 
-  plot(bootstrapped_mess,
-       main = bquote(~italic(.(title))),
-       legend = TRUE,
-       axes = FALSE,
-       box = FALSE)
-   plot(range,
-      add = TRUE,
-      border = 'black',
-      lty = 1,
-      lwd = 1)
-   plot(ext,
-        add = TRUE,
-        border = 'gray45',
-        lty = 1,
-        lwd = 0.5)
-   
-   
-  title(xlab = 'Bootstrapped MESS', line = 0)
-  
-  dev.off()
+  # create a plot of both of the MESS outputs, specify whether to add the
+  # reference points to the plot
+  plots <- plot_mess(png_mess, 
+                     spp_name, 
+                     add_points = TRUE,
+                     tmp_masked,
+                     bootstrapped_mess)
   
   }
   
@@ -205,11 +164,11 @@ for(i in 1:1){
     records_oor_pos <- as.data.frame(records_outside[!(is.na(records_outside$mess)), ])
     records_oor_neg <- as.data.frame(records_outside[is.na(records_outside$mess), ])
     
-    neg_outpath <- paste('output/species_occurrence_plots/species data oor/', 
-                         spp_name, 'OOR_neg_Mess.csv', sep = '')
+    neg_outpath <- paste('output/mess_oor_data/', 
+                         spp_name, '_OOR_neg_Mess.csv', sep = '')
     
-    pos_outpath <- paste('output/species_occurrence_plots/species data oor/', 
-                         spp_name, 'OOR_pos_Mess.csv', sep = '')
+    pos_outpath <- paste('output/mess_oor_data/', 
+                         spp_name, '_OOR_pos_Mess.csv', sep = '')
     
     if(nrow(records_oor_pos) != 0) {
     
@@ -220,19 +179,12 @@ for(i in 1:1){
     
     if(nrow(records_oor_neg) != 0) {
       
-      write.csv(records_oor_pos,
+      write.csv(records_oor_neg,
                 neg_outpath,
                 row.names = FALSE)  
-  }
+      
+    }
   
   }
-  
-  # rm(records_outside,
-  #    records_inside, 
-  #    records_oor_pos,
-  #    records_oor_neg)
   
 }  
-
-# remind where the distribution plots have been saved (forcing to re-direct if necessary)
-message(paste('distribution plots saved in the specified directory:', distribution_path, sep = " "))
