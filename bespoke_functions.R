@@ -221,6 +221,7 @@ measure_variance <- function(n_boot, covs_extract_df, distribution_path, spp_nam
   
 }
 
+the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract, covs, occ_dat, eval_plot, plot_outpath){
   # where n_boot is the number of bootstraps required, covs_extract is an extracted
   # dataframe including covariate values for each reference point, covs is a stack of covariate 
   # surfaces, occ_dat is the raw reference (occurrence data), in_parallel - if the cluster should
@@ -334,8 +335,11 @@ measure_variance <- function(n_boot, covs_extract_df, distribution_path, spp_nam
     
     suppressWarnings(ggplot(data = eval_stats, mapping = aes(x = value)) + 
                      geom_density(colour = 'cadetblue4', fill = 'cadetblue3') + 
+                     ggtitle(bquote(~italic(.(spp_italics))~' MESS evaluation (proportion correctly classified)')) +   
                      facet_wrap(~variable, scales = 'free')) 
     
+    eval_path <- paste(plot_outpath, spp_name, '_mess_evaluation_plots_', Sys.Date(), '.png', sep = "")
+    ggsave(eval_path, device = "png")
     
   }
   
