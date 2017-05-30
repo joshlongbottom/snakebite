@@ -7,8 +7,9 @@ vector.is.empty <- function(data) {
 }
 
 prepare_covariates <- function(cov_list, ext, range) {
-  # where 'cov_list' is a dataframe with covariate names, and covariate file paths,
-  # ext is a shapefile of the study extent, and range is the EOR shapefile
+  # where 'cov_list' is a dataframe with covariate names and covariate file paths,
+  # ext is a shapefile of the study extent, and range is the EOR shapefile - loop through the
+  # covariate list, load and stack the rasters, and mask by a surface with all NA cell values
   
   # create a list of the covariates to loop through and open
   covars <- as.list(cov_list$cov_path)
@@ -40,6 +41,7 @@ prepare_covariates <- function(cov_list, ext, range) {
   
   # return prepped covariates
   return(covs)
+  
 }
 
 prepare_eor <- function(sub) {
@@ -67,7 +69,8 @@ prepare_eor <- function(sub) {
 
 generate_ext <- function(sub, admin_0){
   # where sub is a dataframe containing a list of ISO codes within a species' extent, and 
-  # admin_0 is a shapefile with national country polygons
+  # admin_0 is a shapefile with national country polygons, generate a national extent for 
+  # the species
   
   # get a list of iso3 codes
   country_list <- as.data.frame(strsplit(sub$countries_raw, ","))
@@ -89,10 +92,10 @@ generate_ext <- function(sub, admin_0){
 load_occurrence <- function(spp_name, range){
   # where spp_name is a vector with the name of the species (genus_species), and 
   # range is an EOR shapefile for each species, load in occurrence data, turn into a 
-  # spatial points dataframe and project in the same projection as the EOR
+  # spatial points dataframe and project in the same coordinate system as the EOR
   
   # get presence records for species
-  dat_path <- paste('output/species_occurrence_plots/species data/', 
+  dat_path <- paste('data/raw/species_data/', 
                   spp_name,
                   '_trimmed.csv', 
                   sep = "")
@@ -102,13 +105,17 @@ load_occurrence <- function(spp_name, range){
 
   # remove NA records
   locations <- locations[!(is.na(locations$latitude)), ]
-
+  
+  if(nrow(locations) !=0){
+    
   # turn into a spatial points dataframe
   coordinates(locations) <- c("longitude", "latitude")
 
   # project coordinates in same projection as shape
   proj4string(locations) <- proj4string(range)
-
+  
+  }
+  
   return(locations)
   
 }
@@ -128,13 +135,14 @@ measure_variance <- function(n_boot, covs_extract_df, distribution_path, spp_nam
   for(i in 1:n_boot){
     
     # subsample the covariate data
-    sub_sample <- covs_extract_df[sample(1:nrow(covs_extract_df), 30, replace = TRUE), ]
+    sub_sample <- covs_extract_df[sample(1:nrow(covs_extract_df), nrow(covs_extract_df), replace = TRUE), ]
     
-    # generate a max, min, and mean value for each covariate
+    # generate a max, min, and mean value for each covariate, for each bootstrap
     sub_max <- apply(sub_sample, 2, max)
     sub_min <- apply(sub_sample, 2, min)
     sub_mean <- apply(sub_sample, 2, mean)
     
+    # add these values to a dataframe
     max_cov_frame <- rbind(max_cov_frame,
                            sub_max)
     
@@ -146,7 +154,7 @@ measure_variance <- function(n_boot, covs_extract_df, distribution_path, spp_nam
     
   }
   
-  # melt the covariate max, min, mean dataframes
+  # melt the covariate max, min, mean dataframes, so they can be used to generate density plots
   max_cov_melt <- melt(max_cov_frame)
   max_cov_melt$Var1 <- NULL
   names(max_cov_melt) <- c('variable', 'value')
@@ -213,41 +221,305 @@ measure_variance <- function(n_boot, covs_extract_df, distribution_path, spp_nam
   
 }
 
-the_1000_mess_project <- function(n_boot, covs_extract, covs){
+  # where n_boot is the number of bootstraps required, covs_extract is an extracted
+  # dataframe including covariate values for each reference point, covs is a stack of covariate 
+  # surfaces, occ_dat is the raw reference (occurrence data), in_parallel - if the cluster should
+  # be initiated, and n_cores - how many cores to use; loop through and generate x bootstrapped MESS, 
+  # and stack the binary outputs of each MESS to get a relative interpolation surface
   
-  # for however many specified bootstraps, generate the respective number of mess
-  for(i in 1:n_boot){
+  if(in_parallel){
     
-    # sample 30 reference points
-    sub_sample <- covs_extract[sample(1:nrow(covs_extract), 30, replace = TRUE), ]
+    # initialize the cluster
+    registerDoMC(n_cores)
     
-    # generate a mess using the sub_sample
-    mess_iteration <- mess(covs, sub_sample, full = TRUE)
-  
-    # convert to a binary surface
-    tmp <- mess_iteration[['rmess']] >= 0
-  
-    # crop to extent
-    tmp_masked <- mask(tmp, covs[[1]])
-    
-    # stack with previous iteration
-    if(i == 1){
+    # for however many specified bootstraps, generate the respective number of mess
+    mess_stack <- foreach(i=1:n_boot) %dopar% {
       
-      raster_stack <- tmp_masked
+      # sample reference points, with replacement
+      sub_sample <- covs_extract[sample(1:nrow(covs_extract), nrow(covs_extract), replace = TRUE), ]
+      
+      # generate a mess using the sub_sample
+      suppressWarnings(mess_iteration <- mess(covs, sub_sample, full = TRUE))
+      
+      # convert to a binary surface
+      tmp <- mess_iteration[['rmess']] >= 0
+      
+      # crop to extent
+      tmp_masked <- mask(tmp, covs[[1]])
+      
+      }
+      
+      raster_stack <- stack(mess_stack)
     
+  } else { 
+    
+    for(i in 1:n_boot){
+      
+      # sample reference points, with replacement
+      sub_sample <- covs_extract[sample(1:nrow(covs_extract), nrow(covs_extract), replace = TRUE), ]
+      
+      # generate a mess using the sub_sample
+      suppressWarnings(mess_iteration <- mess(covs, sub_sample, full = TRUE))
+      
+      # convert to a binary surface
+      tmp <- mess_iteration[['rmess']] >= 0
+      
+      # crop to extent
+      tmp_masked <- mask(tmp, covs[[1]])
+      
+      # stack with previous iteration
+      if(i == 1){
+        
+        raster_stack <- tmp_masked
+        
       } else {
-      
+        
         raster_stack <- stack(raster_stack,
                               tmp_masked)
+        
+      }
       
-        }
+    }
+    
   }
   
   # sum cell values to generate a relative interpolation surface
   monster_mess <- sum(raster_stack, na.rm = TRUE)
   
+  # crop monster mess by the effective land/sea mask
   monster_mess <- mask(monster_mess, covs[[1]])
   
+  if(eval_plot){
+  
+    ## get stats on the performance of each MESS
+    # turn occ_dat into a spatial points dataframe
+    coordinates(occ_dat) <- c("longitude", "latitude")
+  
+    # project coordinates in same projection as covariates
+    proj4string(occ_dat) <- proj4string(covs[[1]])
+  
+    lat <- occ_dat$latitude
+    lon <- occ_dat$longitude
+  
+    lat_lon <- cbind(lon,
+                     lat)
+  
+    eval_stats <- NULL
+  
+    for(i in 1:nlayers(raster_stack)){
+  
+    # get an index for occurrence records correctly classified
+    occ_dat$mess <- cellFromXY(raster_stack[[i]], lat_lon)
+    
+    # get count of number correctly classified (land within a cell value of the MESS)
+    rcc <- as.data.frame(occ_dat[!(is.na(occ_dat$mess)), ])
+    
+    rcc_i <- (nrow(rcc) / nrow(occ_dat))
+    
+    eval_stats <- rbind(eval_stats,
+                        rcc_i)
+    
+    }
+  
+    # plot distribution of correctly classified across all bootstraps
+    eval_stats <- as.data.frame(eval_stats)
+    
+    eval_stats$variable <- rep('proportion correctly classified')
+    
+    names(eval_stats) <- c('value', 'variable')
+
+    spp_name <- unique(occ_dat$name)
+    
+    spp_italics <- gsub('_', ' ', spp_name)
+    
+    suppressWarnings(ggplot(data = eval_stats, mapping = aes(x = value)) + 
+                     geom_density(colour = 'cadetblue4', fill = 'cadetblue3') + 
+                     facet_wrap(~variable, scales = 'free')) 
+    
+    
+  }
+  
   return(monster_mess)
+ 
+}
+
+plot_mess <- function(png_mess, spp_name, add_points, tmp_masked, bootstrapped_mess){
+  
+  # create a plotting window to plot both of the surfaces
+  png_name <- paste(png_mess, spp_name, '_species_mess_maps_', Sys.Date(), '.png', sep = "")
+  
+  if(add_points == TRUE){
+    
+  png(png_name,
+      width = 450,
+      height = 400,
+      units = 'mm',
+      res = 300)
+  par(mfrow = c(2, 2))
+  
+  # plot the conservative MESS
+  title <- gsub('_', ' ', spp_name)
+  
+  plot(tmp_masked, 
+       main = bquote(~italic(.(title))),
+       legend = FALSE,
+       axes = FALSE, 
+       box = FALSE)
+  plot(range,
+       add = TRUE,
+       border = 'black',
+       lty = 1,
+       lwd = 1)
+  plot(ext,
+       add = TRUE,
+       border = 'gray45',
+       lty = 1,
+       lwd = 0.5)
+  
+  title(xlab = 'Conservative MESS', line = 0)
+  
+  # add legend to the bottom
+  legend('bottomleft', c("Interpolation","Extrapolation"), 
+         pch = c(15, 15),
+         col = c("springgreen4","gainsboro"), bty = 'n')
+  
+  # plot the 1000-MESS MESS 
+  plot(bootstrapped_mess,
+       main = bquote(~italic(.(title))),
+       legend = TRUE,
+       axes = FALSE,
+       box = FALSE)
+  plot(range,
+       add = TRUE,
+       border = 'black',
+       lty = 1,
+       lwd = 1)
+  plot(ext,
+       add = TRUE,
+       border = 'gray45',
+       lty = 1,
+       lwd = 0.5)
+  
+  title(xlab = 'Bootstrapped MESS', line = 0)
+  
+  # now plot again, adding the points to each plot
+  plot(tmp_masked, 
+       main = bquote(~italic(.(title))),
+       legend = FALSE,
+       axes = FALSE, 
+       box = FALSE)
+  plot(range,
+       add = TRUE,
+       border = 'black',
+       lty = 1,
+       lwd = 1)
+  plot(ext,
+       add = TRUE,
+       border = 'gray45',
+       lty = 1,
+       lwd = 0.5)
+  
+  title(xlab = 'Conservative MESS', line = 0)
+  
+  # add points on top
+  points(records_outside$longitude, records_outside$latitude, pch = 20, cex = 0.75, col = '#D93529')
+  points(records_inside$longitude, records_inside$latitude, pch = 20, cex = 0.75, col = 'blue')
+  
+  legend('bottomleft', c("Interpolation","Extrapolation", "Within range", "Outside range"), 
+         pch = c(15, 15, 20, 20),
+         col = c("springgreen4","gainsboro", "blue", "#D93529"), bty = 'n')
+  
+  # plot the 1000-MESS MESS 
+  plot(bootstrapped_mess,
+       main = bquote(~italic(.(title))),
+       legend = TRUE,
+       axes = FALSE,
+       box = FALSE)
+  plot(range,
+       add = TRUE,
+       border = 'black',
+       lty = 1,
+       lwd = 1)
+  plot(ext,
+       add = TRUE,
+       border = 'gray45',
+       lty = 1,
+       lwd = 0.5)
+  
+  title(xlab = 'Bootstrapped MESS', line = 0)
+  
+  # add points on top
+  points(records_outside$longitude, records_outside$latitude, pch = 20, cex = 0.75, col = '#D93529')
+  points(records_inside$longitude, records_inside$latitude, pch = 20, cex = 0.75, col = 'blue')
+  
+  legend('bottomleft', c("Interpolation","Extrapolation", "Within range", "Outside range"), 
+         pch = c(15, 15, 20, 20),
+         col = c("springgreen4","gainsboro", "blue", "#D93529"), bty = 'n')
+  
+  dev.off()
+  
+  } else {
+    
+    # just plot the two without the points
+    png(png_name,
+        width = 450,
+        height = 200,
+        units = 'mm',
+        res = 300)
+    par(mfrow = c(1, 2))
+    
+    # plot the conservative MESS
+    title <- gsub('_', ' ', spp_name)
+    
+    plot(tmp_masked, 
+         main = bquote(~italic(.(title))),
+         legend = FALSE,
+         axes = FALSE, 
+         box = FALSE)
+    plot(range,
+         add = TRUE,
+         border = 'black',
+         lty = 1,
+         lwd = 1)
+    plot(ext,
+         add = TRUE,
+         border = 'gray45',
+         lty = 1,
+         lwd = 0.5)
+    
+    title(xlab = 'Conservative MESS', line = 0)
+    
+    # add legend to the bottom
+    legend('bottomleft', c("Interpolation","Extrapolation"), 
+           pch = c(15, 15),
+           col = c("springgreen4","gainsboro"), bty = 'n')
+    
+    # plot the 1000-MESS MESS 
+    plot(bootstrapped_mess,
+         main = bquote(~italic(.(title))),
+         legend = TRUE,
+         axes = FALSE,
+         box = FALSE)
+    plot(range,
+         add = TRUE,
+         border = 'black',
+         lty = 1,
+         lwd = 1)
+    plot(ext,
+         add = TRUE,
+         border = 'gray45',
+         lty = 1,
+         lwd = 0.5)
+    
+    title(xlab = 'Bootstrapped MESS', line = 0)
+    
+    dev.off()
+  
+    }
+  
+  # create a return
+  status <- 'Plots complete'
+  
+  return(status)
   
 }
