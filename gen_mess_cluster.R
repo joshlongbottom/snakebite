@@ -46,6 +46,9 @@ mess_si <- 'output/mess_si/'
 # specify outpath for MESS evaluation
 mess_eval <- 'output/mess_evaluation/'
 
+# specify outpath for modified shapefiles
+new_shp_path <- 'output/modified_ranges/'
+
 # loop through and create a MESS for each species, including plots showing 
 # variance within environmental covariates across referenced occurrence data
 for(i in 1:length(spp_list)){
@@ -55,7 +58,7 @@ for(i in 1:length(spp_list)){
   spp_name <- gsub('_raw.csv', '', spp_name)
   
   # inform progress
-  message(paste('processing species ', i, ' of ', length(spp_list), ' (', spp_name, ') ', Sys.time(), sep = ""))
+  message(paste('Processing species ', i, ' of ', length(spp_list), ' (', spp_name, ') ', Sys.time(), sep = ""))
   
   sub <- snake_list[snake_list$split_spp == spp_name, ]
 
@@ -131,7 +134,7 @@ for(i in 1:length(spp_list)){
   
   # generate the 1000 MESS surface 
   # run function, specify number of bootstraps, and number of reference points
-  message(paste('generating bootstrapped MESS', ' (', spp_name, ') ', Sys.time(), sep = ""))
+  message(paste('Generating bootstrapped MESS', ' (', spp_name, ') ', Sys.time(), sep = ""))
   
                                              # number of bootstraps
   bootstrapped_mess <- the_1000_mess_project(n_boot = 100,
@@ -200,6 +203,7 @@ for(i in 1:length(spp_list)){
     # project coordinates in same projection as shape
     proj4string(records_outside) <- proj4string(range)
     
+    # get a matrix of coordinates for use in extract function
     lat <- records_outside$latitude
     lon <- records_outside$longitude
     
@@ -208,26 +212,43 @@ for(i in 1:length(spp_list)){
     
     # get an index for occurrence records within species' range
     vals <- extract(binary_95, lat_lon)
+    vals <- replace(vals, vals == 0, NA)
     
+    # attach 'vals' to the records_outside dataframe
     records_outside <- as.data.frame(records_outside)
     records_outside$mess <- vals
     
+    # subset to create two dataframes
+    # 1. records outside of the EOR, but within MESS interpolation space
     records_oor_pos <- records_outside[!(is.na(records_outside$mess)), ]
+    # 2. records outside of the EOR, and in MESS extrapolation space
     records_oor_neg <- records_outside[is.na(records_outside$mess), ]
     
+    # if there's any records which are within the MESS interpolation space
+    # buffer these records, and merge them on to the current EOR shapefiles
     if(nrow(records_oor_pos) != 0) {
       
+      # get matrix of coordinates
       buf_lat <- records_oor_pos$latitude
       buf_lon <- records_oor_pos$longitude
       
       buffer_pts <- cbind(buf_lon,
                           buf_lat)
       
+      # inform progress, as this step takes a while [clipping]
+      message(paste('Buffering MESS +ve occurrence records for', spp_name, Sys.time(), sep = " "))
+      
+      # run buffer function, specify a radius to buffer by (in km), and 
+      # which land/sea shapefile to clip by
       modified_poly <- bufferMESSpositives(range,
                                            coords = buffer_pts,
                                            radius = 20,
                                            sea = sea_shp)
-      
+    
+      # write out the new shapefile, define path
+      shp_path <- paste(new_shp_path, spp_name, sep = "")
+      shapefile(modified_poly, path = shp_path, overwrite = TRUE)
+        
     }
     
   }
@@ -244,7 +265,10 @@ for(i in 1:length(spp_list)){
       res = 300)
   par(mfrow = c(2, 2))
   
-  # plot the bootstrapped MESS 
+  # plot the conservative MESS
+  title <- gsub('_', ' ', spp_name)
+  
+  ### plot the bootstrapped MESS 
   plot(bootstrapped_mess,
        main = bquote(~italic(.(title))),
        legend = TRUE,
@@ -267,10 +291,10 @@ for(i in 1:length(spp_list)){
          pch = c(15, 15),
          col = c("springgreen4","gainsboro"), bty = 'n')
   
-  # plot the 95% binary MESS
+  ### plot the 95% binary MESS
   plot(binary_95,
        main = bquote(~italic(.(title))),
-       legend = TRUE,
+       legend = FALSE,
        axes = FALSE,
        box = FALSE)
   plot(range,
@@ -290,10 +314,10 @@ for(i in 1:length(spp_list)){
          pch = c(15, 15),
          col = c("springgreen4","gainsboro"), bty = 'n')
   
-  # plot the 95% binary MESS with points
+  ### plot the 95% binary MESS with points
   plot(binary_95,
        main = bquote(~italic(.(title))),
-       legend = TRUE,
+       legend = FALSE,
        axes = FALSE,
        box = FALSE)
   plot(range,
@@ -317,12 +341,40 @@ for(i in 1:length(spp_list)){
          pch = c(15, 15, 20, 20),
          col = c("springgreen4","gainsboro", "blue", "#D93529"), bty = 'n')
   
+  ### plot the new range shapefile, ontop of binary bootstrapped MESS
+  plot(binary_95,
+       main = bquote(~italic(.(title))),
+       legend = FALSE,
+       axes = FALSE,
+       box = FALSE)
   
+  if(nrow(records_oor_pos) != 0) {
+    
+    plot(modified_poly,
+         add = TRUE,
+         border = 'black',
+         lty = 1,
+         lwd = 1.5)
+    
+  } else {
+    
+    plot(range,
+         add = TRUE,
+         border = 'black',
+         lty = 1,
+         lwd = 1.5)
+  }
   
+  plot(ext,
+       add = TRUE,
+       border = 'gray45',
+       lty = 1,
+       lwd = 0.5)
+  
+  title(xlab = 'Suggested ammended range', line = 0)
+
   dev.off()      
 
   }
-  
-  
-  
+ 
 }  
