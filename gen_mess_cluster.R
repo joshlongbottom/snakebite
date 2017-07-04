@@ -11,7 +11,9 @@ pacman::p_load(raster, dismo, rgeos, seegSDM, maptools, ggplot2, colorRamps, res
 source('code/bespoke_functions_cluster.R')
 
 # read in a list of the covariates to be used in the model
-cov_list <- read.csv('data/raw/raster/covariates_for_model_cluster.csv',
+# cov_list <- read.csv('data/raw/raster/covariates_for_model_cluster.csv',
+#                      stringsAsFactors = FALSE)
+cov_list <- read.csv('data/raw/raster/bio_climatic_covariates_for_model_cluster.csv',
                      stringsAsFactors = FALSE)
 
 # read in snakelist
@@ -41,7 +43,7 @@ mess_eval <- 'output/mess_evaluation/'
 # loop through and create a MESS for each species, including plots showing 
 # variance within environmental covariates across referenced occurrence data
 for(i in 1:length(spp_list)){
-
+  
   # get species info from spp_list
   spp_name <- as.character(spp_list[i])
   spp_name <- gsub('_raw.csv', '', spp_name)
@@ -62,14 +64,17 @@ for(i in 1:length(spp_list)){
   
   # get presence records for species
   locations <- load_occurrence(spp_name, range)
-  
+
   if(nrow(locations) !=0){
-    
+
   # get an index for occurrence records within species' range
   records_inside <- !is.na(over(locations, as(range, "SpatialPolygons")))
   
   records_outside <- as.data.frame(locations[records_inside == FALSE, ])
   records_inside <- as.data.frame(locations[records_inside == TRUE, ])
+  
+  # clean locations to remove 0,0 coordinates  
+  records_outside <- records_outside[!records_outside$latitude == 0 & !records_outside$longitude == 0, ]
   
   } else {
     
@@ -92,36 +97,36 @@ for(i in 1:length(spp_list)){
                                       distribution_path,
                                       spp_name)
 
-  # create conservative mess map
-  # inform progress
-  message(paste('generating conservative MESS', ' (', spp_name, ') ', Sys.time(), sep = ""))
-  suppressWarnings(conservative_mess_map <- mess(covs, covariate_stats, full = TRUE))
-
-  # make binary, interpolation/extrapolation surface for the conservative mess
-  tmp <- conservative_mess_map[['rmess']] >= 0
-  raw_mess <- conservative_mess_map[['rmess']]
-  
-  # crop to extent
-  tmp_masked <- mask(tmp, covs[[1]])
-  raw_mess_masked <- mask(raw_mess, covs[[1]])
-  
-  # write to disk
-  outpath <- paste(geotif_mess, spp_name, '_conservative_binary', sep = '')
-  writeRaster(tmp_masked, 
-              file = outpath, 
-              format = 'GTiff', 
-              overwrite = TRUE)
-  
-  outpath_2 <- paste(geotif_mess, spp_name, '_conservative_raw', sep = '')
-  writeRaster(raw_mess_masked, 
-              file = outpath_2, 
-              format = 'GTiff', 
-              overwrite = TRUE)
+  # ### create conservative mess map
+  # # inform progress
+  # message(paste('generating conservative MESS', ' (', spp_name, ') ', Sys.time(), sep = ""))
+  # suppressWarnings(conservative_mess_map <- mess(covs, covariate_stats, full = TRUE))
+  # 
+  # # make binary, interpolation/extrapolation surface for the conservative mess
+  # tmp <- conservative_mess_map[['rmess']] >= 0
+  # raw_mess <- conservative_mess_map[['rmess']]
+  # 
+  # # crop to extent
+  # tmp_masked <- mask(tmp, covs[[1]])
+  # raw_mess_masked <- mask(raw_mess, covs[[1]])
+  # 
+  # # write to disk
+  # outpath <- paste(geotif_mess, spp_name, '_conservative_binary', sep = '')
+  # writeRaster(tmp_masked, 
+  #             file = outpath, 
+  #             format = 'GTiff', 
+  #             overwrite = TRUE)
+  # 
+  # outpath_2 <- paste(geotif_mess, spp_name, '_conservative_raw', sep = '')
+  # writeRaster(raw_mess_masked, 
+  #             file = outpath_2, 
+  #             format = 'GTiff', 
+  #             overwrite = TRUE)
   
   # generate the 1000 MESS surface (uh-oh)
   # run function, specify number of bootstraps, and number of reference points
   message(paste('generating bootstrapped MESS', ' (', spp_name, ') ', Sys.time(), sep = ""))
-  bootstrapped_mess <- the_1000_mess_project(n_boot = 10,
+  bootstrapped_mess <- the_1000_mess_project(n_boot = 100,
                                              in_parallel = TRUE,
                                              n_cores = 50,
                                              covs_extract = covs_extract, 

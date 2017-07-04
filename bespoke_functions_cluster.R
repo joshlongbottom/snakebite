@@ -308,7 +308,9 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract, co
     eval_stats <- NULL
   
     for(i in 1:nlayers(raster_stack)){
-  
+    
+    occ_dat$mess <- NULL  
+      
     # get an index for occurrence records correctly classified
     occ_dat$mess <- cellFromXY(raster_stack[[i]], lat_lon)
     
@@ -339,7 +341,7 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract, co
                      facet_wrap(~variable, scales = 'free')) 
     
     eval_path <- paste(plot_outpath, spp_name, '_mess_evaluation_plots_', Sys.Date(), '.png', sep = "")
-    ggsave(eval_path, device = "png")
+    ggsave(eval_path, width = 600, height = 450, units = 'mm', dpi = 300, device = 'png')
     
   }
   
@@ -387,7 +389,7 @@ plot_mess <- function(png_mess, spp_name, add_points, tmp_masked, bootstrapped_m
          pch = c(15, 15),
          col = c("springgreen4","gainsboro"), bty = 'n')
   
-  # now plot the conservative MESS again, adding the points on-top
+  # now plot again, adding the points to each plot
   plot(tmp_masked, 
        main = bquote(~italic(.(title))),
        legend = FALSE,
@@ -432,8 +434,8 @@ plot_mess <- function(png_mess, spp_name, add_points, tmp_masked, bootstrapped_m
        lwd = 0.5)
   
   title(xlab = 'Bootstrapped MESS', line = 0)
-
-  # now plot the 1000-MESS MESS again, and add points on top 
+  
+  # plot the 1000-MESS MESS with points
   plot(bootstrapped_mess,
        main = bquote(~italic(.(title))),
        legend = TRUE,
