@@ -76,6 +76,12 @@ generate_ext <- function(sub, admin_0){
   country_list <- as.data.frame(strsplit(sub$countries_raw, ","))
   names(country_list)[1] <- 'ISO'
   
+  country_list_2 <- as.data.frame(strsplit(sub$countries_occ, ","))
+  names(country_list_2)[1] <- 'ISO'
+  
+  country_list <- rbind(country_list,
+                        country_list_2)
+  
   country_list <- as.character(unique(country_list$ISO))
   country_list <- gsub(" ", "", country_list)
   
@@ -309,15 +315,16 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract, co
   
     for(i in 1:nlayers(raster_stack)){
     
-    occ_dat$mess <- NULL  
-      
+    # subset to get a temporary MESS layer
+    temp_MESS <- raster_stack[[i]]
+    
     # get an index for occurrence records correctly classified
-    occ_dat$mess <- cellFromXY(raster_stack[[i]], lat_lon)
+    vals <- extract(temp_MESS, lat_lon, method='bilinear')
     
-    # get count of number correctly classified (land within a cell value of the MESS)
-    rcc <- as.data.frame(occ_dat[!(is.na(occ_dat$mess)), ])
+    # vals of 1 suggest 100% prediction
+    vals <- vals[vals == 1]
     
-    rcc_i <- (nrow(rcc) / nrow(occ_dat))
+    rcc_i <- (length(vals) / nrow(records_inside))
     
     eval_stats <- rbind(eval_stats,
                         rcc_i)
@@ -349,183 +356,44 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract, co
  
 }
 
-plot_mess <- function(png_mess, spp_name, add_points, tmp_masked, bootstrapped_mess){
+bufferMESSpositives <- function (range, coords, radius, sea) {
+  # function to generate a buffer of a given radius around the locations of some points, and merge
+  # with an EOR polygon
+  # `range` must be a SpatialPolygons object of length 1
+  # `coords` must be a two-column matrix of coordinates (x then y)
+  # giving the points to buffer, `radius` must be a single positive number giving the radius of the circle to
+  # remove around each point, in kilometers
   
-  # create a plotting window to plot both of the surfaces
-  png_name <- paste(png_mess, spp_name, '_species_mess_maps_', Sys.Date(), '.png', sep = "")
+  # packages needed
+  require(sp)
+  require(rgeos)
   
-  if(add_points == TRUE){
-    
-  png(png_name,
-      width = 450,
-      height = 400,
-      units = 'mm',
-      res = 300)
-  par(mfrow = c(2, 2))
+  # check things
+  stopifnot(inherits(range, 'SpatialPolygons'))
+  stopifnot(length(range) == 1)
+  stopifnot(inherits(coords, c('matrix', 'data.frame')))
+  stopifnot(ncol(coords) == 2)
+  stopifnot(radius > 0)
   
-  # plot the conservative MESS
-  title <- gsub('_', ' ', spp_name)
+  # turn coords into SpatialPoints
+  spts <- SpatialPoints(coords,
+                        proj4string = CRS(proj4string(range)))
+
+  # convert radius to decimal degrees at the equator
+  radius <- radius/111.2
   
-  plot(tmp_masked, 
-       main = bquote(~italic(.(title))),
-       legend = FALSE,
-       axes = FALSE, 
-       box = FALSE)
-  plot(range,
-       add = TRUE,
-       border = 'black',
-       lty = 1,
-       lwd = 1)
-  plot(ext,
-       add = TRUE,
-       border = 'gray45',
-       lty = 1,
-       lwd = 0.5)
+  # turn SpatialPoints in SpatialPolygons circles
+  spts_buffer <- gBuffer(spts, width = radius)
   
-  title(xlab = 'Conservative MESS', line = 0)
+  # combine buffered points with range polygon
+  modified_range <- gUnion(range, spts_buffer)
   
-  # add legend to the bottom
-  legend('bottomleft', c("Interpolation","Extrapolation"), 
-         pch = c(15, 15),
-         col = c("springgreen4","gainsboro"), bty = 'n')
+  # clip the buffered polygon by a sea shapefile
+  mod_clip_range <- erase(modified_range, sea)
   
-  # now plot again, adding the points to each plot
-  plot(tmp_masked, 
-       main = bquote(~italic(.(title))),
-       legend = FALSE,
-       axes = FALSE, 
-       box = FALSE)
-  plot(range,
-       add = TRUE,
-       border = 'black',
-       lty = 1,
-       lwd = 1)
-  plot(ext,
-       add = TRUE,
-       border = 'gray45',
-       lty = 1,
-       lwd = 0.5)
-  
-  title(xlab = 'Conservative MESS', line = 0)
-  
-  # add points on top
-  points(records_outside$longitude, records_outside$latitude, pch = 20, cex = 0.75, col = '#D93529')
-  points(records_inside$longitude, records_inside$latitude, pch = 20, cex = 0.75, col = 'blue')
-  
-  legend('bottomleft', c("Interpolation","Extrapolation", "Within range", "Outside range"), 
-         pch = c(15, 15, 20, 20),
-         col = c("springgreen4","gainsboro", "blue", "#D93529"), bty = 'n')
-  
-  # plot the 1000-MESS MESS 
-  plot(bootstrapped_mess,
-       main = bquote(~italic(.(title))),
-       legend = TRUE,
-       axes = FALSE,
-       box = FALSE)
-  plot(range,
-       add = TRUE,
-       border = 'black',
-       lty = 1,
-       lwd = 1)
-  plot(ext,
-       add = TRUE,
-       border = 'gray45',
-       lty = 1,
-       lwd = 0.5)
-  
-  title(xlab = 'Bootstrapped MESS', line = 0)
-  
-  # plot the 1000-MESS MESS with points
-  plot(bootstrapped_mess,
-       main = bquote(~italic(.(title))),
-       legend = TRUE,
-       axes = FALSE,
-       box = FALSE)
-  plot(range,
-       add = TRUE,
-       border = 'black',
-       lty = 1,
-       lwd = 1)
-  plot(ext,
-       add = TRUE,
-       border = 'gray45',
-       lty = 1,
-       lwd = 0.5)
-  
-  title(xlab = 'Bootstrapped MESS', line = 0)
-  
-  # add points on top
-  points(records_outside$longitude, records_outside$latitude, pch = 20, cex = 0.75, col = '#D93529')
-  points(records_inside$longitude, records_inside$latitude, pch = 20, cex = 0.75, col = 'blue')
-  
-  legend('bottomleft', c("Interpolation","Extrapolation", "Within range", "Outside range"), 
-         pch = c(15, 15, 20, 20),
-         col = c("springgreen4","gainsboro", "blue", "#D93529"), bty = 'n')
-  
-  dev.off()
-  
-  } else {
-    
-    # just plot the two without the points
-    png(png_name,
-        width = 450,
-        height = 200,
-        units = 'mm',
-        res = 300)
-    par(mfrow = c(1, 2))
-    
-    # plot the conservative MESS
-    title <- gsub('_', ' ', spp_name)
-    
-    plot(tmp_masked, 
-         main = bquote(~italic(.(title))),
-         legend = FALSE,
-         axes = FALSE, 
-         box = FALSE)
-    plot(range,
-         add = TRUE,
-         border = 'black',
-         lty = 1,
-         lwd = 1)
-    plot(ext,
-         add = TRUE,
-         border = 'gray45',
-         lty = 1,
-         lwd = 0.5)
-    
-    title(xlab = 'Conservative MESS', line = 0)
-    
-    # add legend to the bottom
-    legend('bottomleft', c("Interpolation","Extrapolation"), 
-           pch = c(15, 15),
-           col = c("springgreen4","gainsboro"), bty = 'n')
-    
-    # plot the 1000-MESS MESS 
-    plot(bootstrapped_mess,
-         main = bquote(~italic(.(title))),
-         legend = TRUE,
-         axes = FALSE,
-         box = FALSE)
-    plot(range,
-         add = TRUE,
-         border = 'black',
-         lty = 1,
-         lwd = 1)
-    plot(ext,
-         add = TRUE,
-         border = 'gray45',
-         lty = 1,
-         lwd = 0.5)
-    
-    title(xlab = 'Bootstrapped MESS', line = 0)
-    
-    dev.off()
-  
-    }
-  
-  # create a return
-  status <- 'Plots complete'
-  
-  return(status)
+  # return expanded MESS polygon
+  return (modified_range)
   
 }
+
+
