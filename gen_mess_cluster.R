@@ -23,6 +23,9 @@ snake_list <- read.csv('data/raw/snake_list_cluster.csv',
 # read in admin 0
 admin_0 <- shapefile('data/raw/world_shapefiles/admin2013_0.shp')
 
+# read in sea shapefile
+sea_shp <- shapefile('data/raw/world_shapefiles/sea.shp')
+
 # list species for which we have occurrence data
 spp_list <- list.files('data/raw/species_data/',
                        pattern = '*_raw.csv$',
@@ -36,6 +39,9 @@ geotif_mess <- 'output/mess_geotiff/'
 
 # specify outpath for MESS pngs
 png_mess <- 'output/mess_png/'
+
+# specify outpath for MESS SI plots
+mess_si <- 'output/mess_si/'
 
 # specify outpath for MESS evaluation
 mess_eval <- 'output/mess_evaluation/'
@@ -66,7 +72,7 @@ for(i in 1:length(spp_list)){
   locations <- load_occurrence(spp_name, range)
 
   if(nrow(locations) !=0){
-
+  
   # get an index for occurrence records within species' range
   records_inside <- !is.na(over(locations, as(range, "SpatialPolygons")))
   
@@ -123,18 +129,27 @@ for(i in 1:length(spp_list)){
   #             format = 'GTiff', 
   #             overwrite = TRUE)
   
-  # generate the 1000 MESS surface (uh-oh)
+  # generate the 1000 MESS surface 
   # run function, specify number of bootstraps, and number of reference points
   message(paste('generating bootstrapped MESS', ' (', spp_name, ') ', Sys.time(), sep = ""))
-  bootstrapped_mess <- the_1000_mess_project(n_boot = 100,
-                                             in_parallel = TRUE,
-                                             n_cores = 50,
-                                             covs_extract = covs_extract, 
-                                             covs = covs,
-                                             occ_dat = records_inside,
-                                             eval_plot = TRUE,
-                                             plot_outpath = mess_eval)
   
+                                             # number of bootstraps
+  bootstrapped_mess <- the_1000_mess_project(n_boot = 100,
+                                             # execute in parallel?
+                                             in_parallel = TRUE,
+                                             # number of cores
+                                             n_cores = 50,
+                                             # data frame of extracted covariate values
+                                             covs_extract = covs_extract,
+                                             # stack of covariates
+                                             covs = covs,
+                                             # dataframe with species occurrence records
+                                             occ_dat = records_inside,
+                                             # run an evaluation plot to assess PCC?
+                                             eval_plot = TRUE,
+                                             # where to save the plots
+                                             plot_outpath = mess_eval)
+      
   # write bootstrapped mess to disk
   outpath_3 <- paste(geotif_mess, spp_name, '_bootstrapped', sep = '')
   writeRaster(bootstrapped_mess, 
@@ -142,16 +157,41 @@ for(i in 1:length(spp_list)){
               format = 'GTiff', 
               overwrite = TRUE)
   
-  # create a plot of both of the MESS outputs, specify whether to add the
-  # reference points to the plot
-  plots <- plot_mess(png_mess, 
-                     spp_name, 
-                     add_points = TRUE,
-                     tmp_masked,
-                     bootstrapped_mess)
+  # convert bootstrapped MESS into a binary surface; threshold set = 95%
+  binary_95 <- bootstrapped_mess
+  binary_95[binary_95 < 95] <- 0
   
-  }
+  # write out binary
+  outpath_4 <- paste(geotif_mess, spp_name, '_binary_bootstrapped_95', sep = '')
+  writeRaster(binary_95, 
+              file = outpath_4, 
+              format = 'GTiff', 
+              overwrite = TRUE)
   
+  # convert bootstrapped MESS into a binary surface; threshold set = 90%
+  binary_90 <- bootstrapped_mess
+  binary_90[binary_90 < 90] <- 0
+  
+  # write out binary
+  outpath_5 <- paste(geotif_mess, spp_name, '_binary_bootstrapped_90', sep = '')
+  writeRaster(binary_90, 
+              file = outpath_5, 
+              format = 'GTiff', 
+              overwrite = TRUE)
+  
+  # convert bootstrapped MESS into a binary surface; threshold set = 75%
+  binary_75 <- bootstrapped_mess
+  binary_75[binary_75 < 75] <- 0
+  
+  # write out binary
+  outpath_6 <- paste(geotif_mess, spp_name, '_binary_bootstrapped_95', sep = '')
+  writeRaster(binary_75, 
+              file = outpath_6, 
+              format = 'GTiff', 
+              overwrite = TRUE)
+
+  # create a buffered polygon around points within the binary bootstrapped MESS
+  # start by classifying as being OOR MESS +ve or OOO MESS -ve
   if(nrow(records_outside) != 0){
     
     # turn into a spatial points dataframe
@@ -167,32 +207,122 @@ for(i in 1:length(spp_list)){
                      lat)
     
     # get an index for occurrence records within species' range
-    records_outside$mess <- cellFromXY(tmp_masked, lat_lon)
+    vals <- extract(binary_95, lat_lon)
     
-    records_oor_pos <- as.data.frame(records_outside[!(is.na(records_outside$mess)), ])
-    records_oor_neg <- as.data.frame(records_outside[is.na(records_outside$mess), ])
+    records_outside <- as.data.frame(records_outside)
+    records_outside$mess <- vals
     
-    neg_outpath <- paste('output/mess_oor_data/', 
-                         spp_name, '_OOR_neg_Mess.csv', sep = '')
-    
-    pos_outpath <- paste('output/mess_oor_data/', 
-                         spp_name, '_OOR_pos_Mess.csv', sep = '')
+    records_oor_pos <- records_outside[!(is.na(records_outside$mess)), ]
+    records_oor_neg <- records_outside[is.na(records_outside$mess), ]
     
     if(nrow(records_oor_pos) != 0) {
-    
-      write.csv(records_oor_pos,
-              pos_outpath,
-              row.names = FALSE)
+      
+      buf_lat <- records_oor_pos$latitude
+      buf_lon <- records_oor_pos$longitude
+      
+      buffer_pts <- cbind(buf_lon,
+                          buf_lat)
+      
+      modified_poly <- bufferMESSpositives(range,
+                                           coords = buffer_pts,
+                                           radius = 20,
+                                           sea = sea_shp)
+      
     }
     
-    if(nrow(records_oor_neg) != 0) {
-      
-      write.csv(records_oor_neg,
-                neg_outpath,
-                row.names = FALSE)  
-      
-    }
-  
   }
+  
+  ### SI plots
+  # create a plot of both of the MESS outputs, specify whether to add the reference points to the plot
+  # create a plotting window to plot both of the surfaces
+  png_name <- paste(png_mess, spp_name, '_species_mess_maps_', Sys.Date(), '.png', sep = "")
+  
+  png(png_name,
+      width = 450,
+      height = 400,
+      units = 'mm',
+      res = 300)
+  par(mfrow = c(2, 2))
+  
+  # plot the bootstrapped MESS 
+  plot(bootstrapped_mess,
+       main = bquote(~italic(.(title))),
+       legend = TRUE,
+       axes = FALSE,
+       box = FALSE)
+  plot(range,
+       add = TRUE,
+       border = 'black',
+       lty = 1,
+       lwd = 1.5)
+  plot(ext,
+       add = TRUE,
+       border = 'gray45',
+       lty = 1,
+       lwd = 0.5)
+  
+  title(xlab = 'Bootstrapped MESS (100 bootstraps)', line = 0)
+  
+  legend('bottomleft', c("Interpolation","Extrapolation"), 
+         pch = c(15, 15),
+         col = c("springgreen4","gainsboro"), bty = 'n')
+  
+  # plot the 95% binary MESS
+  plot(binary_95,
+       main = bquote(~italic(.(title))),
+       legend = TRUE,
+       axes = FALSE,
+       box = FALSE)
+  plot(range,
+       add = TRUE,
+       border = 'black',
+       lty = 1,
+       lwd = 1)
+  plot(ext,
+       add = TRUE,
+       border = 'gray45',
+       lty = 1,
+       lwd = 0.5)
+  
+  title(xlab = 'Binary bootstrapped MESS (95% threshold)', line = 0)
+  
+  legend('bottomleft', c("Interpolation","Extrapolation"), 
+         pch = c(15, 15),
+         col = c("springgreen4","gainsboro"), bty = 'n')
+  
+  # plot the 95% binary MESS with points
+  plot(binary_95,
+       main = bquote(~italic(.(title))),
+       legend = TRUE,
+       axes = FALSE,
+       box = FALSE)
+  plot(range,
+       add = TRUE,
+       border = 'black',
+       lty = 1,
+       lwd = 1.5)
+  plot(ext,
+       add = TRUE,
+       border = 'gray45',
+       lty = 1,
+       lwd = 0.5)
+  
+  title(xlab = 'Binary bootstrapped MESS (95% threshold)', line = 0)
+  
+  # add points on top
+  points(records_outside$longitude, records_outside$latitude, pch = 20, cex = 0.75, col = '#D93529')
+  points(records_inside$longitude, records_inside$latitude, pch = 20, cex = 0.75, col = 'blue')
+  
+  legend('bottomleft', c("Interpolation","Extrapolation", "Within range", "Outside range"), 
+         pch = c(15, 15, 20, 20),
+         col = c("springgreen4","gainsboro", "blue", "#D93529"), bty = 'n')
+  
+  
+  
+  dev.off()      
+
+  }
+  
+  
   
 }  
