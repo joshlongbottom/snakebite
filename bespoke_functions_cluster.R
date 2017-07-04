@@ -392,7 +392,7 @@ bufferMESSpositives <- function (range, coords, radius, sea) {
   mod_clip_range <- erase(modified_range, sea)
   
   # return expanded MESS polygon
-  return (modified_range)
+  return (mod_clip_range)
   
 }
 
