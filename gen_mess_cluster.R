@@ -187,7 +187,7 @@ for(i in 1:length(spp_list)){
   binary_75[binary_75 < 75] <- 0
   
   # write out binary
-  outpath_6 <- paste(geotif_mess, spp_name, '_binary_bootstrapped_95', sep = '')
+  outpath_6 <- paste(geotif_mess, spp_name, '_binary_bootstrapped_75', sep = '')
   writeRaster(binary_75, 
               file = outpath_6, 
               format = 'GTiff', 
@@ -273,15 +273,48 @@ for(i in 1:length(spp_list)){
     
       # write out the new shapefile, define path
       shp_path <- paste(new_shp_path, spp_name, sep = "")
-      shapefile(modified_poly, path = shp_path, overwrite = TRUE)
+      shapefile(modified_poly, shp_path, overwrite = TRUE)
         
     }
+    
+    # generate a dataframe with stats for each species
+    total_obs <- nrow(locations)
+    within_eor <- nrow(records_inside)
+    outside_eor <- nrow(records_outside)
+    within_95 <- nrow(records_oor_pos)
+    within_90 <- nrow(records_oor_pos_90)
+    within_75 <- nrow(records_oor_pos_75)
+    
+    spec_stats <- data.frame(species = spp_name, 
+                             total_occurrence_records = total_obs,
+                             total_occ_within_eor = within_eor,
+                             total_occ_outside_eor = outside_eor,
+                             mess_positive_95 = within_95,
+                             mess_positive_90 = within_90,
+                             mess_positive_75 = within_75)
+    
+    if(i == 1){
+      
+      combined_mess_stats <- spec_stats
+      
+    } else {
+      
+      combined_mess_stats <- rbind(combined_mess_stats,
+                                   spec_stats)
+    }
+    
+    mess_stats_path <- paste(png_mess, '_combined_mess_stats_', Sys.Date(), '.csv', sep = "")
+    
+    write.csv(combined_mess_stats,
+              mess_stats_path,
+              row.names = FALSE)
     
   }
   
   ### SI plots
   # create a plot of both of the MESS outputs, specify whether to add the reference points to the plot
   # create a plotting window to plot both of the surfaces
+  message(paste('Plotting', spp_name, 'outputs ', Sys.time(), sep = " "))
   png_name <- paste(png_mess, spp_name, '_species_mess_maps_', Sys.Date(), '.png', sep = "")
   
   png(png_name,
@@ -403,7 +436,7 @@ for(i in 1:length(spp_list)){
 
   ## SI plot of the different threshold binary-bootstrapped MESS
   # create plotting window
-  png_name <- paste(mess_si, spp_name, '_species_mess_maps_', Sys.Date(), '.png', sep = "")
+  png_name <- paste(mess_si, spp_name, '_SI_threshold_mess_maps_', Sys.Date(), '.png', sep = "")
   
   png(png_name,
       width = 450,
