@@ -211,18 +211,44 @@ for(i in 1:length(spp_list)){
                      lat)
     
     # get an index for occurrence records within species' range
-    vals <- extract(binary_95, lat_lon)
-    vals <- replace(vals, vals == 0, NA)
+    vals_95threshold <- extract(binary_95, lat_lon)
+    vals_95threshold <- replace(vals_95threshold, vals_95threshold == 0, NA)
     
     # attach 'vals' to the records_outside dataframe
     records_outside <- as.data.frame(records_outside)
-    records_outside$mess <- vals
+    records_outside$mess_95 <- vals_95threshold
     
     # subset to create two dataframes
     # 1. records outside of the EOR, but within MESS interpolation space
-    records_oor_pos <- records_outside[!(is.na(records_outside$mess)), ]
+    records_oor_pos <- records_outside[!(is.na(records_outside$mess_95)), ]
     # 2. records outside of the EOR, and in MESS extrapolation space
-    records_oor_neg <- records_outside[is.na(records_outside$mess), ]
+    records_oor_neg <- records_outside[is.na(records_outside$mess_95), ]
+    
+    # generate the same stats for the 90% and 75% threshold binary MESS
+    vals_90threshold <- extract(binary_90, lat_lon)
+    vals_90threshold <- replace(vals_90threshold, vals_90threshold == 0, NA)
+    
+    # attach 'vals' to the records_outside dataframe
+    records_outside$mess_90 <- vals_90threshold
+    
+    # subset to create two dataframes
+    # 1. records outside of the EOR, but within MESS interpolation space
+    records_oor_pos_90 <- records_outside[!(is.na(records_outside$mess_90)), ]
+    # 2. records outside of the EOR, and in MESS extrapolation space
+    records_oor_neg_90 <- records_outside[is.na(records_outside$mess_90), ]
+    
+    # generate the same stats for the 90% and 75% threshold binary MESS
+    vals_75threshold <- extract(binary_75, lat_lon)
+    vals_75threshold <- replace(vals_75threshold, vals_75threshold == 0, NA)
+    
+    # attach 'vals' to the records_outside dataframe
+    records_outside$mess_75 <- vals_75threshold
+    
+    # subset to create two dataframes
+    # 1. records outside of the EOR, but within MESS interpolation space
+    records_oor_pos_75 <- records_outside[!(is.na(records_outside$mess_75)), ]
+    # 2. records outside of the EOR, and in MESS extrapolation space
+    records_oor_neg_75 <- records_outside[is.na(records_outside$mess_75), ]
     
     # if there's any records which are within the MESS interpolation space
     # buffer these records, and merge them on to the current EOR shapefiles
@@ -375,6 +401,129 @@ for(i in 1:length(spp_list)){
 
   dev.off()      
 
+  ## SI plot of the different threshold binary-bootstrapped MESS
+  # create plotting window
+  png_name <- paste(mess_si, spp_name, '_species_mess_maps_', Sys.Date(), '.png', sep = "")
+  
+  png(png_name,
+      width = 450,
+      height = 400,
+      units = 'mm',
+      res = 300)
+  par(mfrow = c(2, 2))
+  
+  # generate species title
+  title <- gsub('_', ' ', spp_name)
+  
+  ### plot the raw bootstrapped MESS 
+  plot(bootstrapped_mess,
+       main = bquote(~italic(.(title))),
+       legend = TRUE,
+       axes = FALSE,
+       box = FALSE)
+  plot(range,
+       add = TRUE,
+       border = 'black',
+       lty = 1,
+       lwd = 1.5)
+  plot(ext,
+       add = TRUE,
+       border = 'gray45',
+       lty = 1,
+       lwd = 0.5)
+  
+  title(xlab = 'Bootstrapped MESS (100 bootstraps)', line = 0)
+  
+  legend('bottomleft', c("Interpolation","Extrapolation"), 
+         pch = c(15, 15),
+         col = c("springgreen4","gainsboro"), bty = 'n')
+
+  ### plot the 95% binary MESS with points
+  plot(binary_95,
+       main = bquote(~italic(.(title))),
+       legend = FALSE,
+       axes = FALSE,
+       box = FALSE)
+  plot(range,
+       add = TRUE,
+       border = 'black',
+       lty = 1,
+       lwd = 1.5)
+  plot(ext,
+       add = TRUE,
+       border = 'gray45',
+       lty = 1,
+       lwd = 0.5)
+  
+  title(xlab = 'Binary bootstrapped MESS (95% threshold)', line = 0)
+  
+  # add points on top
+  # these are the points which are considered OOEOR MESS+ve/-ve for the 95% threshold
+  points(records_oor_neg$longitude, records_oor_neg$latitude, pch = 20, cex = 0.75, col = '#D93529')
+  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 20, cex = 0.75, col = 'blue')
+  
+  legend('bottomleft', c("Interpolation","Extrapolation", "Within the 95% MESS threshold", "Outside of the 95% MESS threshold"), 
+         pch = c(15, 15, 20, 20),
+         col = c("springgreen4","gainsboro", "blue", "#D93529"), bty = 'n')
+  
+  ### plot the 90% binary MESS with points
+  plot(binary_90,
+       main = bquote(~italic(.(title))),
+       legend = FALSE,
+       axes = FALSE,
+       box = FALSE)
+  plot(range,
+       add = TRUE,
+       border = 'black',
+       lty = 1,
+       lwd = 1.5)
+  plot(ext,
+       add = TRUE,
+       border = 'gray45',
+       lty = 1,
+       lwd = 0.5)
+  
+  title(xlab = 'Binary bootstrapped MESS (90% threshold)', line = 0)
+  
+  # add points on top
+  # these are the points which are considered OOEOR MESS+ve/-ve for the 95% threshold
+  points(records_oor_neg_90$longitude, records_oor_neg_90$latitude, pch = 20, cex = 0.75, col = '#D93529')
+  points(records_oor_pos_90$longitude, records_oor_pos_90$latitude, pch = 20, cex = 0.75, col = 'blue')
+  
+  legend('bottomleft', c("Interpolation","Extrapolation", "Within the 90% MESS threshold", "Outside of the 90% MESS threshold"), 
+         pch = c(15, 15, 20, 20),
+         col = c("springgreen4","gainsboro", "blue", "#D93529"), bty = 'n')
+  
+  ### plot the 75% binary MESS with points
+  plot(binary_75,
+       main = bquote(~italic(.(title))),
+       legend = FALSE,
+       axes = FALSE,
+       box = FALSE)
+  plot(range,
+       add = TRUE,
+       border = 'black',
+       lty = 1,
+       lwd = 1.5)
+  plot(ext,
+       add = TRUE,
+       border = 'gray45',
+       lty = 1,
+       lwd = 0.5)
+  
+  title(xlab = 'Binary bootstrapped MESS (75% threshold)', line = 0)
+  
+  # add points on top
+  # these are the points which are considered OOEOR MESS+ve/-ve for the 95% threshold
+  points(records_oor_neg_75$longitude, records_oor_neg_75$latitude, pch = 20, cex = 0.75, col = '#D93529')
+  points(records_oor_pos_75$longitude, records_oor_pos_75$latitude, pch = 20, cex = 0.75, col = 'blue')
+  
+  legend('bottomleft', c("Interpolation","Extrapolation", "Within the 75% MESS threshold", "Outside of the 75% MESS threshold"), 
+         pch = c(15, 15, 20, 20),
+         col = c("springgreen4","gainsboro", "blue", "#D93529"), bty = 'n')
+  
+  dev.off()
+  
   }
  
 }  
