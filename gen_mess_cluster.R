@@ -23,9 +23,6 @@ snake_list <- read.csv('data/raw/snake_list_cluster.csv',
 # read in admin 0
 admin_0 <- shapefile('data/raw/world_shapefiles/admin2013_0.shp')
 
-# read in sea shapefile
-sea_shp <- shapefile('data/raw/world_shapefiles/sea.shp')
-
 # list species for which we have occurrence data
 spp_list <- list.files('data/raw/species_data/',
                        pattern = '*_raw.csv$',
@@ -67,6 +64,7 @@ for(i in 1:length(spp_list)){
   
   # read in EOR shapefile for each species, and dissolve if >1 polygon
   range <- prepare_eor(sub)
+  raw_range <- shapefile(sub$shapefile_path)
 
   # prepare covariates for analysis
   covs <- prepare_covariates(cov_list, ext, range)
@@ -265,16 +263,14 @@ for(i in 1:length(spp_list)){
       message(paste('Buffering MESS +ve occurrence records for', spp_name, Sys.time(), sep = " "))
       
       # run buffer function, specify a radius to buffer by (in km), and 
-      # which land/sea shapefile to clip by
-      modified_poly <- bufferMESSpositives(range,
+      # which mess layer/threshold to clip by
+      modified_poly <- bufferMESSpositives(raw_range,
                                            coords = buffer_pts,
-                                           radius = 20,
-                                           sea = sea_shp)
+                                           radius = 100,
+                                           mess = binary_95,
+                                           admin_0,
+                                           outpath = new_shp_path)
     
-      # write out the new shapefile, define path
-      shp_path <- paste(new_shp_path, spp_name, sep = "")
-      shapefile(modified_poly, shp_path, overwrite = TRUE)
-        
     }
     
     # generate a dataframe with stats for each species
