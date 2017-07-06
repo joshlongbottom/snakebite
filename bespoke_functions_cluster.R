@@ -356,13 +356,14 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract, co
  
 }
 
-bufferMESSpositives <- function (range, coords, radius, sea) {
+bufferMESSpositives <- function (range, coords, radius, mess, admin_0, outpath) {
   # function to generate a buffer of a given radius around the locations of some points, and merge
   # with an EOR polygon
-  # `range` must be a SpatialPolygons object of length 1
-  # `coords` must be a two-column matrix of coordinates (x then y)
-  # giving the points to buffer, `radius` must be a single positive number giving the radius of the circle to
-  # remove around each point, in kilometers
+  # `range` must be a SpatialPolygons object of length 1 (polygon of current EOR)
+  # `coords` must be a two-column matrix of coordinates (x then y; points requiring a buffer)
+  # `radius` must be a single positive number giving the radius of the circle to generate around each point (in km)
+  # `mess` must be a binary multivariate environmental similarity surface (MESS), which have values of '1'
+  # for areas of interpolation, and '0' for areas of extrapolation
   
   # packages needed
   require(sp)
@@ -370,7 +371,6 @@ bufferMESSpositives <- function (range, coords, radius, sea) {
   
   # check things
   stopifnot(inherits(range, 'SpatialPolygons'))
-  stopifnot(length(range) == 1)
   stopifnot(inherits(coords, c('matrix', 'data.frame')))
   stopifnot(ncol(coords) == 2)
   stopifnot(radius > 0)
@@ -383,17 +383,103 @@ bufferMESSpositives <- function (range, coords, radius, sea) {
   radius <- radius/111.2
   
   # turn SpatialPoints in SpatialPolygons circles
-  spts_buffer <- gBuffer(spts, width = radius)
+  suppressWarnings(spts_buffer <- gBuffer(spts, width = radius))
   
-  # combine buffered points with range polygon
-  modified_range <- gUnion(range, spts_buffer)
+  # clip buffered points by the MESS surface (caution that this is at a 5 km resolution)
+  # first change 0 binary values to NA in the mess object
+  mess[mess == 0] <- NA
   
-  # clip the buffered polygon by a sea shapefile
-  mod_clip_range <- erase(modified_range, sea)
+  # then convert raster into a polygon, and merge points
+  mess <- rasterToPolygons(mess, dissolve = FALSE)
   
+  ids <- mess@data$layer
+  mess <- unionSpatialPolygons(mess, ids)
+  
+  # then clip the buffered points by the limited mess
+  spts_buffer_clip <- gIntersection(spts_buffer, mess)
+  
+  # get ISO for each point
+  polys <- spts_buffer_clip@polygons[[1]]@Polygons
+  
+  # create a reference for each polygon within the buffered spatialPolys object
+  pl <- vector("list", length(polys))
+  
+  for (i in 1:length(polys)) { 
+    
+    pl[i] <- Polygons(list(polys[[i]]), i) 
+    
+  }
+  
+  buffer_clip_spolys <- SpatialPolygons(pl)
+  
+  # generate row ids
+  row.ids = sapply(slot(buffer_clip_spolys, "polygons"), function(i) slot(i, "ID"))
+  
+  # project 
+  proj4string(buffer_clip_spolys) <- CRS(proj4string(range))
+  
+  # get the centroids of each polygon, so we can determine which country they land in
+  suppressWarnings(centroids <- getSpPPolygonsLabptSlots(buffer_clip_spolys))
+  
+  # change centroid coordinates to a spatial points object
+  centroids <- SpatialPoints(centroids,
+                             proj4string = CRS(projection(range)))
+  
+  # get the ISO code for all of the polygon centroids
+  iso <- over(centroids, admin_0)$COUNTRY_ID
+  
+  # get a list of the medical classification of each country in the EOR
+  class_dataframe <- as.data.frame(range)
+  lookup <- match(iso, class_dataframe$COUNTRY_ID)
+  med_class <- class_dataframe$Med_Class[lookup]
+  
+  # if an ISO isn't in the current EOR, generate a medical class:
+  # if the rest of the species is considered class 2, assign class 2
+  # if there's both C1 and C2, assign as being C1
+  class_check <- unique(class_dataframe$Med_Class)
+  
+  if(length(class_check) == 2){
+    
+    temp_class <- 1
+    
+  } else {
+    
+    temp_class <- class_check
+  
+  }
+  
+  med_class[is.na(med_class)] <- temp_class
+
+  # create a dataframe, to allow coersion from a SpatialPolygons object to SpatialPolygonsDataframe
+  buffer_dataframe <- data.frame(FID = 1:length(buffer_clip_spolys))
+  buffer_dataframe <- data.frame(COUNTRY_ID = iso,
+                                 ADMN_LEVEL = 0, 
+                                 Med_Class = med_class)
+  
+  # merge to form a spatialPolygonsDataframe
+  buffer_spdf <- SpatialPolygonsDataFrame(buffer_clip_spolys, buffer_dataframe)
+  buffer_spdf <- spChFIDs(buffer_spdf, paste("buffer", row.names(buffer_spdf), sep="."))
+  
+  variable_list <- c('COUNTRY_ID',
+                     'Med_Class',
+                     'ADMN_LEVEL')
+  
+  # subset both shapefiles to just have the necessary columns
+  raw_sub <- range[,(names(range) %in% variable_list)]
+  buf_sub <- buffer_spdf[,(names(buffer_spdf) %in% variable_list)]
+  
+  # merge buffer, and raw shapefile to create one shapefile which has multiple polygons (keeping med class)
+  merged_range_mp <- rbind(raw_sub, buf_sub)
+  merged_range_co <- aggregate(merged_range_mp, c("COUNTRY_ID", "Med_Class", "ADMN_LEVEL"))
+  
+  # write out the new shapefile, define path
+  shp_path <- paste(outpath, spp_name, sep = "")
+  shapefile(merged_range_co, shp_path, overwrite = TRUE)
+  
+  # combine points to create a single range polygon
+  modified_range <- gUnion(range, spts_buffer_clip)
+
   # return expanded MESS polygon
-  return (mod_clip_range)
+  return (modified_range)
   
 }
-
-
