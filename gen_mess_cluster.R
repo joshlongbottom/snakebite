@@ -391,7 +391,7 @@ for(i in 1:length(spp_list)){
        lty = 1,
        lwd = 0.5)
   
-  title(xlab = 'Binary bootstrapped MESS (95% threshold)', line = 0, cex.lab = 1.25)
+  title(xlab = 'Binary bootstrapped MESS (95% threshold) with occurrence records', line = 0, cex.lab = 1.25)
   
   # add points on top
   points(records_oor_neg$longitude, records_oor_neg$latitude, pch = 20, cex = 0.5, col = 'dimgray')
@@ -432,7 +432,7 @@ for(i in 1:length(spp_list)){
        lty = 1,
        lwd = 0.5)
   
-  title(xlab = 'Suggested ammended range', line = 0, cex.lab = 1.25)
+  title(xlab = 'Suggested ammended range (incorporating outside of range MESS +ve records)', line = 0, cex.lab = 1.25)
   
   mtext(bquote(~italic(.(title))), side = 3, line = -1, outer = TRUE, cex = 2, font = 2)
   
@@ -447,14 +447,15 @@ for(i in 1:length(spp_list)){
       height = 400,
       units = 'mm',
       res = 300)
-  par(mfrow = c(2, 2))
+  par(mfrow = c(2, 2), 
+      oma = c(2, 2, 2, 2))
   
   # generate species title
   title <- gsub('_', ' ', spp_name)
   
   ### plot the raw bootstrapped MESS 
   plot(bootstrapped_mess,
-       main = bquote(~italic(.(title))),
+       main = "A)", adj = 0,
        legend = TRUE,
        axes = FALSE,
        box = FALSE)
@@ -469,7 +470,7 @@ for(i in 1:length(spp_list)){
        lty = 1,
        lwd = 0.5)
   
-  title(xlab = 'Bootstrapped MESS (100 bootstraps)', line = 0)
+  title(xlab = 'Bootstrapped MESS (100 bootstraps)', line = 0, cex.lab = 1.25)
   
   legend('bottomleft', c("Interpolation","Extrapolation"), 
          pch = c(15, 15),
@@ -477,7 +478,7 @@ for(i in 1:length(spp_list)){
 
   ### plot the 95% binary MESS with points
   plot(binary_95,
-       main = bquote(~italic(.(title))),
+       main = "B)", adj = 0,
        legend = FALSE,
        axes = FALSE,
        box = FALSE)
@@ -492,7 +493,7 @@ for(i in 1:length(spp_list)){
        lty = 1,
        lwd = 0.5)
   
-  title(xlab = 'Binary bootstrapped MESS (95% threshold)', line = 0)
+  title(xlab = 'Binary bootstrapped MESS (95% threshold)', line = 0, cex.lab = 1.25)
   
   # add points on top
   # these are the points which are considered OOEOR MESS+ve/-ve for the 95% threshold
@@ -505,7 +506,7 @@ for(i in 1:length(spp_list)){
   
   ### plot the 90% binary MESS with points
   plot(binary_90,
-       main = bquote(~italic(.(title))),
+       main = "C)", adj = 0,
        legend = FALSE,
        axes = FALSE,
        box = FALSE)
@@ -520,7 +521,7 @@ for(i in 1:length(spp_list)){
        lty = 1,
        lwd = 0.5)
   
-  title(xlab = 'Binary bootstrapped MESS (90% threshold)', line = 0)
+  title(xlab = 'Binary bootstrapped MESS (90% threshold)', line = 0, cex.lab = 1.25)
   
   # add points on top
   # these are the points which are considered OOEOR MESS+ve/-ve for the 95% threshold
@@ -533,7 +534,7 @@ for(i in 1:length(spp_list)){
   
   ### plot the 75% binary MESS with points
   plot(binary_75,
-       main = bquote(~italic(.(title))),
+       main = "D)", adj = 0,
        legend = FALSE,
        axes = FALSE,
        box = FALSE)
@@ -548,7 +549,7 @@ for(i in 1:length(spp_list)){
        lty = 1,
        lwd = 0.5)
   
-  title(xlab = 'Binary bootstrapped MESS (75% threshold)', line = 0)
+  title(xlab = 'Binary bootstrapped MESS (75% threshold)', line = 0, cex.lab = 1.25)
   
   # add points on top
   # these are the points which are considered OOEOR MESS+ve/-ve for the 95% threshold
@@ -558,6 +559,8 @@ for(i in 1:length(spp_list)){
   legend('bottomleft', c("Interpolation","Extrapolation", "Within the 75% MESS threshold", "Outside of the 75% MESS threshold"), 
          pch = c(15, 15, 20, 20),
          col = c("springgreen4","gainsboro", "blue", "#D93529"), bty = 'n')
+  
+  mtext(bquote(~italic(.(title))), side = 3, line = -1, outer = TRUE, cex = 2, font = 2)
   
   dev.off()
   
