@@ -380,7 +380,7 @@ bufferMESSpositives <- function (range, coords, radius, mess, admin_0, outpath) 
                         proj4string = CRS(proj4string(range)))
 
   # convert radius to decimal degrees at the equator
-  radius <- radius/111.2
+  radius <- radius/111.32
   
   # turn SpatialPoints in SpatialPolygons circles
   suppressWarnings(spts_buffer <- gBuffer(spts, width = radius))
