@@ -318,14 +318,19 @@ for(i in 1:length(spp_list)){
       height = 400,
       units = 'mm',
       res = 300)
-  par(mfrow = c(2, 2))
+  par(mfrow = c(2, 2),
+      oma = c(2, 2, 2, 2))
   
   # plot the conservative MESS
   title <- gsub('_', ' ', spp_name)
   
+  # changed plots (07.07.2017) to remove species name from plot main title, and to
+  # instead label each plot in the panel (A:D), and have one central title for all plots
+  # main = bquote(~italic(.(title)))
+  
   ### plot the bootstrapped MESS 
   plot(bootstrapped_mess,
-       main = bquote(~italic(.(title))),
+       main = "A)", adj = 0,
        legend = TRUE,
        axes = FALSE,
        box = FALSE)
@@ -340,7 +345,7 @@ for(i in 1:length(spp_list)){
        lty = 1,
        lwd = 0.5)
   
-  title(xlab = 'Bootstrapped MESS (100 bootstraps)', line = 0)
+  title(xlab = 'Bootstrapped MESS (100 bootstraps)', line = 0, cex.lab = 1.25)
   
   legend('bottomleft', c("Interpolation","Extrapolation"), 
          pch = c(15, 15),
@@ -348,7 +353,7 @@ for(i in 1:length(spp_list)){
   
   ### plot the 95% binary MESS
   plot(binary_95,
-       main = bquote(~italic(.(title))),
+       main = "B)", adj = 0,
        legend = FALSE,
        axes = FALSE,
        box = FALSE)
@@ -363,7 +368,7 @@ for(i in 1:length(spp_list)){
        lty = 1,
        lwd = 0.5)
   
-  title(xlab = 'Binary bootstrapped MESS (95% threshold)', line = 0)
+  title(xlab = 'Binary bootstrapped MESS (95% threshold)', line = 0, cex.lab = 1.25)
   
   legend('bottomleft', c("Interpolation","Extrapolation"), 
          pch = c(15, 15),
@@ -371,7 +376,7 @@ for(i in 1:length(spp_list)){
   
   ### plot the 95% binary MESS with points
   plot(binary_95,
-       main = bquote(~italic(.(title))),
+       main = "C)", adj = 0,
        legend = FALSE,
        axes = FALSE,
        box = FALSE)
@@ -386,19 +391,20 @@ for(i in 1:length(spp_list)){
        lty = 1,
        lwd = 0.5)
   
-  title(xlab = 'Binary bootstrapped MESS (95% threshold)', line = 0)
+  title(xlab = 'Binary bootstrapped MESS (95% threshold)', line = 0, cex.lab = 1.25)
   
   # add points on top
-  points(records_outside$longitude, records_outside$latitude, pch = 20, cex = 0.75, col = '#D93529')
-  points(records_inside$longitude, records_inside$latitude, pch = 20, cex = 0.75, col = 'blue')
+  points(records_oor_neg$longitude, records_oor_neg$latitude, pch = 20, cex = 0.5, col = 'dimgray')
+  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 20, cex = 0.75, col = '#D93529')
+  points(records_inside$longitude, records_inside$latitude, pch = 20, cex = 0.5, col = 'blue')
   
-  legend('bottomleft', c("Interpolation","Extrapolation", "Within range", "Outside range"), 
-         pch = c(15, 15, 20, 20),
-         col = c("springgreen4","gainsboro", "blue", "#D93529"), bty = 'n')
+  legend('bottomleft', c("Interpolation","Extrapolation", "Within range", "Outside range, MESS +ve", "Outside range, MESS -ve"), 
+         pch = c(15, 15, 20, 20, 20),
+         col = c("springgreen4","gainsboro", "blue", "#D93529", "dimgray"), bty = 'n')
   
   ### plot the new range shapefile, ontop of binary bootstrapped MESS
   plot(binary_95,
-       main = bquote(~italic(.(title))),
+       main = "D)", adj = 0,
        legend = FALSE,
        axes = FALSE,
        box = FALSE)
@@ -426,8 +432,10 @@ for(i in 1:length(spp_list)){
        lty = 1,
        lwd = 0.5)
   
-  title(xlab = 'Suggested ammended range', line = 0)
-
+  title(xlab = 'Suggested ammended range', line = 0, cex.lab = 1.25)
+  
+  mtext(bquote(~italic(.(title))), side = 3, line = -1, outer = TRUE, cex = 2, font = 2)
+  
   dev.off()      
 
   ## SI plot of the different threshold binary-bootstrapped MESS
