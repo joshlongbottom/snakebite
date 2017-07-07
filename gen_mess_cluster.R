@@ -96,6 +96,9 @@ for(i in 1:length(spp_list)){
   # extract covariate data for all of that species' presence records, within the WHO EOR
   covs_extract <- as.data.frame(extract(covs, records_inside[c("longitude", "latitude")]))
   
+  # remove any NA extracts (if any covariate value is a NA at a particular row, remove it)
+  covs_extract <- covs_extract[complete.cases(covs_extract), ]
+  
   # subsample from this extracted covariate data, to generate 1000 bootstraps
   # then plot the distribution of the max and mix values for each covariate
   # to measure variation in the input data
