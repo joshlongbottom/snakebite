@@ -36,9 +36,10 @@ plots <- lapply(species_list,
 ggsave(mess_si_name, 
        width = 8.27,
        height = 11.29,
-       marrangeGrob(grobs = plots, nrow = 1, ncol = 1, top = NULL))
+       marrangeGrob(grobs = plots, nrow = 2, ncol = 1, top = NULL))
 
 rm(plots)
+gc()
 
 # SI figure 2 file:
 # this SI figure contains plots of:
@@ -68,9 +69,10 @@ plots <- lapply(threshold_list,
 ggsave(threshold_si_name, 
        width = 8.27,
        height = 11.29,
-       marrangeGrob(grobs = plots, nrow = 1, ncol = 1, top = NULL))
+       marrangeGrob(grobs = plots, nrow = 2, ncol = 1, top = NULL))
 
 rm(plots)
+gc()
 
 # SI figure 3 file:
 # this SI figure contains plots of:
@@ -99,6 +101,7 @@ ggsave(covariate_si_name,
        marrangeGrob(grobs = plots, nrow = 3, ncol = 1, top = NULL))
 
 rm(plots)
+gc()
 
 # SI figure 4 file:
 # this SI figure contains plots of:
@@ -125,3 +128,4 @@ ggsave(pcc_si_name,
        marrangeGrob(grobs = plots, nrow = 2, ncol = 1, top = NULL))
 
 rm(plots)
+gc()
