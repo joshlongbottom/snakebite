@@ -411,6 +411,8 @@ bufferMESSpositives <- function (range, coords, radius, mess, admin_0, outpath) 
   ids <- mess@data$layer
   mess <- unionSpatialPolygons(mess, ids)
   
+  # fix potential self-intersection issue with buffered points
+  suppressWarnings(spts_buffer <- gBuffer(spts_buffer, byid = TRUE, width = 0))
   # then clip the buffered points by the limited mess
   spts_buffer_clip <- gIntersection(spts_buffer, mess)
   
@@ -479,7 +481,7 @@ bufferMESSpositives <- function (range, coords, radius, mess, admin_0, outpath) 
   variable_list <- c('COUNTRY_ID',
                      'Med_Class',
                      'ADMN_LEVEL')
-  
+
   # subset both shapefiles to just have the necessary columns
   raw_sub <- range[,(names(range) %in% variable_list)]
   buf_sub <- buffer_spdf[,(names(buffer_spdf) %in% variable_list)]
