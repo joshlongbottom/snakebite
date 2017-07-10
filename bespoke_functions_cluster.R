@@ -249,7 +249,15 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract, co
       suppressWarnings(mess_iteration <- mess(covs, sub_sample, full = TRUE))
       
       # convert to a binary surface
-      tmp <- mess_iteration[['rmess']] >= 0
+      if('rmess' %in% names(mess_iteration)){
+        
+        tmp <- mess_iteration[['rmess']] >= 0
+        
+      } else {
+        
+        tmp <- mess_iteration[['mess']] >=0
+        
+      }
       
       # crop to extent
       tmp_masked <- mask(tmp, covs[[1]])
@@ -269,7 +277,15 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract, co
       suppressWarnings(mess_iteration <- mess(covs, sub_sample, full = TRUE))
       
       # convert to a binary surface
-      tmp <- mess_iteration[['rmess']] >= 0
+      if('rmess' %in% names(mess_iteration)){
+        
+        tmp <- mess_iteration[['rmess']] >= 0
+        
+      } else {
+        
+        tmp <- mess_iteration[['mess']] >=0
+        
+      }
       
       # crop to extent
       tmp_masked <- mask(tmp, covs[[1]])
