@@ -159,6 +159,8 @@ for(i in 1:length(spp_list)){
 # initialize the cluster (50 cores)
 registerDoMC(50)
 
+message(paste('Processing species ranges on 50 cores ', Sys.time(), sep = ""))
+
 # run the following buffer section on all species in parallel
 stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
   
@@ -175,10 +177,7 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
   # read in EOR shapefile for each species, and dissolve if >1 polygon
   range <- prepare_eor(sub)
   raw_range <- shapefile(sub$shapefile_path)
-  
-  # prepare covariates for analysis
-  covs <- prepare_covariates(cov_list, ext, range)
-  
+
   # get presence records for species
   locations <- load_occurrence(spp_name, range)
   
@@ -565,6 +564,8 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
             row.names = FALSE)
   
   }
+
+message(paste('Completed processing species ranges on 50 cores ', Sys.time(), sep = ""))
 
 # merge species stats
 spp_list <- list.files('data/raw/species_data/',
