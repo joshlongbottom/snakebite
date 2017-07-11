@@ -6,7 +6,7 @@
 rm(list = ls())
 
 # load required packages
-pacman::p_load(png, grid, ggplot2, gridExtra)
+pacman::p_load(png, grid, ggplot2, gridExtra, parallel)
 
 # SI figure 1 file:
 # this SI figure contains plots of:
@@ -16,27 +16,26 @@ pacman::p_load(png, grid, ggplot2, gridExtra)
 # D) Recommended modified range
 
 # list the SI figure 1 files
-species_list <- list.files('Z:/users/joshua/Snakebite/output/species_mess_maps/mess_png', 
+species_list <- list.files('output/mess_png/', 
                            pattern = '.*[.]png',
                            full.names = TRUE)
 
 # specify filepath to save combined output
-mess_si_name <- paste('Z:/users/joshua/Snakebite/output/species_mess_maps/merged_si_files/Species_MESS_SI_', Sys.Date(), '.pdf', sep = "")
+mess_si_name <- paste('output/merged_si/Species_MESS_SI_', Sys.Date(), '.pdf', sep = "")
 
 # open all png files
-plots <- lapply(species_list,
-                function(x){
-                img <- as.raster(readPNG(x))
-                rasterGrob(img, interpolate = FALSE)
-            
-              }
-)
+plots <- mclapply(species_list,
+                  function(x){
+                  img <- as.raster(readPNG(x))
+                  rasterGrob(img, interpolate = FALSE)
+                  },
+                  mc.cores = 50)
 
 # merge into one single PDF
 ggsave(mess_si_name, 
        width = 8.27,
        height = 11.29,
-       marrangeGrob(grobs = plots, nrow = 2, ncol = 1, top = NULL))
+       marrangeGrob(grobs = plots, nrow = 1, ncol = 1, top = NULL))
 
 rm(plots)
 gc()
@@ -49,21 +48,20 @@ gc()
 # D) 75% threshold MESS with occurrence records placed on top
 
 # list the SI figure 2 files
-threshold_list <- list.files('Z:/users/joshua/Snakebite/output/species_mess_maps/mess_si/', 
+threshold_list <- list.files('output/mess_si/', 
                            pattern = '.*[.]png',
                            full.names = TRUE)
 
 # specify filepath to save combined output
-threshold_si_name <- paste('Z:/users/joshua/Snakebite/output/species_mess_maps/merged_si_files/Species_threshold_SI_', Sys.Date(), '.pdf', sep = "")
+threshold_si_name <- paste('output/merged_si/Species_threshold_SI_', Sys.Date(), '.pdf', sep = "")
 
 # open all png files
-plots <- lapply(threshold_list,
-                function(x){
-                img <- as.raster(readPNG(x))
-                rasterGrob(img, interpolate = FALSE)
-                  
-                }
-)
+plots <- mclapply(threshold_list,
+                  function(x){
+                  img <- as.raster(readPNG(x))
+                  rasterGrob(img, interpolate = FALSE)
+                  },
+                  mc.cores = 50)
 
 # merge into one single PDF
 ggsave(threshold_si_name, 
@@ -80,20 +78,19 @@ gc()
 # 2) Mean covariate values (across 1000 bootstraps of the reference data)
 # 3) Minimum covariate values (across 1000 bootstraps of the reference data)
 
-covariate_plot_list <- list.files('Z:/users/joshua/Snakebite/output/species_mess_maps/distribution_plots/', 
+covariate_plot_list <- list.files('output/distribution_plots/', 
                            pattern = '.*[.]png',
                            full.names = TRUE)
 
 # specify filepath to save combined output
-covariate_si_name <- paste('Z:/users/joshua/Snakebite/output/species_mess_maps/merged_si_files/Species_covariate_variance_SI_', Sys.Date(), '.pdf', sep = "")
+covariate_si_name <- paste('output/merged_si/Species_covariate_variance_SI_', Sys.Date(), '.pdf', sep = "")
 
-plots <- lapply(covariate_plot_list,
-                function(x){
-                img <- as.raster(readPNG(x))
-                rasterGrob(img, interpolate = FALSE)
-                  
-                }
-)
+plots <- mclapply(covariate_plot_list,
+                  function(x){
+                  img <- as.raster(readPNG(x))
+                  rasterGrob(img, interpolate = FALSE)
+                  },
+                  mc.cores = 50)
 
 ggsave(covariate_si_name, 
        width = 8.27,
@@ -107,20 +104,19 @@ gc()
 # this SI figure contains plots of:
 # 1) Proportion correctly classified
 
-pcc_plot_list <- list.files('Z:/users/joshua/Snakebite/output/species_mess_maps/mess_evaluation/', 
+pcc_plot_list <- list.files('output/mess_evaluation/', 
                                   pattern = '.*[.]png',
                                   full.names = TRUE)
 
 # specify filepath to save combined output
-pcc_si_name <- paste('Z:/users/joshua/Snakebite/output/species_mess_maps/merged_si_files/Species_PCC_SI_', Sys.Date(), '.pdf', sep = "")
+pcc_si_name <- paste('output/merged_si/Species_PCC_SI_', Sys.Date(), '.pdf', sep = "")
 
-plots <- lapply(pcc_plot_list,
-                function(x){
+plots <- mclapply(pcc_plot_list,
+                  function(x){
                   img <- as.raster(readPNG(x))
                   rasterGrob(img, interpolate = FALSE)
-                  
-                }
-)
+                  },
+                  mc.cores = 50)
 
 ggsave(pcc_si_name, 
        width = 8.27,
