@@ -126,108 +126,8 @@ load_occurrence <- function(spp_name, range){
   
 }
 
-measure_variance <- function(n_boot, covs_extract_df, distribution_path, spp_name){
-  # where n_boot is the number of bootstraps to perform on the covariate data,
-  # covs_extract_df is the dataframe of covariate values for each reference point, 
-  # distribution path is a vector with the directory in which plots should be saved, and
-  # spp_name is the name of the species; measure the variance within each of the reference
-  # data points, and plot a distribution of the maximum, mean, and medium values for each 
-  # each covariate, across the specified number of boostraps (n_boot)
-  max_cov_frame <- NULL
-  min_cov_frame <- NULL
-  mean_cov_frame <- NULL
-  
-  # for however many bootstraps
-  for(i in 1:n_boot){
-    
-    # subsample the covariate data
-    sub_sample <- covs_extract_df[sample(1:nrow(covs_extract_df), nrow(covs_extract_df), replace = TRUE), ]
-    
-    # generate a max, min, and mean value for each covariate, for each bootstrap
-    sub_max <- apply(sub_sample, 2, max)
-    sub_min <- apply(sub_sample, 2, min)
-    sub_mean <- apply(sub_sample, 2, mean)
-    
-    # add these values to a dataframe
-    max_cov_frame <- rbind(max_cov_frame,
-                           sub_max)
-    
-    min_cov_frame <- rbind(min_cov_frame,
-                           sub_min)
-    
-    mean_cov_frame <- rbind(mean_cov_frame,
-                            sub_mean)
-    
-  }
-  
-  # melt the covariate max, min, mean dataframes, so they can be used to generate density plots
-  max_cov_melt <- melt(max_cov_frame)
-  max_cov_melt$Var1 <- NULL
-  names(max_cov_melt) <- c('variable', 'value')
-  max_cov_msd <- melt(max_cov_frame) %>% group_by(group = Var2) %>% summarise(mean_max = mean(value), sd_max = sd(value), median_max = median(value))
-  
-  min_cov_melt <- melt(min_cov_frame)
-  min_cov_melt$Var1 <- NULL
-  names(min_cov_melt) <- c('variable', 'value')
-  min_cov_msd <- melt(min_cov_frame) %>% group_by(group = Var2) %>% summarise(mean_min = mean(value), sd_min = sd(value), median_min = median(value))
-  
-  mean_cov_frame <- melt(mean_cov_frame)
-  mean_cov_frame$Var1 <- NULL
-  names(mean_cov_frame) <- c('variable', 'value')
-
-  # plot the distributions of the max and minimum covariate frames
-  # plot max
-  spp_italics <- gsub('_', ' ', spp_name)
-
-  suppressWarnings(ggplot(data = max_cov_melt, mapping = aes(x = value)) + 
-                     geom_density(colour = 'cadetblue4', fill = 'cadetblue3') +  
-                     ggtitle(bquote(~italic(.(spp_italics))~' maximum covariate values')) +
-                     facet_wrap(~variable, scales = 'free'))
-  
-  max_path <- paste(distribution_path, spp_name, '_maximum_cov_distribution_plots_', Sys.Date(), '.png', sep = "")
-  ggsave(max_path, width = 600, height = 450, units = 'mm', dpi = 300)
-  
-  # plot mean
-  suppressWarnings(ggplot(data = mean_cov_frame, mapping = aes(x = value)) + 
-                     geom_density(colour = 'cadetblue4', fill = 'cadetblue3') + 
-                     ggtitle(bquote(~italic(.(spp_italics))~' mean covariate values')) +   
-                     facet_wrap(~variable, scales = 'free')) 
-  
-  mean_path <- paste(distribution_path, spp_name, '_mean_cov_distribution_plots_', Sys.Date(), '.png', sep = "")
-  ggsave(mean_path, width = 600, height = 450, units = 'mm', dpi = 300)
-  
-  # plot min
-  suppressWarnings(ggplot(data = min_cov_melt, mapping = aes(x = value)) + 
-                     geom_density(colour = 'cadetblue4', fill = 'cadetblue3') +
-                     ggtitle(bquote(~italic(.(spp_italics))~' minimum covariate values')) +   
-                     facet_wrap(~variable, scales = 'free'))
-  
-  min_path <- paste(distribution_path, spp_name, '_minimum_cov_distribution_plots_', Sys.Date(), '.png', sep = "")
-  ggsave(min_path, width = 600, height = 450, units = 'mm', dpi = 300)
-  
-  # generate a two row dataframe, which only contains the median minimum value from all bootstraps, and the 
-  # median maximum value from all bootstraps (extremely conservative)
-  min_cov_median <- as.data.frame(t(min_cov_msd[c(1, 4)]))
-  colnames(min_cov_median) <- as.character(unlist(min_cov_median[1,]))
-  min_cov_median = min_cov_median[-1, ]
-  
-  max_cov_median <- as.data.frame(t(max_cov_msd[c(1, 4)]))
-  colnames(max_cov_median) <- as.character(unlist(max_cov_median[1,]))
-  max_cov_median = max_cov_median[-1, ]
-  
-  covariate_stats <- rbind(min_cov_median,
-                           max_cov_median)
-  
-  row.names(covariate_stats) <- c('1', '2')
-  
-  suppressWarnings(covariate_stats <- data.frame(lapply(covariate_stats, as.character), stringsAsFactors = FALSE))
-  suppressWarnings(covariate_stats <- data.frame(lapply(covariate_stats, as.numeric), stringsAsFactors = FALSE))
-  
-  return(covariate_stats)
-  
-}
-
-the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract, covs, occ_dat, eval_plot, plot_outpath){
+the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract, 
+                                  covs, occ_dat, eval_plot, pcc_outpath, variance, var_outpath){
   # where n_boot is the number of bootstraps required, covs_extract is an extracted
   # dataframe including covariate values for each reference point, covs is a stack of covariate 
   # surfaces, occ_dat is the raw reference (occurrence data), in_parallel - if the cluster should
@@ -239,14 +139,18 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract, co
     # initialize the cluster
     registerDoMC(n_cores)
     
-    # for however many specified bootstraps, generate the respective number of mess
-    mess_stack <- foreach(i=1:n_boot) %dopar% {
+    # for however many specified bootstraps, sample reference points with replacement
+    sub_sample <- foreach(i = 1:n_boot) %dopar% {
       
-      # sample reference points, with replacement
-      sub_sample <- covs_extract[sample(1:nrow(covs_extract), nrow(covs_extract), replace = TRUE), ]
+      temp_sample <- covs_extract[sample(1:nrow(covs_extract), nrow(covs_extract), replace = TRUE), ]
       
+    }
+    
+    # generate the respective number of mess, using each sub_sample from above
+    mess_stack <- foreach(i = 1:length(sub_sample)) %dopar% {
+
       # generate a mess using the sub_sample
-      suppressWarnings(mess_iteration <- mess(covs, sub_sample, full = TRUE))
+      suppressWarnings(mess_iteration <- mess(covs, sub_sample[[i]], full = TRUE))
       
       # convert to a binary surface
       if('rmess' %in% names(mess_iteration)){
@@ -263,8 +167,9 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract, co
       tmp_masked <- mask(tmp, covs[[1]])
       
       }
-      
-      raster_stack <- stack(mess_stack)
+    
+    # stack the 100 separate MESS  
+    raster_stack <- stack(mess_stack)
     
   } else { 
     
@@ -363,10 +268,118 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract, co
                      ggtitle(bquote(~italic(.(spp_italics))~' MESS evaluation (proportion correctly classified)')) +   
                      facet_wrap(~variable, scales = 'free')) 
     
-    eval_path <- paste(plot_outpath, spp_name, '_mess_evaluation_plots_', Sys.Date(), '.png', sep = "")
+    eval_path <- paste(pcc_outpath, spp_name, '_mess_evaluation_plots_', Sys.Date(), '.png', sep = "")
     ggsave(eval_path, width = 600, height = 450, units = 'mm', dpi = 300, device = 'png')
     
   }
+
+  if(variance){
+    
+    max_cov_frame <- NULL
+    min_cov_frame <- NULL
+    mean_cov_frame <- NULL
+    
+    # for however many bootstraps
+    for(i in 1:length(sub_sample)){
+      
+      # generate a max, min, and mean value for each covariate, for each bootstrap
+      sub_max <- apply(sub_sample[[i]], 2, max)
+      sub_min <- apply(sub_sample[[i]], 2, min)
+      sub_mean <- apply(sub_sample[[i]], 2, mean)
+      
+      # add these values to a dataframe
+      max_cov_frame <- rbind(max_cov_frame,
+                             sub_max)
+      
+      min_cov_frame <- rbind(min_cov_frame,
+                             sub_min)
+      
+      mean_cov_frame <- rbind(mean_cov_frame,
+                              sub_mean)
+      
+    }
+    
+    # melt the covariate max, min, mean dataframes, so they can be used to generate density plots
+    max_cov_melt <- melt(max_cov_frame)
+    max_cov_melt$Var1 <- NULL
+    names(max_cov_melt) <- c('variable', 'value')
+    max_cov_msd <- melt(max_cov_frame) %>% group_by(group = Var2) %>% summarise(mean_max = mean(value), sd_max = sd(value), median_max = median(value))
+    names(max_cov_melt) <- c('variable', 'max_value')
+    
+    min_cov_melt <- melt(min_cov_frame)
+    min_cov_melt$Var1 <- NULL
+    names(min_cov_melt) <- c('variable', 'value')
+    min_cov_msd <- melt(min_cov_frame) %>% group_by(group = Var2) %>% summarise(mean_min = mean(value), sd_min = sd(value), median_min = median(value))
+    names(min_cov_melt) <- c('variable', 'min_value')
+    
+    mean_cov_frame <- melt(mean_cov_frame)
+    mean_cov_frame$Var1 <- NULL
+    names(mean_cov_frame) <- c('variable', 'mean_value')
+    
+    # plot the distributions of the max and minimum covariate frames
+    # plot max
+    spp_italics <- gsub('_', ' ', spp_name)
+    
+    all_cov_stats <- cbind(max_cov_melt,
+                           min_cov_melt,
+                           mean_cov_frame)
+    
+    all_cov_stats <- all_cov_stats[c(1, 2, 4, 6)]
+    
+    all_cov_stats$variable <- gsub('tasselled_cap_brightness_sd', 'Tasselled cap brightness (SD)', all_cov_stats$variable, fixed = TRUE)
+    all_cov_stats$variable <- gsub('lstday_mean', 'Daytime land surface temperature (Mean)', all_cov_stats$variable, fixed = TRUE)
+    all_cov_stats$variable <- gsub('lstday_sd', 'Daytime land surface temperature (SD)', all_cov_stats$variable, fixed = TRUE)
+    all_cov_stats$variable <- gsub('lstnight_mean', 'Night-time land surface temperature (Mean)', all_cov_stats$variable, fixed = TRUE)
+    all_cov_stats$variable <- gsub('lstnight_sd', 'Night-time land surface temperature (SD)', all_cov_stats$variable, fixed = TRUE)
+    all_cov_stats$variable <- gsub('tasselled_cap_wetness_mean', 'Tasselled cap wetness (Mean)', all_cov_stats$variable, fixed = TRUE)
+    all_cov_stats$variable <- gsub('tasselled_cap_wetness_sd', 'Tasselled cap wetness (SD)', all_cov_stats$variable, fixed = TRUE)
+    all_cov_stats$variable <- gsub('elevation', 'Elevation', all_cov_stats$variable, fixed = TRUE)
+    
+    x <- suppressWarnings(ggplot(data = all_cov_stats) +
+                          geom_density(aes(x = min_value, y = ..scaled..), 
+                                           colour = '#ff7473', fill = '#ff7473') +
+                          geom_density(aes(x = mean_value, y = ..scaled..), 
+                                           colour = '#ffc952', fill = '#ffc952') +
+                          geom_density(aes(x = max_value, y = ..scaled..), 
+                                           colour = '#47b8e0', fill = '#47b8e0') +
+                          ggtitle(bquote(~italic(.(spp_italics))~'variance (100 bootstraps)')) +
+                          labs(x = "Covariate value",
+                               y = "Density") +
+                          theme(plot.title = element_text(size = 20))+
+                          theme(strip.text = element_text(size = 13))+
+                          theme(axis.title = element_text(size = 15))+
+                          facet_wrap(~variable, scales = 'free'))
+    
+    x + scale_y_continuous(breaks = NULL)
+    
+    cov_opath <- paste(var_outpath, spp_name, '_cov_distribution_plots_', Sys.Date(), '.png', sep = "")
+    ggsave(cov_opath, width = 600, height = 450, units = 'mm', dpi = 300)
+    
+    # generate a two row dataframe, which only contains the median minimum value from all bootstraps, and the 
+    # median maximum value from all bootstraps (extremely conservative)
+    min_cov_median <- as.data.frame(t(min_cov_msd[c(1, 4)]))
+    colnames(min_cov_median) <- as.character(unlist(min_cov_median[1,]))
+    min_cov_median = min_cov_median[-1, ]
+    
+    max_cov_median <- as.data.frame(t(max_cov_msd[c(1, 4)]))
+    colnames(max_cov_median) <- as.character(unlist(max_cov_median[1,]))
+    max_cov_median = max_cov_median[-1, ]
+    
+    covariate_stats <- rbind(min_cov_median,
+                             max_cov_median)
+    
+    row.names(covariate_stats) <- c('1', '2')
+    
+    suppressWarnings(covariate_stats <- data.frame(lapply(covariate_stats, as.character), stringsAsFactors = FALSE))
+    suppressWarnings(covariate_stats <- data.frame(lapply(covariate_stats, as.numeric), stringsAsFactors = FALSE))
+   
+    # write out these stats
+    cov_stats_opath <- paste(var_outpath, spp_name, '_cov_distribution_stats_', Sys.Date(), '.csv', sep = "")
+    write.csv(covariate_stats,
+              cov_stats_opath,
+              row.names = FALSE)
+    
+    }
   
   return(monster_mess)
  
