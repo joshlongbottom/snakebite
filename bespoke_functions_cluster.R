@@ -344,7 +344,7 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract,
                                            colour = '#47b8e0', fill = '#47b8e0') +
                           ggtitle(bquote(~italic(.(spp_italics))~'variance (100 bootstraps)')) +
                           labs(x = "Covariate value",
-                               y = "Density") +
+                               y = "Relative density") +
                           theme(plot.title = element_text(size = 20))+
                           theme(strip.text = element_text(size = 13))+
                           theme(axis.title = element_text(size = 15))+
