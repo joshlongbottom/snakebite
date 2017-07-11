@@ -353,32 +353,8 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract,
     x + scale_y_continuous(breaks = NULL)
     
     cov_opath <- paste(var_outpath, spp_name, '_cov_distribution_plots_', Sys.Date(), '.png', sep = "")
-    ggsave(cov_opath, width = 600, height = 450, units = 'mm', dpi = 300)
-    
-    # generate a two row dataframe, which only contains the median minimum value from all bootstraps, and the 
-    # median maximum value from all bootstraps (extremely conservative)
-    min_cov_median <- as.data.frame(t(min_cov_msd[c(1, 4)]))
-    colnames(min_cov_median) <- as.character(unlist(min_cov_median[1,]))
-    min_cov_median = min_cov_median[-1, ]
-    
-    max_cov_median <- as.data.frame(t(max_cov_msd[c(1, 4)]))
-    colnames(max_cov_median) <- as.character(unlist(max_cov_median[1,]))
-    max_cov_median = max_cov_median[-1, ]
-    
-    covariate_stats <- rbind(min_cov_median,
-                             max_cov_median)
-    
-    row.names(covariate_stats) <- c('1', '2')
-    
-    suppressWarnings(covariate_stats <- data.frame(lapply(covariate_stats, as.character), stringsAsFactors = FALSE))
-    suppressWarnings(covariate_stats <- data.frame(lapply(covariate_stats, as.numeric), stringsAsFactors = FALSE))
-   
-    # write out these stats
-    cov_stats_opath <- paste(var_outpath, spp_name, '_cov_distribution_stats_', Sys.Date(), '.csv', sep = "")
-    write.csv(covariate_stats,
-              cov_stats_opath,
-              row.names = FALSE)
-    
+    ggsave(cov_opath, width = 600, height = 450, units = 'mm', dpi = 300, device = 'png')
+
     }
   
   return(monster_mess)
