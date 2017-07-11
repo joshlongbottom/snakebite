@@ -565,5 +565,28 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
             row.names = FALSE)
   
   }
- 
+
+# merge species stats
+spp_list <- list.files('data/raw/species_data/',
+                       pattern = '*_raw.csv$',
+                       full.names = FALSE)
+
+temp_frame <- NULL
+
+# loop through, read and bind
+for(i in 1:length(spp_list)){
+
+    temp <- read.csv(spp_list[i],
+                     stringsAsFactors = FALSE)  
+    
+    temp_frame <- rbind(temp_frame,
+                        temp)
+    
+}
+
+# write out merged stats
+mess_stats_path <- paste(png_mess, 'combined_mess_stats_', Sys.Date(), '.csv', sep = "")
+write.csv(temp_frame,
+          mess_stats_path,
+          row.names = FALSE) 
 
