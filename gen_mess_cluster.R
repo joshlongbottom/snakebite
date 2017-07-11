@@ -107,32 +107,6 @@ for(i in 1:length(spp_list)){
                                       distribution_path,
                                       spp_name)
 
-  # ### create conservative mess map
-  # # inform progress
-  # message(paste('generating conservative MESS', ' (', spp_name, ') ', Sys.time(), sep = ""))
-  # suppressWarnings(conservative_mess_map <- mess(covs, covariate_stats, full = TRUE))
-  # 
-  # # make binary, interpolation/extrapolation surface for the conservative mess
-  # tmp <- conservative_mess_map[['rmess']] >= 0
-  # raw_mess <- conservative_mess_map[['rmess']]
-  # 
-  # # crop to extent
-  # tmp_masked <- mask(tmp, covs[[1]])
-  # raw_mess_masked <- mask(raw_mess, covs[[1]])
-  # 
-  # # write to disk
-  # outpath <- paste(geotif_mess, spp_name, '_conservative_binary', sep = '')
-  # writeRaster(tmp_masked, 
-  #             file = outpath, 
-  #             format = 'GTiff', 
-  #             overwrite = TRUE)
-  # 
-  # outpath_2 <- paste(geotif_mess, spp_name, '_conservative_raw', sep = '')
-  # writeRaster(raw_mess_masked, 
-  #             file = outpath_2, 
-  #             format = 'GTiff', 
-  #             overwrite = TRUE)
-  
   # generate the 1000 MESS surface 
   # run function, specify number of bootstraps, and number of reference points
   message(paste('Generating bootstrapped MESS', ' (', spp_name, ') ', Sys.time(), sep = ""))
@@ -153,45 +127,32 @@ for(i in 1:length(spp_list)){
                                              eval_plot = TRUE,
                                              # where to save the plots
                                              plot_outpath = mess_eval)
-      
-  # write bootstrapped mess to disk
-  outpath_3 <- paste(geotif_mess, spp_name, '_bootstrapped', sep = '')
-  writeRaster(bootstrapped_mess, 
-              file = outpath_3, 
-              format = 'GTiff', 
-              overwrite = TRUE)
   
   # convert bootstrapped MESS into a binary surface; threshold set = 95%
   binary_95 <- bootstrapped_mess
   binary_95[binary_95 < 95] <- 0
   
-  # write out binary
-  outpath_4 <- paste(geotif_mess, spp_name, '_binary_bootstrapped_95', sep = '')
-  writeRaster(binary_95, 
-              file = outpath_4, 
-              format = 'GTiff', 
-              overwrite = TRUE)
-  
   # convert bootstrapped MESS into a binary surface; threshold set = 90%
   binary_90 <- bootstrapped_mess
   binary_90[binary_90 < 90] <- 0
-  
-  # write out binary
-  outpath_5 <- paste(geotif_mess, spp_name, '_binary_bootstrapped_90', sep = '')
-  writeRaster(binary_90, 
-              file = outpath_5, 
-              format = 'GTiff', 
-              overwrite = TRUE)
   
   # convert bootstrapped MESS into a binary surface; threshold set = 75%
   binary_75 <- bootstrapped_mess
   binary_75[binary_75 < 75] <- 0
   
-  # write out binary
-  outpath_6 <- paste(geotif_mess, spp_name, '_binary_bootstrapped_75', sep = '')
-  writeRaster(binary_75, 
-              file = outpath_6, 
-              format = 'GTiff', 
+  # stack the different thresholded MESS
+  mess_stack <- stack(bootstrapped_mess, binary_95, binary_90, binary_75)
+  
+  # write out stacked binary surface
+  # bands in the following geotiff are now
+  # band 1: boostrapped MESS (vals ranging from 0-100)
+  # band 2: binary MESS 95% threshold
+  # band 3: binary MESS 90% threshold
+  # band 4: binary MESS 75% threshold
+  stacked_outpath <- paste(geotif_mess, spp_name, '_stacked_bootstrapped_threshold', Sys.Date(), sep = '')
+  writeRaster(mess_stack, 
+              file = stacked_outpath,
+              format = 'GTiff',
               overwrite = TRUE)
 
   # create a buffered polygon around points within the binary bootstrapped MESS
@@ -398,9 +359,9 @@ for(i in 1:length(spp_list)){
   
   # add points on top
   points(records_oor_neg$longitude, records_oor_neg$latitude, pch = 20, cex = 0.5, col = 'dimgray')
-  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 20, cex = 0.75, col = '#D93529')
   points(records_inside$longitude, records_inside$latitude, pch = 20, cex = 0.5, col = 'blue')
-  
+  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 20, cex = 0.75, col = '#D93529')
+
   legend('bottomleft', c("Interpolation","Extrapolation", "Within range", "Outside range, MESS +ve", "Outside range, MESS -ve"), 
          pch = c(15, 15, 20, 20, 20),
          col = c("springgreen4","gainsboro", "blue", "#D93529", "dimgray"), bty = 'n')
