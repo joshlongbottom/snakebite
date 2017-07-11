@@ -29,7 +29,7 @@ spp_list <- list.files('data/raw/species_data/',
                        full.names = FALSE)
 
 # specify outpath for distribution plots
-distribution_path <- 'output/distribution_plots/'
+var_path <- 'output/distribution_plots/'
 
 # specify outpath for MESS geotiffs
 geotif_mess <- 'output/mess_geotiff/'
@@ -98,17 +98,11 @@ for(i in 1:length(spp_list)){
   
   # remove any NA extracts (if any covariate value is a NA at a particular row, remove it)
   covs_extract <- covs_extract[complete.cases(covs_extract), ]
-  
-  # subsample from this extracted covariate data, to generate 1000 bootstraps
-  # then plot the distribution of the max and mix values for each covariate
-  # to measure variation in the input data
-  covariate_stats <- measure_variance(n_boot = 1000, 
-                                      covs_extract,
-                                      distribution_path,
-                                      spp_name)
 
   # generate the 1000 MESS surface 
   # run function, specify number of bootstraps, and number of reference points
+  # specify if PCC and covariate variance should also be quantified using 'eval_plot' and 
+  # 'variance' arguments
   message(paste('Generating bootstrapped MESS', ' (', spp_name, ') ', Sys.time(), sep = ""))
   
                                              # number of bootstraps
@@ -125,9 +119,13 @@ for(i in 1:length(spp_list)){
                                              occ_dat = records_inside,
                                              # run an evaluation plot to assess PCC?
                                              eval_plot = TRUE,
-                                             # where to save the plots
-                                             plot_outpath = mess_eval)
-  
+                                             # where to save the PCC plots
+                                             pcc_outpath = mess_eval,
+                                             # run an evaluation plot to assess variance?
+                                             variance = TRUE,
+                                             # where to save the variance plots
+                                             var_outpath = var_path)                                 
+
   # convert bootstrapped MESS into a binary surface; threshold set = 95%
   binary_95 <- bootstrapped_mess
   binary_95[binary_95 < 95] <- 0
@@ -149,12 +147,59 @@ for(i in 1:length(spp_list)){
   # band 2: binary MESS 95% threshold
   # band 3: binary MESS 90% threshold
   # band 4: binary MESS 75% threshold
-  stacked_outpath <- paste(geotif_mess, spp_name, '_stacked_bootstrapped_threshold', Sys.Date(), sep = '')
+  stacked_outpath <- paste(geotif_mess, spp_name, '_stacked_bootstrapped_threshold', sep = '')
   writeRaster(mess_stack, 
               file = stacked_outpath,
               format = 'GTiff',
               overwrite = TRUE)
 
+  }
+}
+
+# initialize the cluster (50 cores)
+registerDoMC(50)
+
+# run the following buffer section on all species in parallel
+stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
+  
+  # get species info from spp_list
+  spp_name <- as.character(spp_list[i])
+  spp_name <- gsub('_raw.csv', '', spp_name)
+  
+  # generate subset
+  sub <- snake_list[snake_list$split_spp == spp_name, ]
+  
+  # create extent shapefile
+  ext <- generate_ext(sub, admin_0)
+  
+  # read in EOR shapefile for each species, and dissolve if >1 polygon
+  range <- prepare_eor(sub)
+  raw_range <- shapefile(sub$shapefile_path)
+  
+  # prepare covariates for analysis
+  covs <- prepare_covariates(cov_list, ext, range)
+  
+  # get presence records for species
+  locations <- load_occurrence(spp_name, range)
+  
+  if(nrow(locations) !=0){
+    
+    # get an index for occurrence records within species' range
+    records_inside <- !is.na(over(locations, as(range, "SpatialPolygons")))
+    
+    records_outside <- as.data.frame(locations[records_inside == FALSE, ])
+    records_inside <- as.data.frame(locations[records_inside == TRUE, ])
+    
+    # clean locations to remove 0,0 coordinates  
+    records_outside <- records_outside[!records_outside$latitude == 0 & !records_outside$longitude == 0, ]
+    
+  } else {
+    
+    records_inside <- locations  
+    records_outside <- locations  
+    
+  }
+  
   # create a buffered polygon around points within the binary bootstrapped MESS
   # start by classifying as being OOR MESS +ve or OOO MESS -ve
   if(nrow(records_outside) != 0){
@@ -173,6 +218,10 @@ for(i in 1:length(spp_list)){
                      lat)
     
     # get an index for occurrence records within species' range
+    # load in the 95% surface
+    mess_path <- paste(geotif_mess, spp_name, '_stacked_bootstrapped_threshold.tif', sep = '')
+    binary_95 <- raster(mess_path, band = 2)
+    
     vals_95threshold <- extract(binary_95, lat_lon)
     vals_95threshold <- replace(vals_95threshold, vals_95threshold == 0, NA)
     
@@ -187,6 +236,7 @@ for(i in 1:length(spp_list)){
     records_oor_neg <- records_outside[is.na(records_outside$mess_95), ]
     
     # generate the same stats for the 90% and 75% threshold binary MESS
+    binary_90 <- raster(mess_path, band = 3)
     vals_90threshold <- extract(binary_90, lat_lon)
     vals_90threshold <- replace(vals_90threshold, vals_90threshold == 0, NA)
     
@@ -200,6 +250,7 @@ for(i in 1:length(spp_list)){
     records_oor_neg_90 <- records_outside[is.na(records_outside$mess_90), ]
     
     # generate the same stats for the 90% and 75% threshold binary MESS
+    binary_75 <- raster(mess_path, band = 4)
     vals_75threshold <- extract(binary_75, lat_lon)
     vals_75threshold <- replace(vals_75threshold, vals_75threshold == 0, NA)
     
@@ -223,9 +274,6 @@ for(i in 1:length(spp_list)){
       buffer_pts <- cbind(buf_lon,
                           buf_lat)
       
-      # inform progress, as this step takes a while [clipping]
-      message(paste('Buffering MESS +ve occurrence records for', spp_name, Sys.time(), sep = " "))
-      
       # run buffer function, specify a radius to buffer by (in km), and 
       # which mess layer/threshold to clip by
       modified_poly <- bufferMESSpositives(raw_range,
@@ -237,41 +285,11 @@ for(i in 1:length(spp_list)){
     
     }
     
-    # generate a dataframe with stats for each species
-    total_obs <- nrow(locations)
-    within_eor <- nrow(records_inside)
-    outside_eor <- nrow(records_outside)
-    within_95 <- nrow(records_oor_pos)
-    within_90 <- nrow(records_oor_pos_90)
-    within_75 <- nrow(records_oor_pos_75)
-    
-    spec_stats <- data.frame(species = spp_name, 
-                             total_occurrence_records = total_obs,
-                             total_occ_within_eor = within_eor,
-                             total_occ_outside_eor = outside_eor,
-                             mess_positive_95 = within_95,
-                             mess_positive_90 = within_90,
-                             mess_positive_75 = within_75)
-    
-    if(i == 1){
-      
-      combined_mess_stats <- spec_stats
-      
-    } else {
-      
-      combined_mess_stats <- rbind(combined_mess_stats,
-                                   spec_stats)
-    }
-    
-    mess_stats_path <- paste(png_mess, '_combined_mess_stats_', Sys.Date(), '.csv', sep = "")
-    
-    write.csv(combined_mess_stats,
-              mess_stats_path,
-              row.names = FALSE)
-    
   }
   
   ### SI plots
+  # changed plots (07.07.2017) to remove species name from plot main title, and to
+  # instead label each plot in the panel (A:D), and have one central title for all plots
   # create a plot of both of the MESS outputs, specify whether to add the reference points to the plot
   # create a plotting window to plot both of the surfaces
   message(paste('Plotting', spp_name, 'outputs ', Sys.time(), sep = " "))
@@ -285,12 +303,8 @@ for(i in 1:length(spp_list)){
   par(mfrow = c(2, 2),
       oma = c(2, 2, 2, 2))
   
-  # plot the conservative MESS
+  # define species name
   title <- gsub('_', ' ', spp_name)
-  
-  # changed plots (07.07.2017) to remove species name from plot main title, and to
-  # instead label each plot in the panel (A:D), and have one central title for all plots
-  # main = bquote(~italic(.(title)))
   
   ### plot the bootstrapped MESS 
   plot(bootstrapped_mess,
@@ -528,6 +542,28 @@ for(i in 1:length(spp_list)){
   
   dev.off()
   
+  # generate a dataframe with stats for each species
+  total_obs <- nrow(locations)
+  within_eor <- nrow(records_inside)
+  outside_eor <- nrow(records_outside)
+  within_95 <- nrow(records_oor_pos)
+  within_90 <- nrow(records_oor_pos_90)
+  within_75 <- nrow(records_oor_pos_75)
+  
+  spec_stats <- data.frame(species = spp_name, 
+                           total_occurrence_records = total_obs,
+                           total_occ_within_eor = within_eor,
+                           total_occ_outside_eor = outside_eor,
+                           mess_positive_95 = within_95,
+                           mess_positive_90 = within_90,
+                           mess_positive_75 = within_75)
+  
+  mess_stats_path <- paste(png_mess, spp_name, '_mess_stats_', Sys.Date(), '.csv', sep = "")
+  
+  write.csv(spec_stats,
+            mess_stats_path,
+            row.names = FALSE)
+  
   }
  
-}  
+
