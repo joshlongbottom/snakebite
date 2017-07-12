@@ -263,10 +263,17 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract,
     
     spp_italics <- gsub('_', ' ', spp_name)
     
+    title_text <- paste(' MESS evaluation (n = ', nrow(occ_dat), ' records)', sep = "")
+    
     suppressWarnings(ggplot(data = eval_stats, mapping = aes(x = value)) + 
                      geom_density(colour = 'cadetblue4', fill = 'cadetblue3') + 
-                     ggtitle(bquote(~italic(.(spp_italics))~' MESS evaluation (proportion correctly classified)')) +   
-                     facet_wrap(~variable, scales = 'free')) 
+                     ggtitle(bquote(~italic(.(spp_italics))~title_text)) +
+                     labs(x = "Proportion",
+                          y = "Relative density") +
+                     theme(plot.title = element_text(size = 20)) +
+                     theme(strip.text = element_text(size = 15)) +
+                     theme(axis.title = element_text(size = 15)) +   
+                     facet_wrap(~variable, scales = 'fixed')) 
     
     eval_path <- paste(pcc_outpath, spp_name, '_mess_evaluation_plots_', Sys.Date(), '.png', sep = "")
     ggsave(eval_path, width = 600, height = 450, units = 'mm', dpi = 300, device = 'png')
