@@ -219,6 +219,8 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
     # get an index for occurrence records within species' range
     # load in the 95% surface
     mess_path <- paste(geotif_mess, spp_name, '_stacked_bootstrapped_threshold.tif', sep = '')
+    
+    bootstrapped_mess <- raster(mess_path, band = 1)
     binary_95 <- raster(mess_path, band = 2)
     
     vals_95threshold <- extract(binary_95, lat_lon)
@@ -283,6 +285,32 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
                                            outpath = new_shp_path)
     
     }
+    
+    # generate a dataframe with stats for each species
+    total_obs <- nrow(locations)
+    within_eor <- nrow(records_inside)
+    outside_eor <- nrow(records_outside)
+    within_95 <- nrow(records_oor_pos)
+    within_90 <- nrow(records_oor_pos_90)
+    within_75 <- nrow(records_oor_pos_75)
+    
+    spec_stats <- data.frame(species = spp_name, 
+                             total_occurrence_records = total_obs,
+                             total_occ_within_eor = within_eor,
+                             total_occ_outside_eor = outside_eor,
+                             mess_positive_95 = within_95,
+                             mess_positive_90 = within_90,
+                             mess_positive_75 = within_75)
+    
+    mess_stats_path <- paste(png_mess, spp_name, '_mess_stats_', Sys.Date(), '.csv', sep = "")
+    
+    write.csv(spec_stats,
+              mess_stats_path,
+              row.names = FALSE)
+    
+  } else {
+    
+    spec_stats <- NULL
     
   }
   
@@ -541,27 +569,7 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
   
   dev.off()
   
-  # generate a dataframe with stats for each species
-  total_obs <- nrow(locations)
-  within_eor <- nrow(records_inside)
-  outside_eor <- nrow(records_outside)
-  within_95 <- nrow(records_oor_pos)
-  within_90 <- nrow(records_oor_pos_90)
-  within_75 <- nrow(records_oor_pos_75)
-  
-  spec_stats <- data.frame(species = spp_name, 
-                           total_occurrence_records = total_obs,
-                           total_occ_within_eor = within_eor,
-                           total_occ_outside_eor = outside_eor,
-                           mess_positive_95 = within_95,
-                           mess_positive_90 = within_90,
-                           mess_positive_75 = within_75)
-  
-  mess_stats_path <- paste(png_mess, spp_name, '_mess_stats_', Sys.Date(), '.csv', sep = "")
-  
-  write.csv(spec_stats,
-            mess_stats_path,
-            row.names = FALSE)
+  return(spec_stats)
   
   }
 
