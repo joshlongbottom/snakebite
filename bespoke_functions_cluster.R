@@ -361,7 +361,7 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract,
  
 }
 
-bufferMESSpositives <- function (range, coords, radius, mess, admin_0, outpath) {
+bufferMESSpositives <- function (range, coords, radius, mess, admin_0, outpath, spp_name) {
   # function to generate a buffer of a given radius around the locations of some points, and merge
   # with an EOR polygon
   # `range` must be a SpatialPolygons object of length 1 (polygon of current EOR)
