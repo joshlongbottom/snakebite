@@ -397,6 +397,10 @@ bufferMESSpositives <- function (range, coords, radius, mess, admin_0, outpath) 
   # then convert raster into a polygon, and merge points
   mess <- rasterToPolygons(mess, dissolve = FALSE)
   
+  # change layer name for each mess
+  names(mess@data) <- 'layer'
+  
+  # get list of unique values to merge on, use these to reduce size of polygon
   ids <- mess@data$layer
   mess <- unionSpatialPolygons(mess, ids)
   
