@@ -162,7 +162,7 @@ registerDoMC(50)
 message(paste('Processing species ranges on 50 cores ', Sys.time(), sep = ""))
 
 # run the following buffer section on all species in parallel
-stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
+stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
   
   # get species info from spp_list
   spp_name <- as.character(spp_list[i])
@@ -279,13 +279,13 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
       
       # run buffer function, specify a radius to buffer by (in km), and 
       # which mess layer/threshold to clip by
-      modified_poly <- bufferMESSpositives(raw_range,
+      modified_poly <- bufferMESSpositives(range = raw_range,
                                            coords = buffer_pts,
                                            radius = 100,
                                            mess = binary_95,
                                            admin_0,
                                            outpath = new_shp_path,
-                                           spp_name)
+                                           spp_name = spp_name)
     
       # get final extent for a species
       new_shp_path <- paste(new_shp_path, spp_name, sep = "")
@@ -416,13 +416,13 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
   title(xlab = 'Binary bootstrapped MESS (95% threshold) with occurrence records', line = 0, cex.lab = 1.25)
   
   # add points on top
-  points(records_oor_neg$longitude, records_oor_neg$latitude, pch = 20, cex = 0.5, col = '#ffc952')
-  points(records_inside$longitude, records_inside$latitude, pch = 20, cex = 0.5, col = '#47b8e0')
-  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 20, cex = 0.75, col = '#ff7473')
-
-  legend('bottomleft', c("Interpolation","Extrapolation", "Within range", "Outside range, MESS +ve", "Outside range, MESS -ve"), 
+  points(records_oor_neg$longitude, records_oor_neg$latitude, pch = 21, cex = 0.5, col = '#090707', bg = '#EFDC05', lwd = 0.15)
+  points(records_inside$longitude, records_inside$latitude, pch = 21, cex = 0.5, col = '#090707', bg = 'blue', lwd = 0.1)
+  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 21, cex = 0.5, col = '#090707', bg = '#D93529', lwd = 0.1)
+  
+  legend('bottomleft', c("Interpolation","Extrapolation", "Within range", "Outside range, MESS +ve", "Outside range, MESS -ve"),
          pch = c(15, 15, 20, 20, 20),
-         col = c("springgreen4","gainsboro", "blue", "#D93529", "dimgray"), bty = 'n')
+         col = c("springgreen4","gainsboro", "blue", "#D93529", "#EFDC05"), bty = 'n')
   
   ### plot the new range shapefile, ontop of binary bootstrapped MESS
   if(nrow(records_oor_pos) != 0) {
@@ -433,13 +433,19 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
     
     plot(modified_poly,
          add = TRUE,
-         col = '#4775B5',
+         col = '#c1de29',
          border = NA)
     
     plot(range,
          add = TRUE,
-         col = '#4775B5',
+         col = '#00a600',
          border = NA)
+    
+    plot(final_ext,
+         add = TRUE,
+         border = 'gray45',
+         lty = 1,
+         lwd = 0.2)
   
   } else {
     
@@ -450,7 +456,7 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
     
     plot(range,
          add = TRUE,
-         col = '#4775B5',
+         col = '#c1de29',
          border = NA)
     
     plot(ext,
@@ -463,6 +469,10 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
   
   mess_positive_title <- paste('Suggested ammended range (incorporating', nrow(records_oor_pos), 
                                'outside of range MESS +ve records)', sep = " ")
+  
+  legend('bottomleft', c("Current EOR","Proposed addition"), 
+         pch = c(15, 15),
+         col = c("#00a600","#c1de29"), bty = 'n')
   
   title(xlab = mess_positive_title, line = 0, cex.lab = 1.25)
   
@@ -510,7 +520,7 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
 
   ### plot the 95% binary MESS with points
   plot(binary_95,
-       main = "B)", adj = 0,
+       main = "C)", adj = 0,
        legend = FALSE,
        axes = FALSE,
        box = FALSE)
@@ -518,23 +528,22 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
        add = TRUE,
        border = 'black',
        lty = 1,
-       lwd = 1.5)
+       lwd = 1)
   plot(ext,
        add = TRUE,
        border = 'gray45',
        lty = 1,
-       lwd = 0.5)
+       lwd = 0.2)
   
-  title(xlab = 'Binary bootstrapped MESS (95% threshold)', line = 0, cex.lab = 1.25)
+  title(xlab = 'Binary bootstrapped MESS (95% threshold) with occurrence records', line = 0, cex.lab = 1.25)
   
   # add points on top
-  # these are the points which are considered OOEOR MESS+ve/-ve for the 95% threshold
-  points(records_oor_neg$longitude, records_oor_neg$latitude, pch = 20, cex = 0.75, col = '#D93529')
-  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 20, cex = 0.75, col = 'blue')
+  points(records_oor_neg$longitude, records_oor_neg$latitude, pch = 20, cex = 0.75, col = 'blue')
+  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 20, cex = 0.75, col = '#D93529')
   
   legend('bottomleft', c("Interpolation","Extrapolation", "Within the 95% MESS threshold", "Outside of the 95% MESS threshold"), 
          pch = c(15, 15, 20, 20),
-         col = c("springgreen4","gainsboro", "blue", "#D93529"), bty = 'n')
+         col = c("springgreen4","gainsboro", "#D93529", "blue"), bty = 'n')
   
   ### plot the 90% binary MESS with points
   plot(binary_90,
@@ -557,12 +566,12 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
   
   # add points on top
   # these are the points which are considered OOEOR MESS+ve/-ve for the 95% threshold
-  points(records_oor_neg_90$longitude, records_oor_neg_90$latitude, pch = 20, cex = 0.75, col = '#D93529')
-  points(records_oor_pos_90$longitude, records_oor_pos_90$latitude, pch = 20, cex = 0.75, col = 'blue')
+  points(records_oor_neg_90$longitude, records_oor_neg_90$latitude, pch = 20, cex = 0.75, col = 'blue')
+  points(records_oor_pos_90$longitude, records_oor_pos_90$latitude, pch = 20, cex = 0.75, col = '#D93529')
   
   legend('bottomleft', c("Interpolation","Extrapolation", "Within the 90% MESS threshold", "Outside of the 90% MESS threshold"), 
          pch = c(15, 15, 20, 20),
-         col = c("springgreen4","gainsboro", "blue", "#D93529"), bty = 'n')
+         col = c("springgreen4","gainsboro", "#D93529", "blue"), bty = 'n')
   
   ### plot the 75% binary MESS with points
   plot(binary_75,
@@ -585,12 +594,12 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
   
   # add points on top
   # these are the points which are considered OOEOR MESS+ve/-ve for the 95% threshold
-  points(records_oor_neg_75$longitude, records_oor_neg_75$latitude, pch = 20, cex = 0.75, col = '#D93529')
-  points(records_oor_pos_75$longitude, records_oor_pos_75$latitude, pch = 20, cex = 0.75, col = 'blue')
+  points(records_oor_neg_75$longitude, records_oor_neg_75$latitude, pch = 20, cex = 0.75, col = 'blue')
+  points(records_oor_pos_75$longitude, records_oor_pos_75$latitude, pch = 20, cex = 0.75, col = '#D93529')
   
   legend('bottomleft', c("Interpolation","Extrapolation", "Within the 75% MESS threshold", "Outside of the 75% MESS threshold"), 
          pch = c(15, 15, 20, 20),
-         col = c("springgreen4","gainsboro", "blue", "#D93529"), bty = 'n')
+         col = c("springgreen4","gainsboro", "#D93529", "blue"), bty = 'n')
   
   mtext(bquote(~italic(.(title))), side = 3, line = -1, outer = TRUE, cex = 2, font = 2)
   
