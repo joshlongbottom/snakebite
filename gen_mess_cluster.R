@@ -200,8 +200,10 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
   }
   
   # create a buffered polygon around points within the binary bootstrapped MESS
-  # start by classifying as being OOR MESS +ve or OOO MESS -ve
-  if(nrow(records_outside) != 0){
+  # start by classifying as being OOR MESS +ve or OOO MESS -ve; this requires:
+  # 1. >= 5 records within the range (otherwise a MESS wasn't generated above)
+  # 2. >0 records outside of the range (otherwise there's no range modification)
+  if(nrow(records_inside) >= 5){
     
     # turn into a spatial points dataframe
     coordinates(records_outside) <- c("longitude", "latitude")
@@ -282,8 +284,23 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
                                            radius = 100,
                                            mess = binary_95,
                                            admin_0,
-                                           outpath = new_shp_path)
+                                           outpath = new_shp_path,
+                                           spp_name)
     
+      # get final extent for a species
+      new_shp_path <- paste(new_shp_path, spp_name, sep = "")
+      temp_shp <- shapefile(new_shp_path)
+      
+      # get countries in new extent
+      final_countries <- unique(temp_shp@data$COUNTRY_ID)
+      
+      # remove any disputed regions (iso XXX)
+      final_countries <- final_countries[!(final_countries == 'XXX')]
+      final_countries <- final_countries[!is.na(final_countries)]
+      
+      # create extent shapefile
+      final_ext <- admin_0[admin_0$COUNTRY_ID %in% final_countries, ]
+      
     }
     
     # generate a dataframe with stats for each species
@@ -314,12 +331,12 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
     
   }
   
-  ### SI plots
-  # changed plots (07.07.2017) to remove species name from plot main title, and to
-  # instead label each plot in the panel (A:D), and have one central title for all plots
-  # create a plot of both of the MESS outputs, specify whether to add the reference points to the plot
-  # create a plotting window to plot both of the surfaces
-  message(paste('Plotting', spp_name, 'outputs ', Sys.time(), sep = " "))
+  # generate SI plots - this requires a MESS to have been constructed, which depends on a spp
+  # having 5 or more occurrence records, as per above.
+  
+  if(nrow(records_inside) >= 5){
+  
+  # create a plotting window
   png_name <- paste(png_mess, spp_name, '_species_mess_maps_', Sys.Date(), '.png', sep = "")
   
   png(png_name,
@@ -343,12 +360,12 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
        add = TRUE,
        border = 'black',
        lty = 1,
-       lwd = 1.5)
+       lwd = 1)
   plot(ext,
        add = TRUE,
        border = 'gray45',
        lty = 1,
-       lwd = 0.5)
+       lwd = 0.2)
   
   title(xlab = 'Bootstrapped MESS (100 bootstraps)', line = 0, cex.lab = 1.25)
   
@@ -371,7 +388,7 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
        add = TRUE,
        border = 'gray45',
        lty = 1,
-       lwd = 0.5)
+       lwd = 0.2)
   
   title(xlab = 'Binary bootstrapped MESS (95% threshold)', line = 0, cex.lab = 1.25)
   
@@ -389,55 +406,65 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
        add = TRUE,
        border = 'black',
        lty = 1,
-       lwd = 1.5)
+       lwd = 1)
   plot(ext,
        add = TRUE,
        border = 'gray45',
        lty = 1,
-       lwd = 0.5)
+       lwd = 0.2)
   
   title(xlab = 'Binary bootstrapped MESS (95% threshold) with occurrence records', line = 0, cex.lab = 1.25)
   
   # add points on top
-  points(records_oor_neg$longitude, records_oor_neg$latitude, pch = 20, cex = 0.5, col = 'dimgray')
-  points(records_inside$longitude, records_inside$latitude, pch = 20, cex = 0.5, col = 'blue')
-  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 20, cex = 0.75, col = '#D93529')
+  points(records_oor_neg$longitude, records_oor_neg$latitude, pch = 20, cex = 0.5, col = '#ffc952')
+  points(records_inside$longitude, records_inside$latitude, pch = 20, cex = 0.5, col = '#47b8e0')
+  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 20, cex = 0.75, col = '#ff7473')
 
   legend('bottomleft', c("Interpolation","Extrapolation", "Within range", "Outside range, MESS +ve", "Outside range, MESS -ve"), 
          pch = c(15, 15, 20, 20, 20),
          col = c("springgreen4","gainsboro", "blue", "#D93529", "dimgray"), bty = 'n')
   
   ### plot the new range shapefile, ontop of binary bootstrapped MESS
-  plot(binary_95,
-       main = "D)", adj = 0,
-       legend = FALSE,
-       axes = FALSE,
-       box = FALSE)
-  
   if(nrow(records_oor_pos) != 0) {
+    plot(final_ext,
+         main = "D)", adj = 0,
+         col = '#f2f2f2',
+         border = NA)
     
     plot(modified_poly,
          add = TRUE,
-         border = 'black',
-         lty = 1,
-         lwd = 1.5)
-    
-  } else {
+         col = '#4775B5',
+         border = NA)
     
     plot(range,
          add = TRUE,
-         border = 'black',
+         col = '#4775B5',
+         border = NA)
+  
+  } else {
+    
+    plot(ext,
+         main = "D)", adj = 0,
+         col = '#f2f2f2',
+         border = NA)
+    
+    plot(range,
+         add = TRUE,
+         col = '#4775B5',
+         border = NA)
+    
+    plot(ext,
+         add = TRUE,
+         border = 'gray45',
          lty = 1,
-         lwd = 1.5)
+         lwd = 0.2)
+    
   }
   
-  plot(ext,
-       add = TRUE,
-       border = 'gray45',
-       lty = 1,
-       lwd = 0.5)
+  mess_positive_title <- paste('Suggested ammended range (incorporating', nrow(records_oor_pos), 
+                               'outside of range MESS +ve records)', sep = " ")
   
-  title(xlab = 'Suggested ammended range (incorporating outside of range MESS +ve records)', line = 0, cex.lab = 1.25)
+  title(xlab = mess_positive_title, line = 0, cex.lab = 1.25)
   
   mtext(bquote(~italic(.(title))), side = 3, line = -1, outer = TRUE, cex = 2, font = 2)
   
@@ -568,6 +595,8 @@ stage_2 <- foreach(i = 1:length(species_list)) %dopar% {
   mtext(bquote(~italic(.(title))), side = 3, line = -1, outer = TRUE, cex = 2, font = 2)
   
   dev.off()
+  
+  }
   
   return(spec_stats)
   
