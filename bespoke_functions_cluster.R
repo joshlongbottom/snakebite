@@ -245,7 +245,7 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract,
     # vals of 1 suggest 100% prediction
     vals <- vals[vals == 1]
     
-    rcc_i <- (length(vals) / nrow(records_inside))
+    rcc_i <- (length(vals) / nrow(occ_dat))
     
     eval_stats <- rbind(eval_stats,
                         rcc_i)
@@ -255,7 +255,9 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract,
     # plot distribution of correctly classified across all bootstraps
     eval_stats <- as.data.frame(eval_stats)
     
-    eval_stats$variable <- rep('proportion correctly classified')
+    title_text <- paste('(n = ', nrow(occ_dat), ' records)', sep = "")
+    
+    eval_stats$variable <- rep(title_text)
     
     names(eval_stats) <- c('value', 'variable')
 
@@ -263,18 +265,16 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract,
     
     spp_italics <- gsub('_', ' ', spp_name)
     
-    title_text <- paste(' MESS evaluation (n = ', nrow(occ_dat), ' records)', sep = "")
-    
     suppressWarnings(ggplot(data = eval_stats, mapping = aes(x = value)) + 
                      geom_density(colour = 'cadetblue4', fill = 'cadetblue3') + 
-                     ggtitle(bquote(~italic(.(spp_italics))~title_text)) +
+                     ggtitle(bquote(~italic(.(spp_italics))~' MESS evaluation')) +
                      labs(x = "Proportion",
                           y = "Relative density") +
                      theme(plot.title = element_text(size = 20)) +
                      theme(strip.text = element_text(size = 15)) +
                      theme(axis.title = element_text(size = 15)) +   
                      facet_wrap(~variable, scales = 'fixed')) 
-    
+
     eval_path <- paste(pcc_outpath, spp_name, '_mess_evaluation_plots_', Sys.Date(), '.png', sep = "")
     ggsave(eval_path, width = 600, height = 450, units = 'mm', dpi = 300, device = 'png')
     
