@@ -367,7 +367,9 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
        lty = 1,
        lwd = 0.2)
   
-  title(xlab = 'Bootstrapped MESS (100 bootstraps)', line = 0, cex.lab = 1.25)
+  a_text <- paste('100 Bootstrapped MESS\n(constructed using', nrow(records_inside), 'occurrence records)', sep = " ")
+  
+  title(xlab = a_text, line = 2, cex.lab = 1.25)
   
   legend('bottomleft', c("Interpolation","Extrapolation"), 
          pch = c(15, 15),
@@ -390,7 +392,7 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
        lty = 1,
        lwd = 0.2)
   
-  title(xlab = 'Binary bootstrapped MESS (95% threshold)', line = 0, cex.lab = 1.25)
+  title(xlab = 'Binary bootstrapped MESS (95% threshold)', line = 1, cex.lab = 1.25)
   
   legend('bottomleft', c("Interpolation","Extrapolation"), 
          pch = c(15, 15),
@@ -413,16 +415,18 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
        lty = 1,
        lwd = 0.2)
   
-  title(xlab = 'Binary bootstrapped MESS (95% threshold) with occurrence records', line = 0, cex.lab = 1.25)
+  c_text <- paste('Binary bootstrapped MESS (95% threshold) \nwith', nrow(records_outside), 
+                  'outside of range occurrence records', sep = " ")
+  
+  title(xlab = c_text, line = 2, cex.lab = 1.25)
   
   # add points on top
-  points(records_oor_neg$longitude, records_oor_neg$latitude, pch = 21, cex = 0.5, col = '#090707', bg = '#EFDC05', lwd = 0.15)
-  points(records_inside$longitude, records_inside$latitude, pch = 21, cex = 0.5, col = '#090707', bg = 'blue', lwd = 0.1)
-  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 21, cex = 0.5, col = '#090707', bg = '#D93529', lwd = 0.1)
+  points(records_oor_neg$longitude, records_oor_neg$latitude, pch = 4, cex = 0.5, col = 'blue', lwd = 0.5)
+  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 20, cex = 0.5, col = '#D93529')
   
-  legend('bottomleft', c("Interpolation","Extrapolation", "Within range", "Outside range, MESS +ve", "Outside range, MESS -ve"),
-         pch = c(15, 15, 20, 20, 20),
-         col = c("springgreen4","gainsboro", "blue", "#D93529", "#EFDC05"), bty = 'n')
+  legend('bottomleft', c("Interpolation","Extrapolation", "Outside range, MESS +ve", "Outside range, MESS -ve"),
+         pch = c(15, 15, 20, 4),
+         col = c("springgreen4","gainsboro", "#D93529", "blue"), bty = 'n')
   
   ### plot the new range shapefile, ontop of binary bootstrapped MESS
   if(nrow(records_oor_pos) != 0) {
@@ -433,12 +437,12 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
     
     plot(modified_poly,
          add = TRUE,
-         col = '#c1de29',
+         col = '#00a600',
          border = NA)
     
     plot(range,
          add = TRUE,
-         col = '#00a600',
+         col = '#c1de29',
          border = NA)
     
     plot(final_ext,
@@ -467,14 +471,14 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
     
   }
   
-  mess_positive_title <- paste('Suggested ammended range (incorporating', nrow(records_oor_pos), 
+  mess_positive_title <- paste('Suggested ammended range \n(incorporating', nrow(records_oor_pos), 
                                'outside of range MESS +ve records)', sep = " ")
   
   legend('bottomleft', c("Current EOR","Proposed addition"), 
          pch = c(15, 15),
-         col = c("#00a600","#c1de29"), bty = 'n')
+         col = c("#c1de29","#00a600"), bty = 'n')
   
-  title(xlab = mess_positive_title, line = 0, cex.lab = 1.25)
+  title(xlab = mess_positive_title, line = 2, cex.lab = 1.25)
   
   mtext(bquote(~italic(.(title))), side = 3, line = -1, outer = TRUE, cex = 2, font = 2)
   
@@ -486,7 +490,7 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
   
   png(png_name,
       width = 450,
-      height = 400,
+      height = 200,
       units = 'mm',
       res = 300)
   par(mfrow = c(2, 2), 
@@ -512,15 +516,22 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
        lty = 1,
        lwd = 0.5)
   
-  title(xlab = 'Bootstrapped MESS (100 bootstraps)', line = 0, cex.lab = 1.25)
+  title(xlab = '100 Bootstrapped MESS', line = 1, cex.lab = 1.25)
   
   legend('bottomleft', c("Interpolation","Extrapolation"), 
          pch = c(15, 15),
          col = c("springgreen4","gainsboro"), bty = 'n')
 
   ### plot the 95% binary MESS with points
+  binary_95[binary_95 >= 95] <- 1
+  
+  breakpoints <- c(0, 0.5, 1)
+  colours <- c('#f2f2f2', 'gray70', 'gray70')
+  
   plot(binary_95,
-       main = "C)", adj = 0,
+       breaks = breakpoints,
+       col = colours,
+       main = "B)", adj = 0,
        legend = FALSE,
        axes = FALSE,
        box = FALSE)
@@ -535,71 +546,21 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
        lty = 1,
        lwd = 0.2)
   
-  title(xlab = 'Binary bootstrapped MESS (95% threshold) with occurrence records', line = 0, cex.lab = 1.25)
+  c_text <- paste('MESS threshold classification of \n', nrow(records_outside), 
+                  'outside of range occurrence records', sep = " ")
+  
+  title(xlab = c_text, line = 2, cex.lab = 1.25)
   
   # add points on top
-  points(records_oor_neg$longitude, records_oor_neg$latitude, pch = 20, cex = 0.75, col = 'blue')
-  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 20, cex = 0.75, col = '#D93529')
+  points(records_oor_neg_75$longitude, records_oor_neg_75$latitude, pch = 20, cex = 0.75, col = '#67D5B5')
+  points(records_oor_pos_75$longitude, records_oor_pos_75$latitude, pch = 20, cex = 0.75, col = '#84B1ED')
+  points(records_oor_pos_90$longitude, records_oor_pos_90$latitude, pch = 20, cex = 0.75, col = '#C89EC4')
+  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 20, cex = 0.75, col = '#EE7785')
   
-  legend('bottomleft', c("Interpolation","Extrapolation", "Within the 95% MESS threshold", "Outside of the 95% MESS threshold"), 
-         pch = c(15, 15, 20, 20),
-         col = c("springgreen4","gainsboro", "#D93529", "blue"), bty = 'n')
-  
-  ### plot the 90% binary MESS with points
-  plot(binary_90,
-       main = "C)", adj = 0,
-       legend = FALSE,
-       axes = FALSE,
-       box = FALSE)
-  plot(range,
-       add = TRUE,
-       border = 'black',
-       lty = 1,
-       lwd = 1.5)
-  plot(ext,
-       add = TRUE,
-       border = 'gray45',
-       lty = 1,
-       lwd = 0.5)
-  
-  title(xlab = 'Binary bootstrapped MESS (90% threshold)', line = 0, cex.lab = 1.25)
-  
-  # add points on top
-  # these are the points which are considered OOEOR MESS+ve/-ve for the 95% threshold
-  points(records_oor_neg_90$longitude, records_oor_neg_90$latitude, pch = 20, cex = 0.75, col = 'blue')
-  points(records_oor_pos_90$longitude, records_oor_pos_90$latitude, pch = 20, cex = 0.75, col = '#D93529')
-  
-  legend('bottomleft', c("Interpolation","Extrapolation", "Within the 90% MESS threshold", "Outside of the 90% MESS threshold"), 
-         pch = c(15, 15, 20, 20),
-         col = c("springgreen4","gainsboro", "#D93529", "blue"), bty = 'n')
-  
-  ### plot the 75% binary MESS with points
-  plot(binary_75,
-       main = "D)", adj = 0,
-       legend = FALSE,
-       axes = FALSE,
-       box = FALSE)
-  plot(range,
-       add = TRUE,
-       border = 'black',
-       lty = 1,
-       lwd = 1.5)
-  plot(ext,
-       add = TRUE,
-       border = 'gray45',
-       lty = 1,
-       lwd = 0.5)
-  
-  title(xlab = 'Binary bootstrapped MESS (75% threshold)', line = 0, cex.lab = 1.25)
-  
-  # add points on top
-  # these are the points which are considered OOEOR MESS+ve/-ve for the 95% threshold
-  points(records_oor_neg_75$longitude, records_oor_neg_75$latitude, pch = 20, cex = 0.75, col = 'blue')
-  points(records_oor_pos_75$longitude, records_oor_pos_75$latitude, pch = 20, cex = 0.75, col = '#D93529')
-  
-  legend('bottomleft', c("Interpolation","Extrapolation", "Within the 75% MESS threshold", "Outside of the 75% MESS threshold"), 
-         pch = c(15, 15, 20, 20),
-         col = c("springgreen4","gainsboro", "#D93529", "blue"), bty = 'n')
+  legend('bottomleft', c("Within the 95%, 90% and 75% MESS thresholds", "Within the 90% and 75% MESS thresholds only", 
+                         "Within the 75% MESS threshold only", "Outside of all MESS thresholds"), 
+         pch = c(20, 20, 20, 20),
+         col = c("#EE7785","#C89EC4", "#84B1ED", "#67D5B5"), bty = 'n')
   
   mtext(bquote(~italic(.(title))), side = 3, line = -1, outer = TRUE, cex = 2, font = 2)
   
