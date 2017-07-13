@@ -493,7 +493,7 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
       height = 200,
       units = 'mm',
       res = 300)
-  par(mfrow = c(2, 2), 
+  par(mfrow = c(1, 2), 
       oma = c(2, 2, 2, 2))
   
   # generate species title
@@ -516,11 +516,11 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
        lty = 1,
        lwd = 0.5)
   
-  title(xlab = '100 Bootstrapped MESS', line = 1, cex.lab = 1.25)
+  title(xlab = '100 Bootstrapped MESS', line = 1, cex.lab = 1)
   
   legend('bottomleft', c("Interpolation","Extrapolation"), 
          pch = c(15, 15),
-         col = c("springgreen4","gainsboro"), bty = 'n')
+         col = c("springgreen4","gainsboro"), bty = 'n', pt.cex = 1.5)
 
   ### plot the 95% binary MESS with points
   binary_95[binary_95 >= 95] <- 1
@@ -549,18 +549,18 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
   c_text <- paste('MESS threshold classification of \n', nrow(records_outside), 
                   'outside of range occurrence records', sep = " ")
   
-  title(xlab = c_text, line = 2, cex.lab = 1.25)
+  title(xlab = c_text, line = 2, cex.lab = 1)
   
   # add points on top
-  points(records_oor_neg_75$longitude, records_oor_neg_75$latitude, pch = 20, cex = 0.75, col = '#67D5B5')
-  points(records_oor_pos_75$longitude, records_oor_pos_75$latitude, pch = 20, cex = 0.75, col = '#84B1ED')
-  points(records_oor_pos_90$longitude, records_oor_pos_90$latitude, pch = 20, cex = 0.75, col = '#C89EC4')
-  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 20, cex = 0.75, col = '#EE7785')
+  points(records_oor_neg_75$longitude, records_oor_neg_75$latitude, pch = 4, cex = 0.5, col = '#ff7f27', lwd = 0.5)
+  points(records_oor_pos_75$longitude, records_oor_pos_75$latitude, pch = 21, cex = 0.5, col = 'gray58', bg = '#22b14c', lwd = 0.25)
+  points(records_oor_pos_90$longitude, records_oor_pos_90$latitude, pch = 21, cex = 0.5, col = 'gray58', bg = '#E71D36', lwd = 0.25)
+  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 21, cex = 0.5, col = 'gray58', bg = '#00a2e8', lwd = 0.25)
   
-  legend('bottomleft', c("Within the 95%, 90% and 75% MESS thresholds", "Within the 90% and 75% MESS thresholds only", 
+  legend("bottomleft", c("Within the 95%, 90% and 75% MESS thresholds", "Within the 90% and 75% MESS thresholds only", 
                          "Within the 75% MESS threshold only", "Outside of all MESS thresholds"), 
-         pch = c(20, 20, 20, 20),
-         col = c("#EE7785","#C89EC4", "#84B1ED", "#67D5B5"), bty = 'n')
+         pch = c(20, 20, 20, 4),
+         col = c("#00a2e8","#E71D36", "#22b14c", "#ff7f27"), bty = 'n', cex = 0.8, pt.cex = 1)
   
   mtext(bquote(~italic(.(title))), side = 3, line = -1, outer = TRUE, cex = 2, font = 2)
   
