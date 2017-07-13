@@ -34,7 +34,7 @@ plots <- mclapply(species_list,
 # merge into one single PDF
 ggsave(mess_si_name, 
        width = 8.27,
-       height = 11.29,
+       height = 11.69,
        marrangeGrob(grobs = plots, nrow = 1, ncol = 1, top = NULL))
 
 rm(plots)
@@ -65,8 +65,8 @@ plots <- mclapply(threshold_list,
 
 # merge into one single PDF
 ggsave(threshold_si_name, 
-       width = 8.27,
-       height = 11.29,
+       width = 11.69,
+       height = 8.27,
        marrangeGrob(grobs = plots, nrow = 2, ncol = 1, top = NULL))
 
 rm(plots)
@@ -94,7 +94,7 @@ plots <- mclapply(covariate_plot_list,
 
 ggsave(covariate_si_name, 
        width = 8.27,
-       height = 11.29,
+       height = 11.69,
        marrangeGrob(grobs = plots, nrow = 3, ncol = 1, top = NULL))
 
 rm(plots)
@@ -120,7 +120,7 @@ plots <- mclapply(pcc_plot_list,
 
 ggsave(pcc_si_name, 
        width = 8.27,
-       height = 11.29,
+       height = 11.69,
        marrangeGrob(grobs = plots, nrow = 2, ncol = 1, top = NULL))
 
 rm(plots)
