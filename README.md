@@ -1,50 +1,24 @@
-# Snakebite project
+# Snakebite
 Code for the generation of a venomous snake species richness surface, identifying populations at risk of exposure to venomous snake species.
 Project is currently in progress. Main themes of the project:
 - Digitise existing expert opinion range maps for all medically important venomous snake species
-- Redefine the ranges for each of these species
-- Create a venomous snake species surface
-- Compare this surface with disease burden estimates and antivenom availability data
+- Provide recommendations for updates to the range of each of these species
+- Create a contemporary medically important venomous snake species surface, split by medical importance classification
+- Compare this species richness surface with disease burden estimates and antivenom availability data
 
 ## Description
-Expert opinion range (EOR) maps for medically important snake species were obtained from the WHO antivenom database (http://apps.who.int/bloodproducts/snakeantivenoms/database/). **~'get_who_snakes.R'**
+Expert opinion range (EOR) maps for medically important snake species were obtained from the WHO antivenom database (http://apps.who.int/bloodproducts/snakeantivenoms/database/). Each EOR map was digitized, and a shapefile was created for each unique species per map. Utilizing the spocc package, available species occurrence data was obtained for each species (n = 277). This species occurrence data was used to generate Multivariate Environmental Similarity Surfaces (MESS) for each species, highlighting locations which are environmentally similar to locations within the species occurrence data. These MES surfaces were then used to validate any occurrence data located outside of the currently accepted EOR, and informed a process generating an amended, contemporary species range.
 
-Example EOR map:
+The newly created ranges were then converted to raster format, and stacked to generate a surface giving the count of the number of venomous snake species within each 5 km x 5 km cell across the globe.
 
-![Alt text](http://apps.who.int/bloodproducts/snakeantivenoms/database/Images/SnakesDistribution/Small/map_Acanthophis_antarcticus.png "Acanthophis antarcticus EOR map")
+## Project workflow
+![Alt text](https://image.ibb.co/mpUiPa/workflow.png "Project workflow (R scripts)")
 
-Each EOR map was digitized using ArcMAP, and a shapefile was created for each unique species per map.
+Broad overview of the project workflow. Each stage refers to a specific script within this repository.
 
-Example digitization and rasterization process:
-
-![Alt text](https://preview.ibb.co/kZX4Lv/Mapping_venomous_snake_species_richness.png "Digitised Micrurus lemniscatus EOR map")
-
-Utilizing the spocc package, species occurrence data was then obtained for each species (n = 277) **~'plot_occurrence_spocc.R'**. Through a combination of digitised EOR maps, and species occurrence data obtained via spocc, Multivariate Environmental Suitability Surfaces (MESS) were generated for each species **~'gen_mess.R'**. These surfaces were used to validate any new occurrence data outside of the currently accepted EOR, and informed a process generating a new species range.
-
-Example ocurrence data trawl:
-
-![Alt text](https://preview.ibb.co/hzvVtF/Grab_occurrence.png "Occurrence data grabbing example")
-
-Example MESS surface (in progress, Acanthophis antarcticus):
-
-![Alt text](https://image.ibb.co/j3vr0v/Example_MESS.png "Acanthophis antarcticus MESS (in progress)")
-
-The newly created ranges were then converted to raster format (**~'convert_shp_to_raster.R'**), and stacked (**~'gen_species_richness.R'**) to give a count of the number of venomous snake species per 5 km x 5 km cell.
-
-## Dependancies
-Packages:
-1. dismo (https://cran.r-project.org/web/packages/dismo/index.html)
-2. raster (https://cran.r-project.org/web/packages/raster/index.html)
-3. maptools (https://cran.r-project.org/web/packages/maptools/index.html)
-4. rgeos (https://cran.r-project.org/web/packages/rgeos/index.html)
-5. rgdal (https://cran.r-project.org/web/packages/rgdal/index.html)
-6. pdftools (https://cran.r-project.org/web/packages/pdftools/index.html)
-7. foreign (https://cran.r-project.org/web/packages/foreign/index.html)
-8. spatstat (https://cran.r-project.org/web/packages/spatstat/index.html)
-9. utils (https://cran.r-project.org/web/packages/R.utils/index.html)
-10. spocc (https://cran.r-project.org/web/packages/spocc/index.html)
-11. seegSDM (https://github.com/SEEG-Oxford/seegSDM)
-12. ggplot2 (https://cran.r-project.org/web/packages/ggplot2/index.html)
-13. reshape2 (https://cran.r-project.org/web/packages/reshape2/index.html)
-
-
+1. **get_who_snakes.R**: This script bulk downloads EOR maps from the WHO antivenom database, and converts these downloaded maps into PNG fomat, to allow georeferencing and digitization in ArcMAP.
+2. **plot_occurrence_spocc.R**: This script cycles through each medically important venomous snake species, and downloads available occurrence records from the online repositories [GBIF] (http://www.gbif.org/), [VertNet] (http://vertnet.org/), [iNaturalist] (https://www.inaturalist.org/), [iDigBio] (https://www.idigbio.org/) and [Ecoengine] (https://ecoengine.berkeley.edu/) utilizing the `spocc` package (https://CRAN.R-project.org/package=spocc). This occurrence data was then overlaid on top of digitized range shapefiles.
+3. **gen_mess_cluster.R**: This script utilizes the occurrence data obtained in the step above, and generates a Multivariate Environmental Similarity Surface (MESS) for each species. The MESS is constructed using occurrence records within the species currently accepted EOR. The MESS is then used to evaluate occurrence records which are located outside of the currently accepted EOR. Records outside of the EOR, which are within interpolation space (MESS +ve) are used to create an amended, proposed range. This range is generated by buffering MESS +ve records by 100km, and clipping the buffered areas by the MESS interpolation space.
+4. **convert_shp_to_raster.R**: This script converts the newly generated/modified ranges to raster format. If a species has no range modification, the WHO EOR is used. Separate rasters are created for Category 1, Category 2 and combined categories.
+5. **gen_species_richness.R**: This script loops through the species rasters, and creates a raster stack. Cell values across the stack are then summed, to give a count of the number of medically important venomous snake species per cell. This process is performed to generate separate Category 1, Category 2 and combined C1 and C2 species richness surfaces.
+6. **gen_antivenom_coverage.R**: This script loops through each species, and groups species whose envenomings can be treated using the same antivenom. Using the species' range, a surface is generated to show the maximal spatial extent of efficacy for each antivenom. This script utilizes antivenom data from the WHO antivenom database. 
