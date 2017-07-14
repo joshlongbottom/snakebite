@@ -372,12 +372,15 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract,
 
 bufferMESSpositives <- function (range, coords, radius, mess, admin_0, outpath, spp_name) {
   # function to generate a buffer of a given radius around the locations of some points, and merge
-  # with an EOR polygon
-  # `range` must be a SpatialPolygons object of length 1 (polygon of current EOR)
-  # `coords` must be a two-column matrix of coordinates (x then y; points requiring a buffer)
-  # `radius` must be a single positive number giving the radius of the circle to generate around each point (in km)
-  # `mess` must be a binary multivariate environmental similarity surface (MESS), which have values of '1'
+  # with an EOR polygon, where:
+  # `range` is a SpatialPolygons object of length 1 (polygon of current EOR)
+  # `coords` is a two-column matrix of coordinates (x then y; points requiring a buffer)
+  # `radius` is a single positive number giving the radius of the circle to generate around each point (in km)
+  # `mess` is a binary multivariate environmental similarity surface (MESS), which have values of '1'
   # for areas of interpolation, and '0' for areas of extrapolation
+  # `admin_0` is a global FAO admin 0 shapefile, with an iso3 attribute named "COUNTRY_ID"
+  # `outpath` is the path to the directory where the output should be saved
+  # `spp_name` is a vector giving the name of the species "Genus_species"
   
   # packages needed
   require(sp)
