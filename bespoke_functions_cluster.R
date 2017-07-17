@@ -275,9 +275,24 @@ the_1000_mess_project <- function(n_boot, in_parallel, n_cores, covs_extract,
                             theme(axis.title = element_text(size = 15)) +   
                             facet_wrap(~variable, scales = 'fixed')) 
     
-    x + scale_x_continuous(breaks = c(seq(0,1,0.1)), limits = c(0, 1)) + scale_y_continuous(breaks = NULL) 
+    x + scale_x_continuous(breaks = c(seq(0,1,0.1)), limits = c(0, 1)) 
     
-    eval_path <- paste(pcc_outpath, spp_name, '_mess_evaluation_plots_', Sys.Date(), '.png', sep = "")
+    eval_path <- paste(pcc_outpath, 'density/', spp_name, '_mess_evaluation_plots_density_', Sys.Date(), '.png', sep = "")
+    ggsave(eval_path, width = 600, height = 450, units = 'mm', dpi = 300, device = 'png')
+    
+    x <- suppressWarnings(ggplot(data = eval_stats, mapping = aes(x = value)) + 
+                          geom_histogram(colour = 'cadetblue4', fill = 'cadetblue3', bins = 100) + 
+                          ggtitle(bquote(~italic(.(spp_italics))~' MESS evaluation')) +
+                          labs(x = "Proportion",
+                               y = "Number of bootstraps") +
+                          theme(plot.title = element_text(size = 20)) +
+                          theme(strip.text = element_text(size = 15)) +
+                          theme(axis.title = element_text(size = 15)) +   
+                          facet_wrap(~variable, scales = 'fixed')) 
+    
+    x + scale_x_continuous(breaks = c(seq(0,1,0.1)), limits = c(0, 1)) 
+    
+    eval_path <- paste(pcc_outpath, 'hist/', spp_name, '_mess_evaluation_plots_histogram_', Sys.Date(), '.png', sep = "")
     ggsave(eval_path, width = 600, height = 450, units = 'mm', dpi = 300, device = 'png')
     
   }
