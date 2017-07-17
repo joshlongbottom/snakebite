@@ -415,22 +415,23 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
        lty = 1,
        lwd = 0.2)
   
-  c_text <- paste('Binary bootstrapped MESS (95% threshold) \nwith', nrow(records_outside), 
-                  'outside of range occurrence records', sep = " ")
+  c_text <- paste('Binary bootstrapped MESS (95% threshold) \n(with', nrow(records_outside), 
+                  'outside of range occurrence records)', sep = " ")
   
   title(xlab = c_text, line = 2, cex.lab = 1.25)
   
   # add points on top
+  points(records_inside$longitude, records_inside$latitude, pch = 20, cex = 0.5, col = '#868686')
   points(records_oor_neg$longitude, records_oor_neg$latitude, pch = 4, cex = 0.5, col = 'blue', lwd = 0.5)
   points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 20, cex = 0.5, col = '#D93529')
   
-  legend('bottomleft', c("Interpolation","Extrapolation", "Outside range, MESS +ve", "Outside range, MESS -ve"),
-         pch = c(15, 15, 20, 4),
-         col = c("springgreen4","gainsboro", "#D93529", "blue"), bty = 'n')
+  legend('bottomleft', c("Interpolation","Extrapolation", "Within range", "Outside range, MESS +ve", "Outside range, MESS -ve"),
+         pch = c(15, 15, 20, 20, 4),
+         col = c("springgreen4","gainsboro", "#868686", "#D93529", "blue"), bty = 'n')
   
   ### plot the new range shapefile, ontop of binary bootstrapped MESS
   if(nrow(records_oor_pos) != 0) {
-    plot(final_ext,
+    plot(ext,
          main = "D)", adj = 0,
          col = '#f2f2f2',
          border = NA)
@@ -445,7 +446,7 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
          col = '#c1de29',
          border = NA)
     
-    plot(final_ext,
+    plot(ext,
          add = TRUE,
          border = 'gray45',
          lty = 1,
@@ -557,8 +558,8 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
   points(records_oor_pos_90$longitude, records_oor_pos_90$latitude, pch = 21, cex = 0.5, col = 'gray58', bg = '#E71D36', lwd = 0.25)
   points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 21, cex = 0.5, col = 'gray58', bg = '#00a2e8', lwd = 0.25)
   
-  legend("bottomleft", c("Within the 95%, 90% and 75% MESS thresholds", "Within the 90% and 75% MESS thresholds only", 
-                         "Within the 75% MESS threshold only", "Outside of all MESS thresholds"), 
+  legend("bottomleft", c("95%, 90% and 75% MESS thresholds", "90% and 75% MESS thresholds only", 
+                         "75% MESS threshold only", "Outside of all MESS thresholds"), 
          pch = c(20, 20, 20, 4),
          col = c("#00a2e8","#E71D36", "#22b14c", "#ff7f27"), bty = 'n', cex = 0.8, pt.cex = 1)
   
