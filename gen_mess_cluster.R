@@ -430,11 +430,19 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
          col = c("springgreen4","gainsboro", "#868686", "#D93529", "blue"), bty = 'n')
   
   ### plot the new range shapefile, ontop of binary bootstrapped MESS
+  binary_75[binary_75 <= 100] <- 0
+  
+  breakpoints <- c(0, 0.5, 1)
+  colours <- c('#f2f2f2', 'gray70', 'gray70')
+
   if(nrow(records_oor_pos) != 0) {
-    plot(ext,
+    plot(binary_75,
+         breaks = breakpoints,
+         col = colours,
          main = "D)", adj = 0,
-         col = '#f2f2f2',
-         border = NA)
+         legend = FALSE,
+         axes = FALSE,
+         box = FALSE)
     
     plot(modified_poly,
          add = TRUE,
@@ -454,10 +462,13 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
   
   } else {
     
-    plot(ext,
+    plot(binary_75,
+         breaks = breakpoints,
+         col = colours,
          main = "D)", adj = 0,
-         col = '#f2f2f2',
-         border = NA)
+         legend = FALSE,
+         axes = FALSE,
+         box = FALSE)
     
     plot(range,
          add = TRUE,
