@@ -33,8 +33,8 @@ plots <- mclapply(species_list,
 
 # merge into one single PDF
 ggsave(mess_si_name, 
-       width = 8.27,
-       height = 11.69,
+       width = 11.69,
+       height = 8.27,
        marrangeGrob(grobs = plots, nrow = 1, ncol = 1, top = NULL))
 
 rm(plots)
