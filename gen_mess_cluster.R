@@ -373,7 +373,7 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
   
   legend('bottomleft', c("Interpolation","Extrapolation"), 
          pch = c(15, 15),
-         col = c("springgreen4","gainsboro"), bty = 'n')
+         col = c("springgreen4","gainsboro"), bty = 'n', pt.cex = 1.5)
   
   ### plot the 95% binary MESS
   # first, check if there's cells which are within the 95% threshold
@@ -415,11 +415,20 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
        lty = 1,
        lwd = 0.2)
   
-  title(xlab = 'Binary bootstrapped MESS (95% threshold)', line = 1, cex.lab = 1.25)
+  if(max(r_vals) > 95){
+  
+    title(xlab = 'Binary bootstrapped MESS (95% threshold)', line = 1, cex.lab = 1.25)
+  
+  } else{
+      
+    title(xlab = 'Binary bootstrapped MESS (95% threshold)\n[0 cells met this threshold]', line = 2, cex.lab = 1.25)
+  
+    }
+  
   
   legend('bottomleft', c("Interpolation","Extrapolation"), 
          pch = c(15, 15),
-         col = c("springgreen4","gainsboro"), bty = 'n')
+         col = c("springgreen4","gainsboro"), bty = 'n', pt.cex = 1.5)
   
   ### plot the 95% binary MESS with points
   if(max(r_vals) > 95){
@@ -459,13 +468,13 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
   title(xlab = c_text, line = 2, cex.lab = 1.25)
   
   # add points on top
-  points(records_inside$longitude, records_inside$latitude, pch = 20, cex = 0.5, col = '#868686')
+  points(records_inside$longitude, records_inside$latitude, pch = 17, cex = 0.5, col = 'orange2')
   points(records_oor_neg$longitude, records_oor_neg$latitude, pch = 4, cex = 0.5, col = 'blue', lwd = 0.5)
   points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 20, cex = 0.5, col = '#D93529')
   
   legend('bottomleft', c("Interpolation","Extrapolation", "Within range", "Outside range, MESS +ve", "Outside range, MESS -ve"),
-         pch = c(15, 15, 20, 20, 4),
-         col = c("springgreen4","gainsboro", "#868686", "#D93529", "blue"), bty = 'n')
+         pch = c(15, 15, 17, 20, 4),
+         col = c("springgreen4","gainsboro", "orange2", "#D93529", "blue"), bty = 'n', pt.cex = 1.5)
   
   ### plot the new range shapefile, ontop of binary bootstrapped MESS
   binary_75[binary_75 <= 100] <- 0
@@ -526,7 +535,7 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
   
   legend('bottomleft', c("Current EOR","Proposed addition"), 
          pch = c(15, 15),
-         col = c("#c1de29","#00a600"), bty = 'n')
+         col = c("#c1de29","#00a600"), bty = 'n', pt.cex = 1.5)
   
   title(xlab = mess_positive_title, line = 2, cex.lab = 1.25)
   
