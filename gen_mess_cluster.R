@@ -376,11 +376,34 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
          col = c("springgreen4","gainsboro"), bty = 'n')
   
   ### plot the 95% binary MESS
-  plot(binary_95,
-       main = "B)", adj = 0,
-       legend = FALSE,
-       axes = FALSE,
-       box = FALSE)
+  # first, check if there's cells which are within the 95% threshold
+  r_vals <- values(binary_95)
+  r_vals <- unique(r_vals)
+  r_vals <- r_vals[!is.na(r_vals)]
+  
+  t_breakpoints <- c(0, 95, 100)
+  colours <- c('#f2f2f2', 'gray70', 'gray70')
+  
+  if(max(r_vals) > 95){
+    
+    plot(binary_95,
+         main = "B)", adj = 0,
+         legend = FALSE,
+         axes = FALSE,
+         box = FALSE)
+    
+  } else {
+    
+    plot(binary_95,
+         breaks = t_breakpoints,
+         col = colours,
+         main = "B)", adj = 0,
+         legend = FALSE,
+         axes = FALSE,
+         box = FALSE)
+    
+  }
+    
   plot(range,
        add = TRUE,
        border = 'black',
@@ -399,11 +422,26 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
          col = c("springgreen4","gainsboro"), bty = 'n')
   
   ### plot the 95% binary MESS with points
-  plot(binary_95,
-       main = "C)", adj = 0,
-       legend = FALSE,
-       axes = FALSE,
-       box = FALSE)
+  if(max(r_vals) > 95){
+    
+    plot(binary_95,
+         main = "B)", adj = 0,
+         legend = FALSE,
+         axes = FALSE,
+         box = FALSE)
+    
+  } else {
+    
+    plot(binary_95,
+         breaks = t_breakpoints,
+         col = colours,
+         main = "B)", adj = 0,
+         legend = FALSE,
+         axes = FALSE,
+         box = FALSE)
+    
+  }
+  
   plot(range,
        add = TRUE,
        border = 'black',
