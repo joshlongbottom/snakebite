@@ -367,7 +367,7 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
        lty = 1,
        lwd = 0.2)
   
-  a_text <- paste('100 Bootstrapped MESS\n(constructed using', nrow(records_inside), 'occurrence records)', sep = " ")
+  a_text <- paste('100 bootstrapped binary MES surfaces\n(constructed using', nrow(records_inside), 'occurrence records)', sep = " ")
   
   title(xlab = a_text, line = 2, cex.lab = 1.25)
   
@@ -434,7 +434,7 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
   if(max(r_vals) > 95){
     
     plot(binary_95,
-         main = "B)", adj = 0,
+         main = "C)", adj = 0,
          legend = FALSE,
          axes = FALSE,
          box = FALSE)
@@ -468,13 +468,13 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
   title(xlab = c_text, line = 2, cex.lab = 1.25)
   
   # add points on top
-  points(records_inside$longitude, records_inside$latitude, pch = 17, cex = 0.5, col = 'orange2')
+  points(records_inside$longitude, records_inside$latitude, pch = 20, cex = 0.2, col = 'gray22')
   points(records_oor_neg$longitude, records_oor_neg$latitude, pch = 4, cex = 0.5, col = 'blue', lwd = 0.5)
   points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 20, cex = 0.5, col = '#D93529')
   
   legend('bottomleft', c("Interpolation","Extrapolation", "Within range", "Outside range, MESS +ve", "Outside range, MESS -ve"),
-         pch = c(15, 15, 17, 20, 4),
-         col = c("springgreen4","gainsboro", "orange2", "#D93529", "blue"), bty = 'n', pt.cex = 1.5)
+         pch = c(15, 15, 20, 20, 4),
+         col = c("springgreen4","gainsboro", "gray22", "#D93529", "blue"), bty = 'n', pt.cex = 1.5)
   
   ### plot the new range shapefile, ontop of binary bootstrapped MESS
   binary_75[binary_75 <= 100] <- 0
@@ -575,7 +575,7 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
        lty = 1,
        lwd = 0.5)
   
-  title(xlab = '100 Bootstrapped MESS', line = 1, cex.lab = 1)
+  title(xlab = '100 bootstrapped binary MES surfaces', line = 1, cex.lab = 1)
   
   legend('bottomleft', c("Interpolation","Extrapolation"), 
          pch = c(15, 15),
@@ -613,13 +613,19 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
   # add points on top
   points(records_oor_neg_75$longitude, records_oor_neg_75$latitude, pch = 4, cex = 0.5, col = '#ff7f27', lwd = 0.5)
   points(records_oor_pos_75$longitude, records_oor_pos_75$latitude, pch = 21, cex = 0.5, col = 'gray58', bg = '#22b14c', lwd = 0.25)
-  points(records_oor_pos_90$longitude, records_oor_pos_90$latitude, pch = 21, cex = 0.5, col = 'gray58', bg = '#E71D36', lwd = 0.25)
-  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 21, cex = 0.5, col = 'gray58', bg = '#00a2e8', lwd = 0.25)
+  points(records_oor_pos_90$longitude, records_oor_pos_90$latitude, pch = 21, cex = 0.5, col = 'gray58', bg = '#00a2e8', lwd = 0.25)
+  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 21, cex = 0.5, col = 'gray58', bg = '#E71D36', lwd = 0.25)
   
-  legend("bottomleft", c("95%, 90% and 75% MESS thresholds", "90% and 75% MESS thresholds only", 
-                         "75% MESS threshold only", "Outside of all MESS thresholds"), 
+  leg_thres_1 <- paste('95%, 90% and 75% MESS thresholds (', within_95, ' records)', sep = '')
+  leg_thres_2 <- paste('90% and 75% MESS thresholds (', within_90, ' records)', sep = '')
+  leg_thres_3 <- paste('75% MESS threshold (', within_75, ' records)', sep = '')
+  leg_4_val <- outside_eor - within_75
+  leg_thres_4 <- paste('Outside of all MESS thresholds (', leg_4_val, ' records)', sep = '')
+  
+  legend("bottomleft", c(leg_thres_1, leg_thres_2, 
+                         leg_thres_3, leg_thres_4), 
          pch = c(20, 20, 20, 4),
-         col = c("#00a2e8","#E71D36", "#22b14c", "#ff7f27"), bty = 'n', cex = 0.8, pt.cex = 1)
+         col = c("#E71D36","#00a2e8", "#22b14c", "#ff7f27"), bty = 'n', cex = 0.8, pt.cex = 1)
   
   mtext(bquote(~italic(.(title))), side = 3, line = -1, outer = TRUE, cex = 2, font = 2)
   
