@@ -31,7 +31,7 @@ n_spp <- max(spp_vals)
 registerDoMC(50)
 
 ### generate population living in areas suitable for x or more med spp
-par_stack <- foreach(i = 1:n_spp) %dopar% {
+par_stack <- foreach(i = 1:2) %do% {
   
   # convert species richness surface into a binary surface (`1` = presence of `i` quantity of venomous
   # snake species, `NoData` = absence)
@@ -76,4 +76,38 @@ antiv_par_stack <- foreach(i = 1:n_naive) %dopar% {
 
 names(antiv_par_stack) <- paste0("antivenom_naive_", 1:n_spp)
 list2env(antiv_par_stack, envir = .GlobalEnv)
+
+# generate global PAR totals for surface
+# loop through each PAR raster, and get a sum of the pixel values to generate a global
+# PAR estimate
+par_totals <- for(i in 1:n_spp) {
+  
+  # get surface 
+  obj_name <- paste0("par_exposure", i)
+  
+  # get cell values across surface
+  par_exp_vals <- values(obj_name)
+
+  # sum cell values across surface
+  par_totals <- sum(par_exp_vals)
+  
+  return(par_totals)
+  
+}
+
+# generate global PAR totals for antivenom naive
+anti_par_totals <- for(i in 1:n_naive) {
+  
+  # get surface 
+  obj_name <- paste0("antivenom_naive_", i)
+  
+  # get cell values across surface
+  par_naive_vals <- values(obj_name)
+  
+  # sum cell values across surface
+  par_totals <- sum(par_naive_vals)
+  
+  return(par_totals)
+  
+}
 
