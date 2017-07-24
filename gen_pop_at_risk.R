@@ -14,6 +14,9 @@ antivenom <- raster('Z:/users/joshua/Snakebite/output/antivenom_coverage/No_spec
 # load population density surface
 pop_dens <- raster('Z:/mastergrids/Other_Global_Covariates/Population/Worldpop_GPWv4_Hybrid_201601/Global_Pop_1km_Adj_MGMatched_2015_Hybrid.tif')
 
+# load admin 0 raster
+admin_0 <- brick('Z:/users/joshua/Cx.tritaeniorhynchus/Culex Tritaeniorhynchus/data/clean/raster/polygon_rasters/admin0_raster.flt')
+
 # rasterize spp richness raster to be at the same spatial res as the 1km pop
 species_richness <- disaggregate(species_richness, fact = c(5,5))
 
@@ -31,7 +34,7 @@ n_spp <- max(spp_vals)
 registerDoMC(50)
 
 ### generate population living in areas suitable for x or more med spp
-par_stack <- foreach(i = 1:2) %do% {
+par_stack <- foreach(i = 1:n_spp) %dopar% {
   
   # convert species richness surface into a binary surface (`1` = presence of `i` quantity of venomous
   # snake species, `NoData` = absence)
@@ -83,7 +86,7 @@ list2env(antiv_par_stack, envir = .GlobalEnv)
 par_totals <- for(i in 1:n_spp) {
   
   # get surface 
-  obj_name <- paste0("par_exposure", i)
+  obj_name <- paste0("par_exposure_", i)
   
   # get cell values across surface
   par_exp_vals <- values(obj_name)
@@ -110,4 +113,6 @@ anti_par_totals <- for(i in 1:n_naive) {
   return(par_totals)
   
 }
+
+# generate national estimates
 
