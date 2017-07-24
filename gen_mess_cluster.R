@@ -203,7 +203,7 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
   # start by classifying as being OOR MESS +ve or OOO MESS -ve; this requires:
   # 1. >= 5 records within the range (otherwise a MESS wasn't generated above)
   # 2. >0 records outside of the range (otherwise there's no range modification)
-  if(nrow(records_inside) >= 5){
+  if((nrow(records_inside) >= 5) & (nrow(records_outside) >0)){
     
     # turn into a spatial points dataframe
     coordinates(records_outside) <- c("longitude", "latitude")
@@ -327,6 +327,15 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
     
   } else {
     
+    # load in the raster surfaces
+    mess_path <- paste(geotif_mess, spp_name, '_stacked_bootstrapped_threshold.tif', sep = '')
+    
+    bootstrapped_mess <- raster(mess_path, band = 1)
+    binary_95 <- raster(mess_path, band = 2)
+    binary_90 <- raster(mess_path, band = 3)
+    binary_75 <- raster(mess_path, band = 4)
+    
+    # generate an empty species stats dataframe
     spec_stats <- NULL
     
   }
