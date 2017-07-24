@@ -161,6 +161,12 @@ registerDoMC(50)
 
 message(paste('Processing species ranges on 50 cores ', Sys.time(), sep = ""))
 
+# get a list of species for which a MESS has been constructed
+spp_list <- list.files('output/mess_geotiff/',
+                       pattern = '*_threshold.tif$',
+                       full.names = FALSE)
+
+# loop through species for which there has been a MESS, and generate the necessary plots/
 # run the following buffer section on all species in parallel
 stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
   
@@ -335,6 +341,14 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
     binary_90 <- raster(mess_path, band = 3)
     binary_75 <- raster(mess_path, band = 4)
     
+    # generate empty vectors for point classifications
+    records_oor_neg_75 <- NULL
+    records_oor_pos_75 <- NULL
+    records_oor_pos_90 <- NULL
+    records_oor_neg_90 <- NULL
+    records_oor_pos <- NULL
+    records_oor_neg <- NULL
+    
     # generate an empty species stats dataframe
     spec_stats <- NULL
     
@@ -491,7 +505,7 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
   breakpoints <- c(0, 0.5, 1)
   colours <- c('#f2f2f2', 'gray70', 'gray70')
 
-  if(nrow(records_oor_pos) != 0) {
+  if(!(vector.is.empty(records_oor_pos))) {
     plot(binary_75,
          breaks = breakpoints,
          col = colours,
@@ -550,11 +564,15 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
   
   mtext(bquote(~italic(.(title))), side = 3, line = -1, outer = TRUE, cex = 2, font = 2)
   
-  dev.off()      
-
+  dev.off()
+  
+  }
+  
   ## SI plot of the different threshold binary-bootstrapped MESS
-  # create plotting window
-  png_name <- paste(mess_si, spp_name, '_SI_threshold_mess_maps_', Sys.Date(), '.png', sep = "")
+  if(nrow(records_outside) > 0){
+  
+    # create plotting window
+    png_name <- paste(mess_si, spp_name, '_SI_threshold_mess_maps_', Sys.Date(), '.png', sep = "")
   
   png(png_name,
       width = 450,
