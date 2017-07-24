@@ -30,9 +30,11 @@ png_plots <- gsub('_species_mess_maps_.png', '', png_plots, fixed = TRUE)
 snake_list <- read.csv('data/raw/snake_list_cluster.csv',
                        stringsAsFactors = FALSE)
 
-individual_list <- unique(snake_list$split_spp)
+individual_list <- unique(snake_list$shapefile_path)
+individual_list <- gsub('data/raw/eor/', '', individual_list, fixed = TRUE)
+individual_list <- gsub('.shp', '', individual_list, fixed = TRUE)
 
-# now, list species which have not already been plot
+# now, list species which have not already been plot, but for which we have a range
 to_plot <- individual_list[!(individual_list %in% png_plots)]
 
 # loop through these species, and generate a plot of the un-altered EOR
