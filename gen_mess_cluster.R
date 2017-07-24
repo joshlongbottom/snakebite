@@ -492,8 +492,12 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
   
   # add points on top
   points(records_inside$longitude, records_inside$latitude, pch = 20, cex = 0.2, col = 'gray22')
-  points(records_oor_neg$longitude, records_oor_neg$latitude, pch = 4, cex = 0.5, col = 'blue', lwd = 0.5)
-  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 20, cex = 0.5, col = '#D93529')
+  if(!(vector.is.empty(records_oor_neg))) {
+    points(records_oor_neg$longitude, records_oor_neg$latitude, pch = 4, cex = 0.5, col = 'blue', lwd = 0.5)
+  }
+  if(!(vector.is.empty(records_oor_pos))) {
+    points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 20, cex = 0.5, col = '#D93529')
+  }
   
   legend('bottomleft', c("Interpolation","Extrapolation", "Within range", "Outside range, MESS +ve", "Outside range, MESS -ve"),
          pch = c(15, 15, 20, 20, 4),
@@ -529,6 +533,9 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
          border = 'gray45',
          lty = 1,
          lwd = 0.2)
+    
+    mess_positive_title <- paste('Suggested ammended range \n(incorporating', nrow(records_oor_pos), 
+                                 'outside of range MESS +ve records)', sep = " ")
   
   } else {
     
@@ -551,10 +558,10 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
          lty = 1,
          lwd = 0.2)
     
+    mess_positive_title <- paste('Suggested ammended range \n(incorporating 0', 
+                                 'outside of range MESS +ve records)', sep = " ")
+    
   }
-  
-  mess_positive_title <- paste('Suggested ammended range \n(incorporating', nrow(records_oor_pos), 
-                               'outside of range MESS +ve records)', sep = " ")
   
   legend('bottomleft', c("Current EOR","Proposed addition"), 
          pch = c(15, 15),
@@ -638,10 +645,18 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
   title(xlab = c_text, line = 2, cex.lab = 1)
   
   # add points on top
-  points(records_oor_neg_75$longitude, records_oor_neg_75$latitude, pch = 4, cex = 0.5, col = '#ff7f27', lwd = 0.5)
-  points(records_oor_pos_75$longitude, records_oor_pos_75$latitude, pch = 21, cex = 0.5, col = 'gray58', bg = '#22b14c', lwd = 0.25)
-  points(records_oor_pos_90$longitude, records_oor_pos_90$latitude, pch = 21, cex = 0.5, col = 'gray58', bg = '#00a2e8', lwd = 0.25)
-  points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 21, cex = 0.5, col = 'gray58', bg = '#E71D36', lwd = 0.25)
+  if(!(vector.is.empty(records_oor_neg_75))) {
+    points(records_oor_neg_75$longitude, records_oor_neg_75$latitude, pch = 4, cex = 0.5, col = '#ff7f27', lwd = 0.5)
+  }
+  if(!(vector.is.empty(records_oor_pos_75))) {
+    points(records_oor_pos_75$longitude, records_oor_pos_75$latitude, pch = 21, cex = 0.5, col = 'gray58', bg = '#22b14c', lwd = 0.25)
+  }
+  if(!(vector.is.empty(records_oor_pos_90))) {
+    points(records_oor_pos_90$longitude, records_oor_pos_90$latitude, pch = 21, cex = 0.5, col = 'gray58', bg = '#00a2e8', lwd = 0.25)
+  }
+  if(!(vector.is.empty(records_oor_pos))) {
+    points(records_oor_pos$longitude, records_oor_pos$latitude, pch = 21, cex = 0.5, col = 'gray58', bg = '#E71D36', lwd = 0.25)
+  }
   
   leg_thres_1 <- paste('95%, 90% and 75% MESS thresholds (', within_95, ' records)', sep = '')
   leg_thres_2 <- paste('90% and 75% MESS thresholds (', within_90, ' records)', sep = '')
