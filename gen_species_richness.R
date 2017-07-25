@@ -113,11 +113,11 @@ mc.cores = 50
 )
 
 # stack the cat 1 rasters
-combined_class_rasters <- stack(combined_class_rasters)  
+combined_class_raster <- stack(combined_class_raster)  
 
 # get sum of values for each pixel in stack (basically combine all rasters
 # and generate a value of number of snake spp. per pixel)
-combined_class_richness <- sum(combined_class_rasters, na.rm = TRUE)
+combined_class_richness <- sum(combined_class_raster, na.rm = TRUE)
 
 # write out the category 1 species richness output
 combined_outpath <- paste('Z:/users/joshua/Snakebite/output/species_richness/', 'non-modified_eor_combined_categories_', Sys.Date(), sep = '')
