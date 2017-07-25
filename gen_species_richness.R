@@ -5,21 +5,21 @@ rm(list = ls())
 pacman::p_load(raster, foreach, parallel)
 
 # create lists of all rasters in each directory
-c1_list <- as.list(list.files('Z:/users/joshua/Snakebite/WHO EOR rasters/cat_1', 
+c1_list <- as.list(list.files('output/species_rasters/cat_1', 
                               pattern = '*tif$',
                               full.names = TRUE))
 
-c2_list <- as.list(list.files('Z:/users/joshua/Snakebite/WHO EOR rasters/cat_2', 
+c2_list <- as.list(list.files('output/species_rasters/cat_2', 
                               pattern = '*tif$',
                               full.names = TRUE))
 
-combined_list <- as.list(list.files('Z:/users/joshua/Snakebite/WHO EOR rasters/combined_cat', 
+combined_list <- as.list(list.files('output/species_rasters/combined_cat', 
                                     pattern = '*tif$',
                                     full.names = TRUE))
 
 
 # read in the global extent raster
-global <- raster('Z:/users/joshua/Snakebite/raster_mask/CoastGlobal_5k.tif')
+global <- raster('data/raw/raster/land_sea/CoastGlobal_5k.tif')
 
 # loop through, open each raster and extend to the global extent
 message(paste('Generating category 1 species richness surface ', Sys.time(), sep = ''))
@@ -48,7 +48,7 @@ c1_stack <- stack(c1_rasters)
 c1_richness <- sum(c1_stack, na.rm = TRUE)
 
 # write out the category 1 species richness output
-c1_outpath <- paste('Z:/users/joshua/Snakebite/output/species_richness/', 'non-modified_eor_category_1_', Sys.Date(), sep = '')
+c1_outpath <- paste('output/species_richness/', 'modified_eor_category_1_', Sys.Date(), sep = '')
 writeRaster(c1_richness,
             file = c1_outpath,
             format = 'GTiff',
@@ -58,10 +58,7 @@ writeRaster(c1_richness,
 message(paste('Generating category 2 species richness surface ', Sys.time(), sep = ''))
 
 c2_rasters <- mclapply(c2_list, function (x) {
-  
-  # get path to each spp.
-  path <- as.character(c2_list[i])
-  
+
   # read in raster
   snake_rast <- raster(x)
   
@@ -84,7 +81,7 @@ c2_stack <- stack(c2_rasters)
 c2_richness <- sum(c2_stack, na.rm = TRUE)
 
 # write out the category 1 species richness output
-c2_outpath <- paste('Z:/users/joshua/Snakebite/output/species_richness/', 'non-modified_eor_category_2_', Sys.Date(), sep = '')
+c2_outpath <- paste('output/species_richness/', 'modified_eor_category_2_', Sys.Date(), sep = '')
 writeRaster(c2_richness,
             file = c2_outpath,
             format = 'GTiff',
@@ -94,11 +91,8 @@ writeRaster(c2_richness,
 message(paste('Generating combined species richness surface ', Sys.time(), sep = ''))
 
 combined_class_raster <- mclapply(combined_list, function (x) {
-  
-  # get path to each spp.
-  path <- as.character(combined_list[i])
-  
-  # read in raster
+
+    # read in raster
   snake_rast <- raster(x)
   
   # extend the extent to match the global raster
@@ -120,7 +114,7 @@ combined_class_raster <- stack(combined_class_raster)
 combined_class_richness <- sum(combined_class_raster, na.rm = TRUE)
 
 # write out the category 1 species richness output
-combined_outpath <- paste('Z:/users/joshua/Snakebite/output/species_richness/', 'non-modified_eor_combined_categories_', Sys.Date(), sep = '')
+combined_outpath <- paste('output/species_richness/', 'modified_eor_combined_categories_', Sys.Date(), sep = '')
 writeRaster(combined_class_richness,
             file = combined_outpath,
             format = 'GTiff',
