@@ -7,7 +7,7 @@ pacman::p_load(raster, foreach, doMC)
 # list all files in the 'modified_ranges' folder
 # this folder should contain the 'updated range' for a species; if no range modification has occurred, 
 # this folder will contain the original digitised EOR shapefile
-shape_list <- list.files('output/modified_ranges',
+shape_list <- list.files('output/all_ranges_incl_modified',
                          pattern = ".shp$",
                          full.names = TRUE)
 
@@ -24,7 +24,7 @@ raster_range <- foreach(i = 1:length(shape_list)) %dopar% {
   file_name <- shape_list[i]
   
   # get snake species name
-  spp <- gsub('/home/josh/snakebite/output/modified_ranges/', '', file_name)
+  spp <- gsub('output/all_ranges_incl_modified/', '', file_name)
   spp <- gsub('.shp$', '', spp)
   
   # inform progress
