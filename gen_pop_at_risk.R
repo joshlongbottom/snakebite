@@ -131,3 +131,38 @@ writeRaster(c1_naive_par,
             format = 'GTiff',
             overwrite = TRUE)
 
+### generate 'snake-human exposure events' risk surface
+exposure_events_par <- overlay(pop_dens, species_presence, fun = function(pop_dens, species_presence){
+                                                                         (pop_dens*species_presence)})
+
+exposure_events_par <- round(exposure_events_par)
+
+# convert this to a national estimate using zonal()
+national_exposure_par <- zonal(exposure_events_par, admin_0, fun = 'sum', na.rm = TRUE)
+national_exposure_par <- as.data.frame(national_exposure_par)
+
+# match this to get location names
+# read in admin 0 shapefile dbf
+countries <- foreign::read.dbf("Z:/users/joshua/admin2013/admin2013_0.dbf")
+
+# create an matching index
+match_idx <- match(national_exposure_par$zone, countries$GAUL_CODE)
+
+# append iso and country name
+national_exposure_par$iso <- countries$COUNTRY_ID[match_idx]
+national_exposure_par$name <- countries$name[match_idx]
+
+# write out par of exposure to 1 or more snake species
+# first write out the csv
+write.csv(national_exposure_par,
+          'Z:/users/joshua/Snakebite/output/population_at_risk/snake_human_exposure_events.csv',
+          row.names = FALSE)
+
+# then the raster
+writeRaster(exposure_events_par, 
+            file = 'Z:/users/joshua/Snakebite/output/population_at_risk/snake_human_exposure_events',
+            format = 'GTiff',
+            overwrite = TRUE)
+
+
+
