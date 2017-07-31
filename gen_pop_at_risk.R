@@ -15,14 +15,29 @@ antivenom <- raster('Z:/users/joshua/Snakebite/output/antivenom_coverage/No_spec
 c1_antivenom <- raster('Z:/users/joshua/Snakebite/output/antivenom_coverage/No_specific_antivenom_c1_stack.tif')
 c2_antivenom <- raster('Z:/users/joshua/Snakebite/output/antivenom_coverage/No_specific_antivenom_c2_stack.tif')
 
+# define lists
+par_list <- c('species_richness', 'c1_species_richness', 'c2_species_richness', 'antivenom', 'c1_antivenom', 'c2_antivenom')
+title_vector <- c('Population at risk of exposure to one or more medically important snake species \nper HAQI decile',
+                  'Population at risk of exposure to one or more Category 1 snake species \nper HAQI decile',
+                  'Population at risk of exposure to one or more Category 2 snake species \nper HAQI decile',
+                  'Population at risk of exposure to one or more medically important snake species \nwith no effective therapy, per HAQI decile',
+                  'Population at risk of exposure to one or more Category 1 snake species \nwith no effective therapy, per HAQI decile',
+                  'Population at risk of exposure to one or more Category 2 snake species \nwith no effective therapy, per HAQI decile')
+outpath_vector <- c('Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_spp',
+                    'Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_c1_spp',
+                    'Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_c2_spp',
+                    'Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_therapy_naive_spp',
+                    'Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_c1_therapy_naive_spp',
+                    'Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_c2_therapy_naive_spp')
+
 # load population density surface
 pop_dens <- raster('Z:/users/joshua/Snakebite/rasters/population/Worldpop_GPWv4_Hybrid_201601_Global_Pop_5km_Adj_MGMatched_2015_Hybrid.tif')
 
 # load admin 0 raster
-admin_0 <- raster('Z:/users/joshua/Cx.tritaeniorhynchus/Culex Tritaeniorhynchus/data/clean/raster/polygon_rasters/admin0_raster.flt')
+admin_0 <- raster('Z:/users/joshua/Snakebite/rasters/admin_0_updated_2017-07-31.tif')
 
 # read in admin 0 shapefile dbf
-countries <- read.dbf("Z:/users/joshua/admin2013/admin2013_0.dbf",
+countries <- read.dbf('Z:/users/joshua/Snakebite/World shapefiles/merged_admin0.dbf',
                       as.is = TRUE)
 
 # extend to the same extent as species richness surface
@@ -83,10 +98,18 @@ decile_population <- data.frame(decile = rep(NA, length(decile_pop)),
 decile_population$decile <- row.names(decile_pop)
 decile_population$pop <- decile_pop
 
-### generate population living in areas suitable for 1 or more med spp
-# convert species richness surface into a binary surface (`1` = presence of 1 or more venomous
-# snake species, `NoData` = absence)
-species_presence <- species_richness
+# loop through and generate population at risk estimates for
+# 1. Population living in areas suitable for one or more species (any medical classification)
+# 2. Population living in areas suitable for one or more Category 1 species
+# 3. Population living in areas suitable for one or more Category 2 species
+# 4. Population living in areas suitable for one or more species for which no effective antivenom exists (any med class)
+# 5. Population living in areas suitable for one or more Cat 1 species for which no effective antivenom exists
+# 6. Population living in areas suitable for one or more Cat 2 species for which no effective antivenom exists
+
+for(i in 1:length(par_list)){
+
+# convert into a binary surface (`1` = presence of 1 or more species, `0` = absence)
+species_presence <- get(par_list[[i]])
 species_presence[species_presence < 1 ] <- 0
 species_presence[species_presence  >= 1] <- 1
   
@@ -174,6 +197,13 @@ combined <- rbind(decile_plot_1,
 
 combined$decile <- as.numeric(combined$decile)
 
+# generate plot title
+plot_title <- title_vector[[i]]
+# generate plot outpath
+plot_outpath <- paste0(outpath_vector[[i]], '_', Sys.Date(), '_hist.png')
+csv_outpath <- paste0(outpath_vector[[i]], '_', Sys.Date(), '.csv')
+geotiff_outpath <- paste0(outpath_vector[[i]], '_', Sys.Date())
+
 # plot stacked barplot for population at risk
 ggplot(combined, 
        aes(x = decile, y = value, fill = variable)) +
@@ -186,263 +216,24 @@ ggplot(combined,
         # panel.background = element_blank(),
         axis.ticks.y = element_blank(),
         axis.ticks.x = element_blank())+
-  ggtitle('Population at risk of exposure to one or more medically important snake species \nper HAQI decile')
+  ggtitle(plot_title)
 
-ggsave('Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_spp_hist.png', 
-        dpi = 300, device = 'png')
+ggsave(plot_outpath, 
+       dpi = 300, device = 'png')
 
 # write out par of exposure to 1 or more snake species
 # first write out the csv
 write.csv(national_par,
-          'Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_spp.csv',
+          csv_outpath,
           row.names = FALSE)
 
 # then the raster
 writeRaster(presence_par, 
-            file = 'Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_spp',
+            file = outpath_vector[[i]],
             format = 'GTiff',
             overwrite = TRUE)
 
-### generate population living in areas suitable for 1 or more medically important spp for which
-### no effective therapy exists
-# convert antivenom naive surface into a binary surface (`1` = presence of 1 or more therapy
-# naive snake species, `NoData` = absence)
-antiv_n_naive <- antivenom
-antiv_n_naive[antiv_n_naive < 1 ] <- 0
-antiv_n_naive[antiv_n_naive  >= 1] <- 1
-  
-# multiply the population by the binary presence/absence antivenom surface
-naive_par <- overlay(pop_dens, antiv_n_naive, fun = function(pop_dens, antiv_n_naive){
-                                                            (pop_dens*antiv_n_naive)})
-
-# convert this to a national estimate using zonal()
-national_naive_par <- zonal(naive_par, admin_0, fun = 'sum', na.rm = TRUE)
-national_naive_par <- as.data.frame(national_naive_par)
-
-# create an matching index
-rm(match_idx)
-match_idx <- match(national_naive_par$zone, countries$GAUL_CODE)
-
-# append iso and country name
-national_naive_par$iso <- countries$COUNTRY_ID[match_idx]
-national_naive_par$name <- countries$name[match_idx]
-
-# correct West Bank and Gaza to PSE
-national_naive_par$iso[national_naive_par$name == 'West Bank'] <- 'PSE'
-national_naive_par$iso[national_naive_par$name == 'Gaza Strip'] <- 'PSE'
-
-# aggregate based on iso code
-aggregated_par <- do.call(rbind,lapply(split(national_naive_par, national_naive_par$iso),function(df) sum(df$sum)))
-
-new_df <- data.frame(iso = rep(NA, length(aggregated_par)),
-                     par = rep(NA, length(aggregated_par)))
-
-new_df$iso <- row.names(aggregated_par)
-new_df$par <- aggregated_par
-
-national_naive_par <- new_df
-
-# merge HAQI with PAR
-match_idx <- match(national_naive_par$iso, haqi$COUNTRY_ID)
-national_naive_par$haqi <- haqi$haqi_2015[match_idx]
-
-# add deciles
-national_naive_par$decile[national_naive_par$haqi < 42.9] <- 1 
-national_naive_par$decile[(national_naive_par$haqi >= 42.9) & (national_naive_par$haqi <= 47) ] <- 2
-national_naive_par$decile[(national_naive_par$haqi > 47) & (national_naive_par$haqi <= 51.3) ] <- 3
-national_naive_par$decile[(national_naive_par$haqi > 51.3) & (national_naive_par$haqi <= 59) ] <- 4
-national_naive_par$decile[(national_naive_par$haqi > 59) & (national_naive_par$haqi <= 63.4) ] <- 5
-national_naive_par$decile[(national_naive_par$haqi > 63.4) & (national_naive_par$haqi <= 69.7) ] <- 6
-national_naive_par$decile[(national_naive_par$haqi > 69.7) & (national_naive_par$haqi <= 74.4) ] <- 7
-national_naive_par$decile[(national_naive_par$haqi > 74.4) & (national_naive_par$haqi <= 79.4) ] <- 8
-national_naive_par$decile[(national_naive_par$haqi > 79.4) & (national_naive_par$haqi <= 86.3) ] <- 9
-national_naive_par$decile[national_naive_par$haqi > 86.3 ] <- 10
-
-# get a total population at risk per decile
-decile_naive_par <- do.call(rbind,lapply(split(national_naive_par, national_naive_par$decile),function(df) sum(df$par)))
-
-naive_decile_par <- data.frame(decile = rep(NA, length(decile_naive_par)),
-                               par = rep(NA, length(decile_naive_par)))
-
-naive_decile_par$decile <- row.names(decile_naive_par)
-naive_decile_par$par <- decile_naive_par
-
-# gen % of decile at risk
-combined <- cbind(naive_decile_par,
-                  decile_population)
-
-combined[3] <- NULL
-combined$percent_par <- (combined$par/combined$pop)*100
-combined$remaining <- 100-combined$percent_par
-
-# new dataframe
-decile_plot_1 <- data.frame(decile = rep(NA, 10),
-                            variable = rep(NA, 10),
-                            value = rep(NA, 10))
-decile_plot_2 <- data.frame(decile = rep(NA, 10),
-                            variable = rep(NA, 10),
-                            value = rep(NA, 10))
-
-decile_plot_1$decile <- combined$decile
-decile_plot_1$variable <- rep('Exposure to one or more species')
-decile_plot_1$value <- combined$percent_par
-decile_plot_2$decile <- combined$decile
-decile_plot_2$variable <- rep('No risk of exposure')
-decile_plot_2$value <- combined$remaining
-
-combined <- rbind(decile_plot_1,
-                  decile_plot_2)
-
-combined$decile <- as.numeric(combined$decile)
-
-# plot stacked barplot for population at risk
-ggplot(combined, 
-       aes(x = decile, y = value, fill = variable)) +
-       geom_bar(position = "fill", stat = "identity")+
-       scale_x_continuous(breaks = c(seq(0,10,1)))+
-       scale_y_continuous(labels = percent) +
-       labs(x = "Decile",
-            y = "Population (%)")+
-        theme(legend.title = element_blank(),
-        # panel.background = element_blank(),
-        axis.ticks.y = element_blank(),
-        axis.ticks.x = element_blank())+
-        ggtitle('Population at risk of exposure to one or more medically important snake species \nwith no effective therapy, per HAQI decile')
-
-ggsave('Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_therapy_naive_spp_hist.png', 
-       dpi = 300, device = 'png')
-
-# write out par of exposure to 1 or more therapy naive snake species
-# first write out the csv
-write.csv(national_naive_par,
-          'Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_therapy_naive_spp.csv',
-          row.names = FALSE)
-
-# then the raster
-writeRaster(naive_par, 
-            file = 'Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_therapy_naive_spp',
-            format = 'GTiff',
-            overwrite = TRUE)
-
-### no effective therapy exists (cat 1 only)
-# convert antivenom naive surface into a binary surface (`1` = presence of 1 or more therapy
-# naive snake species, `NoData` = absence)
-antiv_c1_naive <- c1_antivenom
-antiv_c1_naive[antiv_c1_naive < 1 ] <- 0
-antiv_c1_naive[antiv_c1_naive  >= 1] <- 1
-
-# multiply the population by the binary presence/absence antivenom surface
-c1_naive_par <- overlay(pop_dens, antiv_c1_naive, fun = function(pop_dens, antiv_c1_naive){
-                                                                (pop_dens*antiv_c1_naive)})
-
-# convert this to a national estimate using zonal()
-national_c1_naive_par <- zonal(c1_naive_par, admin_0, fun = 'sum', na.rm = TRUE)
-national_c1_naive_par <- as.data.frame(national_c1_naive_par)
-
-# create an matching index
-rm(match_idx)
-match_idx <- match(national_c1_naive_par$zone, countries$GAUL_CODE)
-
-# append iso and country name
-national_c1_naive_par$iso <- countries$COUNTRY_ID[match_idx]
-national_c1_naive_par$name <- countries$name[match_idx]
-
-# correct West Bank and Gaza to PSE
-national_c1_naive_par$iso[national_c1_naive_par$name == 'West Bank'] <- 'PSE'
-national_c1_naive_par$iso[national_c1_naive_par$name == 'Gaza Strip'] <- 'PSE'
-
-# aggregate based on iso code
-aggregated_par <- do.call(rbind,lapply(split(national_c1_naive_par, national_c1_naive_par$iso),function(df) sum(df$sum)))
-
-new_df <- data.frame(iso = rep(NA, length(aggregated_par)),
-                     par = rep(NA, length(aggregated_par)))
-
-new_df$iso <- row.names(aggregated_par)
-new_df$par <- aggregated_par
-
-national_c1_naive_par <- new_df
-
-# merge HAQI with PAR
-match_idx <- match(national_c1_naive_par$iso, haqi$COUNTRY_ID)
-national_c1_naive_par$haqi <- haqi$haqi_2015[match_idx]
-
-# add deciles
-national_c1_naive_par$decile[national_c1_naive_par$haqi < 42.9] <- 1 
-national_c1_naive_par$decile[(national_c1_naive_par$haqi >= 42.9) & (national_c1_naive_par$haqi <= 47) ] <- 2
-national_c1_naive_par$decile[(national_c1_naive_par$haqi > 47) & (national_c1_naive_par$haqi <= 51.3) ] <- 3
-national_c1_naive_par$decile[(national_c1_naive_par$haqi > 51.3) & (national_c1_naive_par$haqi <= 59) ] <- 4
-national_c1_naive_par$decile[(national_c1_naive_par$haqi > 59) & (national_c1_naive_par$haqi <= 63.4) ] <- 5
-national_c1_naive_par$decile[(national_c1_naive_par$haqi > 63.4) & (national_c1_naive_par$haqi <= 69.7) ] <- 6
-national_c1_naive_par$decile[(national_c1_naive_par$haqi > 69.7) & (national_c1_naive_par$haqi <= 74.4) ] <- 7
-national_c1_naive_par$decile[(national_c1_naive_par$haqi > 74.4) & (national_c1_naive_par$haqi <= 79.4) ] <- 8
-national_c1_naive_par$decile[(national_c1_naive_par$haqi > 79.4) & (national_c1_naive_par$haqi <= 86.3) ] <- 9
-national_c1_naive_par$decile[national_c1_naive_par$haqi > 86.3 ] <- 10
-
-# get a total population at risk per decile
-decile_c1_naive_par <- do.call(rbind,lapply(split(national_c1_naive_par, national_c1_naive_par$decile),function(df) sum(df$par)))
-
-naive_c1_decile_par <- data.frame(decile = rep(NA, length(decile_c1_naive_par)),
-                                  par = rep(NA, length(decile_c1_naive_par)))
-
-naive_c1_decile_par$decile <- row.names(decile_c1_naive_par)
-naive_c1_decile_par$par <- decile_c1_naive_par
-
-# gen % of decile at risk
-combined <- cbind(naive_c1_decile_par,
-                  decile_population)
-
-combined[3] <- NULL
-combined$percent_par <- (combined$par/combined$pop)*100
-combined$remaining <- 100-combined$percent_par
-
-# new dataframe
-decile_plot_1 <- data.frame(decile = rep(NA, 10),
-                            variable = rep(NA, 10),
-                            value = rep(NA, 10))
-decile_plot_2 <- data.frame(decile = rep(NA, 10),
-                            variable = rep(NA, 10),
-                            value = rep(NA, 10))
-
-decile_plot_1$decile <- combined$decile
-decile_plot_1$variable <- rep('Exposure to one or more species')
-decile_plot_1$value <- combined$percent_par
-decile_plot_2$decile <- combined$decile
-decile_plot_2$variable <- rep('No risk of exposure')
-decile_plot_2$value <- combined$remaining
-
-combined <- rbind(decile_plot_1,
-                  decile_plot_2)
-
-combined$decile <- as.numeric(combined$decile)
-
-# plot stacked barplot for population at risk
-ggplot(combined, 
-       aes(x = decile, y = value, fill = variable)) +
-  geom_bar(position = "fill", stat = "identity")+
-  scale_x_continuous(breaks = c(seq(0,10,1)))+
-  scale_y_continuous(labels = percent) +
-  labs(x = "Decile",
-       y = "Population (%)")+
-  theme(legend.title = element_blank(),
-        # panel.background = element_blank(),
-        axis.ticks.y = element_blank(),
-        axis.ticks.x = element_blank())+
-  ggtitle('Population at risk of exposure to one or more Category 1 medically important snake species \nwith no effective therapy, per HAQI decile')
-
-ggsave('Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_c1_therapy_naive_spp_hist.png', 
-       dpi = 300, device = 'png')
-
-# write out par of exposure to 1 or more therapy naive snake species
-# first write out the csv
-write.csv(national_c1_naive_par,
-          'Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_c1_therapy_naive_spp.csv',
-          row.names = FALSE)
-
-# then the raster
-writeRaster(c1_naive_par, 
-            file = 'Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_c1_therapy_naive_spp',
-            format = 'GTiff',
-            overwrite = TRUE)
+}
 
 ### generate 'snake-human exposure events' risk surface
 exposure_events_par <- overlay(pop_dens, species_presence, fun = function(pop_dens, species_presence){
