@@ -379,16 +379,16 @@ national_c1_naive_par$decile[(national_c1_naive_par$haqi > 79.4) & (national_c1_
 national_c1_naive_par$decile[national_c1_naive_par$haqi > 86.3 ] <- 10
 
 # get a total population at risk per decile
-decile_naive_par <- do.call(rbind,lapply(split(national_naive_par, national_naive_par$decile),function(df) sum(df$par)))
+decile_c1_naive_par <- do.call(rbind,lapply(split(national_c1_naive_par, national_c1_naive_par$decile),function(df) sum(df$par)))
 
-naive_decile_par <- data.frame(decile = rep(NA, length(decile_naive_par)),
-                               par = rep(NA, length(decile_naive_par)))
+naive_c1_decile_par <- data.frame(decile = rep(NA, length(decile_c1_naive_par)),
+                                  par = rep(NA, length(decile_c1_naive_par)))
 
-naive_decile_par$decile <- row.names(decile_naive_par)
-naive_decile_par$par <- decile_naive_par
+naive_c1_decile_par$decile <- row.names(decile_c1_naive_par)
+naive_c1_decile_par$par <- decile_c1_naive_par
 
 # gen % of decile at risk
-combined <- cbind(naive_decile_par,
+combined <- cbind(naive_c1_decile_par,
                   decile_population)
 
 combined[3] <- NULL
@@ -427,9 +427,9 @@ ggplot(combined,
         # panel.background = element_blank(),
         axis.ticks.y = element_blank(),
         axis.ticks.x = element_blank())+
-  ggtitle('Population at risk of exposure to one or more medically important snake species \nwith no effective therapy, per HAQI decile')
+  ggtitle('Population at risk of exposure to one or more Category 1 medically important snake species \nwith no effective therapy, per HAQI decile')
 
-ggsave('Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_therapy_naive_spp_hist.png', 
+ggsave('Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_c1_therapy_naive_spp_hist.png', 
        dpi = 300, device = 'png')
 
 # write out par of exposure to 1 or more therapy naive snake species
