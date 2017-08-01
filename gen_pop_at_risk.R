@@ -34,7 +34,7 @@ outpath_vector <- c('Z:/users/joshua/Snakebite/output/population_at_risk/exposur
 pop_dens <- raster('Z:/users/joshua/Snakebite/rasters/population/Worldpop_GPWv4_Hybrid_201601_Global_Pop_5km_Adj_MGMatched_2015_Hybrid.tif')
 
 # load admin 0 raster
-admin_0 <- raster('Z:/users/joshua/Snakebite/rasters/admin_0_updated_2017-07-31.tif')
+admin_0 <- raster('Z:/users/joshua/Snakebite/rasters/admin_0_updated_2017-08-01.tif')
 
 # load in accessibility surface
 accessibility <- raster('Z:/users/joshua/Snakebite/rasters/accessibility/accessibility_50k+_2017-01-05_final.tif')
@@ -43,8 +43,40 @@ accessibility <- raster('Z:/users/joshua/Snakebite/rasters/accessibility/accessi
 countries <- read.dbf('Z:/users/joshua/Snakebite/World shapefiles/merged_admin0.dbf',
                       as.is = TRUE)
 
-# extend to the same extent as species richness surface
-admin_0 <- extend(admin_0, species_richness, value = NA)
+# extend admin 0 and accessibility to the same extent as species richness surface
+# get all extents
+raster_list <- c(species_richness,
+                 c1_species_richness,
+                 c2_species_richness,
+                 antivenom,
+                 c1_antivenom,
+                 c2_antivenom,
+                 accessibility,
+                 pop_dens,
+                 admin_0)
+
+# loop through and grab extents
+extents <- t(sapply(raster_list, function (x) as.vector(extent(x))))
+
+# get the smallest extent squares of all layers
+ext <- extent(c(max(extents[, 1]),
+                min(extents[, 2]),
+                max(extents[, 3]),
+                min(extents[, 4])))
+
+# crop all layers by this
+species_richness <- crop(species_richness, ext)
+c1_species_richness <- crop(c1_species_richness, ext)
+c2_species_richness <- crop(c2_species_richness, ext)
+antivenom <- crop(antivenom, ext)
+c1_antivenom <- crop(c1_antivenom, ext)
+c2_antivenom <- crop(c2_antivenom, ext)
+accessibility <- crop(accessibility, ext)
+pop_dens <- crop(pop_dens, ext)
+admin_0 <- crop(admin_0, ext)
+
+# aggregate accessibility to 5km resolution
+accessibility <- aggregate(accessibility, fact = 5, fun = mean)
 
 # read in HAQI data
 haqi <- read.csv('Z:/users/joshua/Snakebite/HAQ_extract.csv',
@@ -60,21 +92,6 @@ match_idx <- match(global_pop$zone, countries$GAUL_CODE)
 # append iso and country name
 global_pop$iso <- countries$COUNTRY_ID[match_idx]
 global_pop$name <- countries$name[match_idx]
-
-# correct West Bank and Gaza to PSE
-global_pop$iso[global_pop$name == 'West Bank'] <- 'PSE'
-global_pop$iso[global_pop$name == 'Gaza Strip'] <- 'PSE'
-
-# aggregate based on iso code
-aggregated_pop <- do.call(rbind,lapply(split(global_pop, global_pop$iso),function(df) sum(df$sum)))
-
-new_df <- data.frame(iso = rep(NA, length(aggregated_pop)),
-                     pop = rep(NA, length(aggregated_pop)))
-
-new_df$iso <- row.names(aggregated_pop)
-new_df$pop <- aggregated_pop
-
-global_pop <- new_df
 
 # merge HAQI with PAR
 match_idx <- match(global_pop$iso, haqi$COUNTRY_ID)
@@ -93,7 +110,7 @@ global_pop$decile[(global_pop$haqi > 79.4) & (global_pop$haqi <= 86.3) ] <- 9
 global_pop$decile[global_pop$haqi > 86.3 ] <- 10
 
 # get a total population per decile
-decile_pop <- do.call(rbind,lapply(split(global_pop, global_pop$decile),function(df) sum(df$pop)))
+decile_pop <- do.call(rbind,lapply(split(global_pop, global_pop$decile),function(df) sum(df$sum)))
 
 decile_population <- data.frame(decile = rep(NA, length(decile_pop)),
                                 pop = rep(NA, length(decile_pop)))
@@ -266,7 +283,7 @@ national_exposure_par$haqi <- haqi$haqi_2015[match_idx]
 
 # merge with total population
 match_idx <- match(national_exposure_par$iso, global_pop$iso)
-national_exposure_par$population <- global_pop$pop[match_idx]
+national_exposure_par$population <- global_pop$sum[match_idx]
 
 # add deciles
 national_exposure_par$decile[national_exposure_par$haqi < 42.9] <- 1 
@@ -314,8 +331,9 @@ write.csv(national_exposure_par,
           row.names = FALSE)
 
 # then the raster
+geotiff_outpath <- paste0('Z:/users/joshua/Snakebite/output/population_at_risk/snake_human_exposure_events', '_', Sys.Date())
 writeRaster(exposure_events_par, 
-            file = 'Z:/users/joshua/Snakebite/output/population_at_risk/snake_human_exposure_events',
+            file = geotiff_outpath,
             format = 'GTiff',
             overwrite = TRUE)
 
@@ -334,8 +352,9 @@ accessibility_mortality <- reclassify(accessibility, vals)
 accessibility_mortality <- reclassify(accessibility_mortality, c(101, 1000000000, 100, -10000, -1, NA))
 
 # write out the new 'distance based mortality' raster
+acc_outpath <- paste0('Z:/users/joshua/Snakebite/output/population_at_risk/distance_based_mortality_raw_percentage', '_', Sys.Date())
 writeRaster(accessibility_mortality, 
-            file = 'Z:/users/joshua/Snakebite/output/population_at_risk/distance_based_mortality_raw_percentage',
+            file = acc_outpath,
             format = 'GTiff',
             overwrite = TRUE)
 
