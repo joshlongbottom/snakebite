@@ -36,6 +36,9 @@ pop_dens <- raster('Z:/users/joshua/Snakebite/rasters/population/Worldpop_GPWv4_
 # load admin 0 raster
 admin_0 <- raster('Z:/users/joshua/Snakebite/rasters/admin_0_updated_2017-07-31.tif')
 
+# load in accessibility surface
+accessibility <- raster('Z:/users/joshua/Snakebite/rasters/accessibility/accessibility_50k+_2017-01-05_final.tif')
+
 # read in admin 0 shapefile dbf
 countries <- read.dbf('Z:/users/joshua/Snakebite/World shapefiles/merged_admin0.dbf',
                       as.is = TRUE)
@@ -229,16 +232,20 @@ write.csv(national_par,
 
 # then the raster
 writeRaster(presence_par, 
-            file = outpath_vector[[i]],
+            file = geotiff_outpath,
             format = 'GTiff',
             overwrite = TRUE)
 
 }
 
 ### generate 'snake-human exposure events' risk surface
-exposure_events_par <- overlay(pop_dens, species_presence, fun = function(pop_dens, species_presence){
-                                                                         (pop_dens*species_presence)})
+# this is the number of unique exposure events per person, per pixel. i.e. if there are 5 snakes in a pixel
+# with 50 individuals, there are 250 possible snake-human exposure events (each person could be exposed to up to 
+# 5 species)
+exposure_events_par <- overlay(pop_dens, species_richness, fun = function(pop_dens, species_richness){
+                                                                         (pop_dens*species_richness)})
 
+# round up the values to integers
 exposure_events_par <- round(exposure_events_par)
 
 # convert this to a national estimate using zonal()
@@ -246,9 +253,6 @@ national_exposure_par <- zonal(exposure_events_par, admin_0, fun = 'sum', na.rm 
 national_exposure_par <- as.data.frame(national_exposure_par)
 
 # match this to get location names
-# read in admin 0 shapefile dbf
-countries <- foreign::read.dbf("Z:/users/joshua/admin2013/admin2013_0.dbf")
-
 # create an matching index
 match_idx <- match(national_exposure_par$zone, countries$GAUL_CODE)
 
@@ -256,15 +260,82 @@ match_idx <- match(national_exposure_par$zone, countries$GAUL_CODE)
 national_exposure_par$iso <- countries$COUNTRY_ID[match_idx]
 national_exposure_par$name <- countries$name[match_idx]
 
+# merge HAQI with PAR
+match_idx <- match(national_exposure_par$iso, haqi$COUNTRY_ID)
+national_exposure_par$haqi <- haqi$haqi_2015[match_idx]
+
+# merge with total population
+match_idx <- match(national_exposure_par$iso, global_pop$iso)
+national_exposure_par$population <- global_pop$pop[match_idx]
+
+# add deciles
+national_exposure_par$decile[national_exposure_par$haqi < 42.9] <- 1 
+national_exposure_par$decile[(national_exposure_par$haqi >= 42.9) & (national_exposure_par$haqi <= 47) ] <- 2
+national_exposure_par$decile[(national_exposure_par$haqi > 47) & (national_exposure_par$haqi <= 51.3) ] <- 3
+national_exposure_par$decile[(national_exposure_par$haqi > 51.3) & (national_exposure_par$haqi <= 59) ] <- 4
+national_exposure_par$decile[(national_exposure_par$haqi > 59) & (national_exposure_par$haqi <= 63.4) ] <- 5
+national_exposure_par$decile[(national_exposure_par$haqi > 63.4) & (national_exposure_par$haqi <= 69.7) ] <- 6
+national_exposure_par$decile[(national_exposure_par$haqi > 69.7) & (national_exposure_par$haqi <= 74.4) ] <- 7
+national_exposure_par$decile[(national_exposure_par$haqi > 74.4) & (national_exposure_par$haqi <= 79.4) ] <- 8
+national_exposure_par$decile[(national_exposure_par$haqi > 79.4) & (national_exposure_par$haqi <= 86.3) ] <- 9
+national_exposure_par$decile[national_exposure_par$haqi > 86.3 ] <- 10
+
+# generate average exposure per person, per country
+national_exposure_par$average_exposure <- national_exposure_par$sum/national_exposure_par$population
+
+# get a total population at risk per decile
+decile_par <- do.call(rbind,lapply(split(national_exposure_par, national_exposure_par$decile),function(df) sum(df$sum)))
+
+decile_nat_par <- data.frame(decile = rep(NA, length(decile_par)),
+                             exposures = rep(NA, length(decile_par)))
+
+decile_nat_par$decile <- row.names(decile_par)
+decile_nat_par$exposures <- decile_par
+
+# gen % of decile at risk
+combined <- cbind(decile_nat_par,
+                  decile_population)
+
+combined[3] <- NULL
+combined$average_exposure <- (combined$exposures/combined$pop)
+
+# plot
+plot(combined$decile, combined$average_exposure,
+     xlab = 'Decile',
+     ylab = 'Average snake-human exposures per person',
+     xaxt = 'n')
+axis(1, xaxp = c(0, 10, 10))
+
 # write out par of exposure to 1 or more snake species
 # first write out the csv
+csv_outpath <- paste0('Z:/users/joshua/Snakebite/output/population_at_risk/snake_human_exposure_events', '_', Sys.Date(), '.csv')
 write.csv(national_exposure_par,
-          'Z:/users/joshua/Snakebite/output/population_at_risk/snake_human_exposure_events.csv',
+          csv_outpath,
           row.names = FALSE)
 
 # then the raster
 writeRaster(exposure_events_par, 
             file = 'Z:/users/joshua/Snakebite/output/population_at_risk/snake_human_exposure_events',
+            format = 'GTiff',
+            overwrite = TRUE)
+
+### distance based mortality
+# bin accessibility values to generate mortality likelihoods
+# 1. set up matrix
+vals <- matrix(ncol = 3,
+               c(seq(0, 6000, 60),
+                 seq(60, 6060, 60),
+                 seq(0, 100, 1)), 
+               byrow = FALSE)
+
+# 2. reclassify into mortality bins (suppose this is similar to /60 and rounding vals, but I want
+# 61-89 minutes to contribute towards 2% mortality likelihood, opposed to 1%).
+accessibility_mortality <- reclassify(accessibility, vals)
+accessibility_mortality <- reclassify(accessibility_mortality, c(101, 1000000000, 100, -10000, -1, NA))
+
+# write out the new 'distance based mortality' raster
+writeRaster(accessibility_mortality, 
+            file = 'Z:/users/joshua/Snakebite/output/population_at_risk/distance_based_mortality_raw_percentage',
             format = 'GTiff',
             overwrite = TRUE)
 
