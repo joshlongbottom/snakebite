@@ -37,7 +37,16 @@ pop_dens <- raster('Z:/users/joshua/Snakebite/rasters/population/Worldpop_GPWv4_
 admin_0 <- raster('Z:/users/joshua/Snakebite/rasters/admin_0_updated_2017-08-01.tif')
 
 # load in accessibility surface
-accessibility <- raster('Z:/users/joshua/Snakebite/rasters/accessibility/accessibility_50k+_2017-01-05_final.tif')
+# accessibility <- raster('Z:/users/joshua/Snakebite/rasters/accessibility/accessibility_50k+_2017-01-05_final.tif')
+accessibility <- raster('Z:/users/joshua/Snakebite/rasters/accessibility/accessibility_50k+_2017-01-05_aggregate_5k_2017_02_08.tif')
+# # change -9999 to NA
+# accessibility <- reclassify(accessibility, c(-10000, -1, NA))
+# # resample to 5k
+# accessibility <- resample(accessibility, species_richness, method = 'ngb')
+# writeRaster(accessibility, 
+#             file = 'Z:/users/joshua/Snakebite/rasters/accessibility/accessibility_50k+_2017-01-05_aggregate_5k_2017_02_08',
+#             format = 'GTiff',
+#             overwrite = TRUE)
 
 # read in admin 0 shapefile dbf
 countries <- read.dbf('Z:/users/joshua/Snakebite/World shapefiles/merged_admin0.dbf',
@@ -58,13 +67,13 @@ raster_list <- c(species_richness,
 # loop through and grab extents
 extents <- t(sapply(raster_list, function (x) as.vector(extent(x))))
 
-# get the smallest extent squares of all layers
+# get the smallest extent of all layers
 ext <- extent(c(max(extents[, 1]),
                 min(extents[, 2]),
                 max(extents[, 3]),
                 min(extents[, 4])))
 
-# crop all layers by this
+# crop all layers by this minimal extent
 species_richness <- crop(species_richness, ext)
 c1_species_richness <- crop(c1_species_richness, ext)
 c2_species_richness <- crop(c2_species_richness, ext)
@@ -75,14 +84,15 @@ accessibility <- crop(accessibility, ext)
 pop_dens <- crop(pop_dens, ext)
 admin_0 <- crop(admin_0, ext)
 
-# aggregate accessibility to 5km resolution
-accessibility <- aggregate(accessibility, fact = 5, fun = mean)
+# temp fix for weird admin_0 issue
+# set extent equal to species richness
+extent(admin_0) <- extent(species_richness)
 
 # read in HAQI data
 haqi <- read.csv('Z:/users/joshua/Snakebite/HAQ_extract.csv',
                  stringsAsFactors = FALSE)
 
-#### get global populations per country/HAQI, in order to calculate % of pop at risk
+#### get global populations per country/HAQI, in order to calculate % of pop at risk ####
 global_pop <- zonal(pop_dens, admin_0, fun = 'sum', na.rm = TRUE)
 global_pop <- as.data.frame(global_pop)
 
@@ -118,7 +128,7 @@ decile_population <- data.frame(decile = rep(NA, length(decile_pop)),
 decile_population$decile <- row.names(decile_pop)
 decile_population$pop <- decile_pop
 
-# loop through and generate population at risk estimates for
+##### loop through and generate population at risk estimates for: ####
 # 1. Population living in areas suitable for one or more species (any medical classification)
 # 2. Population living in areas suitable for one or more Category 1 species
 # 3. Population living in areas suitable for one or more Category 2 species
@@ -255,7 +265,7 @@ writeRaster(presence_par,
 
 }
 
-### generate 'snake-human exposure events' risk surface
+#### generate 'snake-human exposure events' risk surface ####
 # this is the number of unique exposure events per person, per pixel. i.e. if there are 5 snakes in a pixel
 # with 50 individuals, there are 250 possible snake-human exposure events (each person could be exposed to up to 
 # 5 species)
@@ -337,7 +347,7 @@ writeRaster(exposure_events_par,
             format = 'GTiff',
             overwrite = TRUE)
 
-### distance based mortality
+#### distance based mortality ####
 # bin accessibility values to generate mortality likelihoods
 # 1. set up matrix
 vals <- matrix(ncol = 3,
@@ -349,7 +359,7 @@ vals <- matrix(ncol = 3,
 # 2. reclassify into mortality bins (suppose this is similar to /60 and rounding vals, but I want
 # 61-89 minutes to contribute towards 2% mortality likelihood, opposed to 1%).
 accessibility_mortality <- reclassify(accessibility, vals)
-accessibility_mortality <- reclassify(accessibility_mortality, c(101, 1000000000, 100, -10000, -1, NA))
+accessibility_mortality <- reclassify(accessibility_mortality, c(101, 1000000000, 100))
 
 # write out the new 'distance based mortality' raster
 acc_outpath <- paste0('Z:/users/joshua/Snakebite/output/population_at_risk/distance_based_mortality_raw_percentage', '_', Sys.Date())
@@ -358,5 +368,54 @@ writeRaster(accessibility_mortality,
             format = 'GTiff',
             overwrite = TRUE)
 
+# bin accessibility values to generate a time surface; here we can divide values by 60, and round
+# this way, 61-89 will be classed as within 1 hour travel time
+
+# loop through and classify proportion of population within each time bin
+for(i in 1:24){
+  
+  # message to inform progress
+  message(paste0("Processsing distance '", i, "'"))
+  
+  # generate a binary time/distance surface
+  if(i != 24){
+    
+    temp <- reclassify(accessibility_mortality, c(0, i, i))
+    temp <- reclassify(accessibility_mortality, c(i, 101, NA))
+    
+  } else {
+    
+    temp <- accessibility_mortality
+    
+  }
+  
+  # mask population dens by this
+  pop_mask <- pop_dens
+  pop_mask <- mask(pop_mask, temp)
+  
+  # get zonal statistics
+  national_pop_dist <- zonal(pop_mask, admin_0, fun = 'sum', na.rm = TRUE)
+  national_pop_dist <- as.data.frame(national_pop_dist)
+  
+  # rename dataframe
+  # create string for distance
+  distance_n <- paste0('pop_within_', i, '_hours')
+  names(national_pop_dist) <- c('zone',
+                                distance_n)
+  
+  # bind dataframes
+  if(i == 1){
+    
+    combined_frame <- national_pop_dist
+    
+  } else {
+    
+    combined_frame <- merge(combined_frame, national_pop_dist)
+    
+  }
+  
+}
+
+# convert these raw distance-based populations into proportion of total population
 
 
