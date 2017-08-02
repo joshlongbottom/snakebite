@@ -368,20 +368,18 @@ writeRaster(accessibility_mortality,
             format = 'GTiff',
             overwrite = TRUE)
 
-# bin accessibility values to generate a time surface; here we can divide values by 60, and round
-# this way, 61-89 will be classed as within 1 hour travel time
-
 # loop through and classify proportion of population within each time bin
-for(i in 1:24){
+for(i in 1:25){
   
   # message to inform progress
   message(paste0("Processsing distance '", i, "'"))
   
   # generate a binary time/distance surface
-  if(i != 24){
+  if(i != 25){
     
-    temp <- reclassify(accessibility_mortality, c(0, i, i))
-    temp <- reclassify(accessibility_mortality, c(i, 101, NA))
+    j <- i-1
+    temp <- reclassify(accessibility_mortality, c(0, j, j))
+    temp <- reclassify(accessibility_mortality, c(j, 101, NA))
     
   } else {
     
@@ -457,6 +455,7 @@ combined_frame$pop_within_21_hours_percent <- (combined_frame$pop_within_21_hour
 combined_frame$pop_within_22_hours_percent <- (combined_frame$pop_within_22_hours/combined_frame$total_population)*100
 combined_frame$pop_within_23_hours_percent <- (combined_frame$pop_within_23_hours/combined_frame$total_population)*100
 combined_frame$pop_within_24_hours_percent <- (combined_frame$pop_within_24_hours/combined_frame$total_population)*100
+combined_frame$pop_within_25_hours_percent <- (combined_frame$pop_within_25_hours/combined_frame$total_population)*100
 
 # sub in ISO code & decile
 combined_frame$iso <- global_pop$iso[match_idx1]
@@ -465,6 +464,12 @@ combined_frame$decile <- global_pop$decile[match_idx1]
 # subset to have a raw population dataframe, and a % dataframe
 raw_pop_distance <- combined_frame[c(51:52, 1:26)]
 percent_pop_distance <- combined_frame[c(51:52, 1, 26:50)]
+
+# write this dataframe to disk
+combined_outpath <- paste0('Z:/users/joshua/Snakebite/output/population_at_risk/proportion_of_whole_population_within_x_distance_', Sys.Date(), '.csv')
+write.csv(combined_frame,
+          combined_outpath,
+          row.names = FALSE)
 
 # remove countries without a HAQi
 percent_pop_distance <- percent_pop_distance[!is.na(percent_pop_distance$decile), ]
@@ -483,30 +488,31 @@ for(i in 1:10){
   melt_percentage_pop <- melt(decile_frame, id.vars = c('iso'))
   
   # rename variables in melted dataframe
-  melt_percentage_pop$variable <- gsub('pop_within_1_hours_percent', '1 hour', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_2_hours_percent', '2 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_3_hours_percent', '3 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_4_hours_percent', '4 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_5_hours_percent', '5 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_6_hours_percent', '6 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_7_hours_percent', '7 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_8_hours_percent', '8 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_9_hours_percent', '9 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_10_hours_percent', '10 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_11_hours_percent', '11 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_12_hours_percent', '12 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_13_hours_percent', '13 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_14_hours_percent', '14 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_15_hours_percent', '15 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_16_hours_percent', '16 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_17_hours_percent', '17 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_18_hours_percent', '18 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_19_hours_percent', '19 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_20_hours_percent', '20 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_21_hours_percent', '21 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_22_hours_percent', '22 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_23_hours_percent', '23 hours', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_24_hours_percent', '24 hours or more', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_1_hours_percent', '<1 hour', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_2_hours_percent', '<2 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_3_hours_percent', '<3 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_4_hours_percent', '<4 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_5_hours_percent', '<5 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_6_hours_percent', '<6 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_7_hours_percent', '<7 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_8_hours_percent', '<8 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_9_hours_percent', '<9 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_10_hours_percent', '<10 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_11_hours_percent', '<11 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_12_hours_percent', '<12 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_13_hours_percent', '<13 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_14_hours_percent', '<14 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_15_hours_percent', '<15 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_16_hours_percent', '<16 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_17_hours_percent', '<17 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_18_hours_percent', '<18 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_19_hours_percent', '<19 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_20_hours_percent', '<20 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_21_hours_percent', '<21 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_22_hours_percent', '<22 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_23_hours_percent', '<23 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_24_hours_percent', '<24 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_25_hours_percent', '24 hours or more', melt_percentage_pop$variable, fixed = TRUE)
   
   # round percentages to 2dp
   melt_percentage_pop$value <- as.numeric(melt_percentage_pop$value)
@@ -517,12 +523,13 @@ for(i in 1:10){
   colours <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(20)
   
   # change variable to an ordered factor...
-  melt_percentage_pop$variable <- factor(melt_percentage_pop$variable, c("1 hour", "2 hours", "3 hours", "4 hours",
-                                                                         "5 hours", "6 hours", "7 hours", "8 hours",
-                                                                         "9 hours", "10 hours", "11 hours", "12 hours",
-                                                                         "13 hours", "14 hours", "15 hours", "16 hours",
-                                                                         "17 hours", "18 hours", "19 hours", "20 hours",
-                                                                         "21 hours", "22 hours", "23 hours", "24 hours or more"))
+  melt_percentage_pop$variable <- factor(melt_percentage_pop$variable, c("<1 hour", "<2 hours", "<3 hours", "<4 hours",
+                                                                         "<5 hours", "<6 hours", "<7 hours", "<8 hours",
+                                                                         "<9 hours", "<10 hours", "<11 hours", "<12 hours",
+                                                                         "<13 hours", "<14 hours", "<15 hours", "<16 hours",
+                                                                         "<17 hours", "<18 hours", "<19 hours", "<20 hours",
+                                                                         "<21 hours", "<22 hours", "<23 hours", "<24 hours", 
+                                                                         "24 hours or more"))
   
   # define title text
   title_text <- paste0('HAQI Decile ', i)
