@@ -3,7 +3,7 @@
 rm(list = ls())
 
 # load required packages
-pacman::p_load(raster, foreign, reshape2, ggplot2, scales)
+pacman::p_load(raster, foreign, reshape2, ggplot2, scales, RColorBrewer)
 
 # load species richness surface
 species_richness <- raster('Z:/users/joshua/Snakebite/output/species_richness/modified_eor_combined_categories_2017-07-25.tif')
@@ -417,5 +417,156 @@ for(i in 1:24){
 }
 
 # convert these raw distance-based populations into proportion of total population
+# merge with global pop estimates
+# first, rename dataframe
+names(global_pop) <- c("zone",
+                       "total_population",
+                       "iso",
+                       "name",
+                       "haqi",
+                       "decile")
 
+# create matching index
+match_idx1 <- match(combined_frame$zone, global_pop$zone)
 
+# sub in total population values
+combined_frame$total_population <- global_pop$total_population[match_idx1]
+
+# generate % fields
+combined_frame$pop_within_1_hours_percent <- (combined_frame$pop_within_1_hours/combined_frame$total_population)*100
+combined_frame$pop_within_2_hours_percent <- (combined_frame$pop_within_2_hours/combined_frame$total_population)*100
+combined_frame$pop_within_3_hours_percent <- (combined_frame$pop_within_3_hours/combined_frame$total_population)*100
+combined_frame$pop_within_4_hours_percent <- (combined_frame$pop_within_4_hours/combined_frame$total_population)*100
+combined_frame$pop_within_5_hours_percent <- (combined_frame$pop_within_5_hours/combined_frame$total_population)*100
+combined_frame$pop_within_6_hours_percent <- (combined_frame$pop_within_6_hours/combined_frame$total_population)*100
+combined_frame$pop_within_7_hours_percent <- (combined_frame$pop_within_7_hours/combined_frame$total_population)*100
+combined_frame$pop_within_8_hours_percent <- (combined_frame$pop_within_8_hours/combined_frame$total_population)*100
+combined_frame$pop_within_9_hours_percent <- (combined_frame$pop_within_9_hours/combined_frame$total_population)*100
+combined_frame$pop_within_10_hours_percent <- (combined_frame$pop_within_10_hours/combined_frame$total_population)*100
+combined_frame$pop_within_11_hours_percent <- (combined_frame$pop_within_11_hours/combined_frame$total_population)*100
+combined_frame$pop_within_12_hours_percent <- (combined_frame$pop_within_12_hours/combined_frame$total_population)*100
+combined_frame$pop_within_13_hours_percent <- (combined_frame$pop_within_13_hours/combined_frame$total_population)*100
+combined_frame$pop_within_14_hours_percent <- (combined_frame$pop_within_14_hours/combined_frame$total_population)*100
+combined_frame$pop_within_15_hours_percent <- (combined_frame$pop_within_15_hours/combined_frame$total_population)*100
+combined_frame$pop_within_16_hours_percent <- (combined_frame$pop_within_16_hours/combined_frame$total_population)*100
+combined_frame$pop_within_17_hours_percent <- (combined_frame$pop_within_17_hours/combined_frame$total_population)*100
+combined_frame$pop_within_18_hours_percent <- (combined_frame$pop_within_18_hours/combined_frame$total_population)*100
+combined_frame$pop_within_19_hours_percent <- (combined_frame$pop_within_19_hours/combined_frame$total_population)*100
+combined_frame$pop_within_20_hours_percent <- (combined_frame$pop_within_20_hours/combined_frame$total_population)*100
+combined_frame$pop_within_21_hours_percent <- (combined_frame$pop_within_21_hours/combined_frame$total_population)*100
+combined_frame$pop_within_22_hours_percent <- (combined_frame$pop_within_22_hours/combined_frame$total_population)*100
+combined_frame$pop_within_23_hours_percent <- (combined_frame$pop_within_23_hours/combined_frame$total_population)*100
+combined_frame$pop_within_24_hours_percent <- (combined_frame$pop_within_24_hours/combined_frame$total_population)*100
+
+# sub in ISO code & decile
+combined_frame$iso <- global_pop$iso[match_idx1]
+combined_frame$decile <- global_pop$decile[match_idx1]
+
+# subset to have a raw population dataframe, and a % dataframe
+raw_pop_distance <- combined_frame[c(51:52, 1:26)]
+percent_pop_distance <- combined_frame[c(51:52, 1, 26:50)]
+
+# remove countries without a HAQi
+percent_pop_distance <- percent_pop_distance[!is.na(percent_pop_distance$decile), ]
+
+## for each decile, loop through and generate heatmaps
+for(i in 1:10){
+  
+  # subset to get decile
+  decile_frame <- percent_pop_distance[percent_pop_distance$decile == i, ]
+
+  # drop some variables prior to reshaping
+  decile_frame$zone <- NULL
+  decile_frame$total_population <- NULL
+  decile_frame$decile <- NULL
+  
+  melt_percentage_pop <- melt(decile_frame, id.vars = c('iso'))
+  
+  # rename variables in melted dataframe
+  melt_percentage_pop$variable <- gsub('pop_within_1_hours_percent', '1 hour', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_2_hours_percent', '2 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_3_hours_percent', '3 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_4_hours_percent', '4 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_5_hours_percent', '5 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_6_hours_percent', '6 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_7_hours_percent', '7 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_8_hours_percent', '8 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_9_hours_percent', '9 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_10_hours_percent', '10 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_11_hours_percent', '11 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_12_hours_percent', '12 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_13_hours_percent', '13 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_14_hours_percent', '14 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_15_hours_percent', '15 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_16_hours_percent', '16 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_17_hours_percent', '17 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_18_hours_percent', '18 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_19_hours_percent', '19 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_20_hours_percent', '20 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_21_hours_percent', '21 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_22_hours_percent', '22 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_23_hours_percent', '23 hours', melt_percentage_pop$variable, fixed = TRUE)
+  melt_percentage_pop$variable <- gsub('pop_within_24_hours_percent', '24 hours or more', melt_percentage_pop$variable, fixed = TRUE)
+  
+  # round percentages to 2dp
+  melt_percentage_pop$value <- as.numeric(melt_percentage_pop$value)
+  melt_percentage_pop$value <- round(melt_percentage_pop$value, digits = 2)
+  
+  # plot data
+  # define colours
+  colours <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(20)
+  
+  # change variable to an ordered factor...
+  melt_percentage_pop$variable <- factor(melt_percentage_pop$variable, c("1 hour", "2 hours", "3 hours", "4 hours",
+                                                                         "5 hours", "6 hours", "7 hours", "8 hours",
+                                                                         "9 hours", "10 hours", "11 hours", "12 hours",
+                                                                         "13 hours", "14 hours", "15 hours", "16 hours",
+                                                                         "17 hours", "18 hours", "19 hours", "20 hours",
+                                                                         "21 hours", "22 hours", "23 hours", "24 hours or more"))
+  
+  # define title text
+  title_text <- paste0('HAQI Decile ', i)
+  
+  # create plot
+  p <- ggplot(melt_percentage_pop, aes(x = iso, y = variable)) +
+       geom_tile(aes(fill = cut(value, seq(0, 100, 5),
+                             include.lowest=TRUE)), 
+                 colour="white", 
+                 size = 0.1) + 
+       labs(x = 'Country',
+            y = 'Hours from closest city with population >50,000') +
+       ggtitle(title_text) +
+       scale_fill_manual(values = colours,
+                         labels = c("0-5",
+                                    "5-10",
+                                    "10-15",
+                                    "15-20",
+                                    "20-25",
+                                    "25-30",
+                                    "30-35",
+                                    "35-40",
+                                    "40-45",
+                                    "45-50",
+                                    "50-55",
+                                    "55-60",
+                                    "60-65",
+                                    "65-70",
+                                    "70-75",
+                                    "75-80",
+                                    "80-85",
+                                    "85-90",
+                                    "90-95",
+                                    "95-100"),
+                        name = "Proportion of population (%)",
+                        drop = FALSE)
+  
+  # rotate x axis labels and remove axis ticks
+  p + theme(axis.text.x = element_text(angle = 90, hjust = 1), 
+            axis.ticks = element_blank())
+  
+  # save output
+  # generate outpath
+  distance_opath <- paste0('Z:/users/joshua/Snakebite/output/population_at_risk/decile_',i, '_proportion_of_whole_population_per_distance_', Sys.Date(), '.png')
+  ggsave(distance_opath, width = 400, height = 350, units = 'mm', dpi = 300, device = 'png')
+  
+}
