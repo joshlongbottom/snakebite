@@ -669,7 +669,7 @@ for(i in 1:length(process_list)){
     
     # rename dataframe
     # create string for distance
-    distance_n <- paste0('pop_within_', i, '_hours')
+    distance_n <- paste0('pop_within_', n, '_hours')
     names(national_pop_dist) <- c('zone',
                                   distance_n)
     
@@ -808,7 +808,25 @@ for(i in 1:length(process_list)){
                                                                            "24 or more"))
     
     # define title text
-    title_text <- paste0('HAQI Decile ', d)
+    if(loop_vector == "exposure_c2"){
+    
+      title_text <- paste0('HAQI Decile ', d, ' - Exposure to one or more category 2 species')
+    
+    } else {
+      
+      if(loop_vector == "exposure_c1"){
+        
+        title_text <- paste0('HAQI Decile ', d, ' - Exposure to one or more category 1 species')
+        
+      } else {
+        
+        if(loop_vector == "exposure_any"){
+          
+          title_text <- paste0('HAQI Decile ', d, ' - Exposure to one or more medically important species')
+          
+        }
+      }
+    }
     
     # create plot
     p <- ggplot(melt_percentage_pop, aes(x = iso, y = variable)) +
