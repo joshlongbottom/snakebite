@@ -33,8 +33,9 @@ outpath_vector <- c('Z:/users/joshua/Snakebite/output/population_at_risk/exposur
 # load population density surface
 pop_dens <- raster('Z:/users/joshua/Snakebite/rasters/population/Worldpop_GPWv4_Hybrid_201601_Global_Pop_5km_Adj_MGMatched_2015_Hybrid.tif')
 
-# load admin 0 raster
+# load admin 0, and admin 1 raster
 admin_0 <- raster('Z:/users/joshua/Snakebite/rasters/admin_0_updated_2017-08-01.tif')
+admin_1 <- raster('Z:/users/joshua/Snakebite/rasters/admin_1.tif')
 
 # load in accessibility surface
 # accessibility <- raster('Z:/users/joshua/Snakebite/rasters/accessibility/accessibility_50k+_2017-01-05_final.tif')
@@ -52,6 +53,9 @@ accessibility <- raster('Z:/users/joshua/Snakebite/rasters/accessibility/accessi
 countries <- read.dbf('Z:/users/joshua/Snakebite/World shapefiles/merged_admin0.dbf',
                       as.is = TRUE)
 
+a1_dbf <- read.dbf('Z:/users/joshua/admin2013/admin2013_1.dbf',
+                   as.is = TRUE)
+
 # extend admin 0 and accessibility to the same extent as species richness surface
 # get all extents
 raster_list <- c(species_richness,
@@ -62,7 +66,8 @@ raster_list <- c(species_richness,
                  c2_antivenom,
                  accessibility,
                  pop_dens,
-                 admin_0)
+                 admin_0,
+                 admin_1)
 
 # loop through and grab extents
 extents <- t(sapply(raster_list, function (x) as.vector(extent(x))))
@@ -83,10 +88,12 @@ c2_antivenom <- crop(c2_antivenom, ext)
 accessibility <- crop(accessibility, ext)
 pop_dens <- crop(pop_dens, ext)
 admin_0 <- crop(admin_0, ext)
+admin_1 <- crop(admin_1, ext)
 
 # temp fix for weird admin_0 issue
 # set extent equal to species richness
 extent(admin_0) <- extent(species_richness)
+extent(admin_1) <- extent(species_richness)
 
 # read in HAQI data
 haqi <- read.csv('Z:/users/joshua/Snakebite/HAQ_extract.csv',
@@ -346,6 +353,53 @@ writeRaster(exposure_events_par,
             file = geotiff_outpath,
             format = 'GTiff',
             overwrite = TRUE)
+
+# generate admin 1, snake-human exposure events
+# use 'exposure_events_par' from above; but admin 1 raster
+# convert this to a national estimate using zonal()
+admin_1_exposure_par <- zonal(exposure_events_par, admin_1, fun = 'sum', na.rm = TRUE)
+admin_1_exposure_par <- as.data.frame(admin_1_exposure_par)
+
+# match this to get location names
+# create an matching index
+match_idx <- match(admin_1_exposure_par$zone, a1_dbf$GAUL_CODE)
+
+# append iso and country name
+admin_1_exposure_par$iso <- a1_dbf$COUNTRY_ID[match_idx]
+admin_1_exposure_par$name <- a1_dbf$name[match_idx]
+
+# merge HAQI with PAR
+match_idx <- match(admin_1_exposure_par$iso, haqi$COUNTRY_ID)
+admin_1_exposure_par$haqi <- haqi$haqi_2015[match_idx]
+
+# generate admin 1 population estimates
+admin_1_pop <- zonal(pop_dens, admin_1, fun = 'sum', na.rm = TRUE)
+admin_1_pop <- as.data.frame(admin_1_pop)
+
+# create an matching index
+match_idx <- match(admin_1_pop$zone, a1_dbf$GAUL_CODE)
+
+# append iso and country name
+admin_1_pop$iso <- a1_dbf$COUNTRY_ID[match_idx]
+admin_1_pop$name <- a1_dbf$name[match_idx]
+
+# merge HAQI with PAR
+match_idx <- match(admin_1_pop$iso, haqi$COUNTRY_ID)
+admin_1_pop$haqi <- haqi$haqi_2015[match_idx]
+
+# merge with total population
+match_idx <- match(admin_1_exposure_par$zone, admin_1_pop$zone)
+admin_1_exposure_par$population <- admin_1_pop$sum[match_idx]
+
+# generate average exposure per person, per admin 1
+admin_1_exposure_par$average_exposure <- admin_1_exposure_par$sum/admin_1_exposure_par$population
+
+# write out par of exposure to 1 or more snake species
+# first write out the csv
+csv_outpath <- paste0('Z:/users/joshua/Snakebite/output/population_at_risk/snake_human_exposure_events_admin_1_', Sys.Date(), '.csv')
+write.csv(admin_1_exposure_par,
+          csv_outpath,
+          row.names = FALSE)
 
 #### distance based mortality ####
 # bin accessibility values to generate mortality likelihoods
