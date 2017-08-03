@@ -145,7 +145,7 @@ species_presence[species_presence  >= 1] <- 1
   
 # multiply the population by the binary presence/absence surface
 presence_par <- overlay(pop_dens, species_presence, fun = function(pop_dens, species_presence){
-                                                                    (pop_dens*species_presence)})
+                                                                  (pop_dens*species_presence)})
 
 # convert this to a national estimate using zonal()
 national_par <- zonal(presence_par, admin_0, fun = 'sum', na.rm = TRUE)
@@ -580,253 +580,282 @@ for(i in 1:10){
 
 #### now generate these estimates for the proportion of the PAR ####
 # load PAR surface from above
+# any exposure
+exposure_any <- raster('Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_spp_2017-08-01.tif')
+exposure_any <- crop(exposure_any, admin_0)
+
+# any c1 exposure
 exposure_c1 <- raster('Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_c1_spp_2017-08-01.tif')
 exposure_c1 <- crop(exposure_c1, admin_0)
 
-# generate national estimates using zonal
-c1_exposure_pop <- zonal(exposure_c1, admin_0, fun = 'sum', na.rm = TRUE)
-c1_exposure_pop <- as.data.frame(c1_exposure_pop)
+# any c1 exposure
+exposure_c2 <- raster('Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_c2_spp_2017-08-01.tif')
+exposure_c2 <- crop(exposure_c2, admin_0)
 
-# create an matching index
-match_idx <- match(c1_exposure_pop$zone, countries$GAUL_CODE)
+# list metrics
+process_list <- c('exposure_any', 'exposure_c1', 'exposure_c2')
 
-# append iso and country name
-c1_exposure_pop$iso <- countries$COUNTRY_ID[match_idx]
-c1_exposure_pop$name <- countries$name[match_idx]
-
-# merge HAQI with PAR
-match_idx <- match(c1_exposure_pop$iso, haqi$COUNTRY_ID)
-c1_exposure_pop$haqi <- haqi$haqi_2015[match_idx]
-
-# add deciles
-c1_exposure_pop$decile[c1_exposure_pop$haqi < 42.9] <- 1 
-c1_exposure_pop$decile[(c1_exposure_pop$haqi >= 42.9) & (c1_exposure_pop$haqi <= 47) ] <- 2
-c1_exposure_pop$decile[(c1_exposure_pop$haqi > 47) & (c1_exposure_pop$haqi <= 51.3) ] <- 3
-c1_exposure_pop$decile[(c1_exposure_pop$haqi > 51.3) & (c1_exposure_pop$haqi <= 59) ] <- 4
-c1_exposure_pop$decile[(c1_exposure_pop$haqi > 59) & (c1_exposure_pop$haqi <= 63.4) ] <- 5
-c1_exposure_pop$decile[(c1_exposure_pop$haqi > 63.4) & (c1_exposure_pop$haqi <= 69.7) ] <- 6
-c1_exposure_pop$decile[(c1_exposure_pop$haqi > 69.7) & (c1_exposure_pop$haqi <= 74.4) ] <- 7
-c1_exposure_pop$decile[(c1_exposure_pop$haqi > 74.4) & (c1_exposure_pop$haqi <= 79.4) ] <- 8
-c1_exposure_pop$decile[(c1_exposure_pop$haqi > 79.4) & (c1_exposure_pop$haqi <= 86.3) ] <- 9
-c1_exposure_pop$decile[c1_exposure_pop$haqi > 86.3 ] <- 10
-
-# get a total population per decile
-c1_exposure_decile_pop <- do.call(rbind,lapply(split(c1_exposure_pop, c1_exposure_pop$decile),function(df) sum(df$sum)))
-
-c1_exposure_decile_population <- data.frame(decile = rep(NA, length(c1_exposure_decile_pop)),
-                                            pop = rep(NA, length(c1_exposure_decile_pop)))
-
-c1_exposure_decile_population$decile <- row.names(c1_exposure_decile_pop)
-c1_exposure_decile_population$pop <- c1_exposure_decile_pop
-
-# loop through and classify proportion of population within each time bin
-for(i in 1:25){
+# cycle through and generate stats
+for(i in 1:length(process_list)){
   
-  # message to inform progress
-  message(paste0("Processsing distance '", i, "'"))
+  # get appropriate raster
+  process_raster <- get(process_list[[i]])
   
-  # generate a binary time/distance surface
-  if(i != 25){
+  # inform progress
+  message(paste0('Processing raster ', i, ' of ', length(process_list)))
+  
+  # generate national estimates using zonal
+  exposure_pop <- zonal(process_raster, admin_0, fun = 'sum', na.rm = TRUE)
+  exposure_pop <- as.data.frame(exposure_pop)
+  
+  # create an matching index
+  match_idx <- match(exposure_pop$zone, countries$GAUL_CODE)
+  
+  # append iso and country name
+  exposure_pop$iso <- countries$COUNTRY_ID[match_idx]
+  exposure_pop$name <- countries$name[match_idx]
+  
+  # merge HAQI with PAR
+  match_idx <- match(exposure_pop$iso, haqi$COUNTRY_ID)
+  exposure_pop$haqi <- haqi$haqi_2015[match_idx]
+  
+  # add deciles
+  exposure_pop$decile[exposure_pop$haqi < 42.9] <- 1 
+  exposure_pop$decile[(exposure_pop$haqi >= 42.9) & (exposure_pop$haqi <= 47) ] <- 2
+  exposure_pop$decile[(exposure_pop$haqi > 47) & (exposure_pop$haqi <= 51.3) ] <- 3
+  exposure_pop$decile[(exposure_pop$haqi > 51.3) & (exposure_pop$haqi <= 59) ] <- 4
+  exposure_pop$decile[(exposure_pop$haqi > 59) & (exposure_pop$haqi <= 63.4) ] <- 5
+  exposure_pop$decile[(exposure_pop$haqi > 63.4) & (exposure_pop$haqi <= 69.7) ] <- 6
+  exposure_pop$decile[(exposure_pop$haqi > 69.7) & (exposure_pop$haqi <= 74.4) ] <- 7
+  exposure_pop$decile[(exposure_pop$haqi > 74.4) & (exposure_pop$haqi <= 79.4) ] <- 8
+  exposure_pop$decile[(exposure_pop$haqi > 79.4) & (exposure_pop$haqi <= 86.3) ] <- 9
+  exposure_pop$decile[exposure_pop$haqi > 86.3 ] <- 10
+  
+  # get a total population per decile
+  exposure_decile_pop <- do.call(rbind,lapply(split(exposure_pop, exposure_pop$decile),function(df) sum(df$sum)))
+  
+  exposure_decile_population <- data.frame(decile = rep(NA, length(exposure_decile_pop)),
+                                           pop = rep(NA, length(exposure_decile_pop)))
+  
+  exposure_decile_population$decile <- row.names(exposure_decile_pop)
+  exposure_decile_population$pop <- exposure_decile_pop
+  
+  # loop through and classify proportion of population within each time bin
+  for(n in 1:25){
     
-    j <- i-1
-    temp <- reclassify(accessibility_mortality, c(0, j, j))
-    temp <- reclassify(accessibility_mortality, c(j, 101, NA))
+    # message to inform progress
+    message(paste0("Processsing distance '", n, "'"))
     
-  } else {
+    # generate a binary time/distance surface
+    if(n != 25){
+      
+      j <- n-1
+      temp <- reclassify(accessibility_mortality, c(0, j, j))
+      temp <- reclassify(accessibility_mortality, c(j, 101, NA))
+      
+    } else {
+      
+      temp <- accessibility_mortality
+      
+    }
     
-    temp <- accessibility_mortality
+    # mask exposure surface by this
+    pop_mask <- process_raster
+    pop_mask <- mask(pop_mask, temp)
+    
+    # get zonal statistics
+    national_pop_dist <- zonal(pop_mask, admin_0, fun = 'sum', na.rm = TRUE)
+    national_pop_dist <- as.data.frame(national_pop_dist)
+    
+    # rename dataframe
+    # create string for distance
+    distance_n <- paste0('pop_within_', i, '_hours')
+    names(national_pop_dist) <- c('zone',
+                                  distance_n)
+    
+    # bind dataframes
+    if(n == 1){
+      
+      combined_frame <- national_pop_dist
+      
+    } else {
+      
+      combined_frame <- merge(combined_frame, national_pop_dist)
+      
+    }
     
   }
   
-  # mask exposure surface by this
-  pop_mask <- exposure_c1
-  pop_mask <- mask(pop_mask, temp)
+  # convert these raw distance-based populations into proportion of total population
+  # merge with global pop estimates
+  # first, rename dataframe
+  names(exposure_pop) <- c("zone",
+                           "total_population",
+                           "iso",
+                           "name",
+                           "haqi",
+                           "decile")
   
-  # get zonal statistics
-  national_pop_dist <- zonal(pop_mask, admin_0, fun = 'sum', na.rm = TRUE)
-  national_pop_dist <- as.data.frame(national_pop_dist)
+  # create matching index
+  match_idx1 <- match(combined_frame$zone, exposure_pop$zone)
   
-  # rename dataframe
-  # create string for distance
-  distance_n <- paste0('pop_within_', i, '_hours')
-  names(national_pop_dist) <- c('zone',
-                                distance_n)
+  # sub in total population values, ISO code & decile
+  combined_frame$total_population <- exposure_pop$total_population[match_idx1]
+  combined_frame$iso <- exposure_pop$iso[match_idx1]
+  combined_frame$decile <- exposure_pop$decile[match_idx1]
   
-  # bind dataframes
-  if(i == 1){
+  # generate % fields
+  combined_frame$pop_within_1_hours_percent <- (combined_frame$pop_within_1_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_2_hours_percent <- (combined_frame$pop_within_2_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_3_hours_percent <- (combined_frame$pop_within_3_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_4_hours_percent <- (combined_frame$pop_within_4_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_5_hours_percent <- (combined_frame$pop_within_5_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_6_hours_percent <- (combined_frame$pop_within_6_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_7_hours_percent <- (combined_frame$pop_within_7_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_8_hours_percent <- (combined_frame$pop_within_8_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_9_hours_percent <- (combined_frame$pop_within_9_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_10_hours_percent <- (combined_frame$pop_within_10_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_11_hours_percent <- (combined_frame$pop_within_11_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_12_hours_percent <- (combined_frame$pop_within_12_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_13_hours_percent <- (combined_frame$pop_within_13_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_14_hours_percent <- (combined_frame$pop_within_14_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_15_hours_percent <- (combined_frame$pop_within_15_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_16_hours_percent <- (combined_frame$pop_within_16_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_17_hours_percent <- (combined_frame$pop_within_17_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_18_hours_percent <- (combined_frame$pop_within_18_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_19_hours_percent <- (combined_frame$pop_within_19_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_20_hours_percent <- (combined_frame$pop_within_20_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_21_hours_percent <- (combined_frame$pop_within_21_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_22_hours_percent <- (combined_frame$pop_within_22_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_23_hours_percent <- (combined_frame$pop_within_23_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_24_hours_percent <- (combined_frame$pop_within_24_hours/combined_frame$total_population)*100
+  combined_frame$pop_within_25_hours_percent <- (combined_frame$pop_within_25_hours/combined_frame$total_population)*100
+  
+  # drop countries with 0 PAR of exposure
+  combined_frame <- combined_frame[!(combined_frame$total_population == 0), ]
+  
+  # subset to have a raw population dataframe, and a % dataframe
+  raw_pop_distance <- combined_frame[c(28:29, 1:27)]
+  percent_pop_distance <- combined_frame[c(28:29, 1, 27, 30:54)]
+  
+  # loop vector
+  loop_vector <- process_list[i]
+  
+  # write this dataframe to disk
+  combined_outpath <- paste0('Z:/users/joshua/Snakebite/output/population_at_risk/proportion_of_', loop_vector, '_PAR_within_x_distance_', Sys.Date(), '.csv')
+  write.csv(combined_frame,
+            combined_outpath,
+            row.names = FALSE)
+  
+  # remove countries without a HAQi
+  percent_pop_distance <- percent_pop_distance[!is.na(percent_pop_distance$decile), ]
+  
+  ## for each decile, loop through and generate heatmaps
+  for(d in 1:10){
     
-    combined_c1_frame <- national_pop_dist
+    # subset to get decile
+    decile_frame <- percent_pop_distance[percent_pop_distance$decile == d, ]
     
-  } else {
+    # drop some variables prior to reshaping
+    decile_frame$zone <- NULL
+    decile_frame$total_population <- NULL
+    decile_frame$decile <- NULL
     
-    combined_c1_frame <- merge(combined_c1_frame, national_pop_dist)
+    melt_percentage_pop <- melt(decile_frame, id.vars = c('iso'))
+    
+    # rename variables in melted dataframe
+    melt_percentage_pop$variable <- gsub('pop_within_1_hours_percent', '< 1', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_2_hours_percent', '< 2', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_3_hours_percent', '< 3', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_4_hours_percent', '< 4', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_5_hours_percent', '< 5', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_6_hours_percent', '< 6', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_7_hours_percent', '< 7', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_8_hours_percent', '< 8', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_9_hours_percent', '< 9', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_10_hours_percent', '< 10', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_11_hours_percent', '< 11', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_12_hours_percent', '< 12', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_13_hours_percent', '< 13', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_14_hours_percent', '< 14', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_15_hours_percent', '< 15', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_16_hours_percent', '< 16', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_17_hours_percent', '< 17', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_18_hours_percent', '< 18', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_19_hours_percent', '< 19', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_20_hours_percent', '< 20', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_21_hours_percent', '< 21', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_22_hours_percent', '< 22', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_23_hours_percent', '< 23', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_24_hours_percent', '< 24', melt_percentage_pop$variable, fixed = TRUE)
+    melt_percentage_pop$variable <- gsub('pop_within_25_hours_percent', '24 or more', melt_percentage_pop$variable, fixed = TRUE)
+    
+    # round percentages to 2dp
+    melt_percentage_pop$value <- as.numeric(melt_percentage_pop$value)
+    melt_percentage_pop$value <- round(melt_percentage_pop$value, digits = 2)
+    
+    # plot data
+    # define colours
+    colours <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(20)
+    
+    # change variable to an ordered factor...
+    melt_percentage_pop$variable <- factor(melt_percentage_pop$variable, c("< 1", "< 2", "< 3", "< 4",
+                                                                           "< 5", "< 6", "< 7", "< 8",
+                                                                           "< 9", "< 10", "< 11", "< 12",
+                                                                           "< 13", "< 14", "< 15", "< 16",
+                                                                           "< 17", "< 18", "< 19", "< 20",
+                                                                           "< 21", "< 22", "< 23", "< 24", 
+                                                                           "24 or more"))
+    
+    # define title text
+    title_text <- paste0('HAQI Decile ', d)
+    
+    # create plot
+    p <- ggplot(melt_percentage_pop, aes(x = iso, y = variable)) +
+      geom_tile(aes(fill = cut(value, seq(0, 100, 5),
+                               include.lowest=TRUE)), 
+                colour="white", 
+                size = 0.1) + 
+      labs(x = 'Country',
+           y = 'Hours from closest city with population \u2265 50,000') +
+      ggtitle(title_text) +
+      scale_fill_manual(values = colours,
+                        labels = c("0-5",
+                                   "5-10",
+                                   "10-15",
+                                   "15-20",
+                                   "20-25",
+                                   "25-30",
+                                   "30-35",
+                                   "35-40",
+                                   "40-45",
+                                   "45-50",
+                                   "50-55",
+                                   "55-60",
+                                   "60-65",
+                                   "65-70",
+                                   "70-75",
+                                   "75-80",
+                                   "80-85",
+                                   "85-90",
+                                   "90-95",
+                                   "95-100"),
+                        name = "Proportion of population (%)",
+                        drop = FALSE)
+    
+    # rotate x axis labels and remove axis ticks
+    p + theme(axis.text.x = element_text(angle = 90, hjust = 1), 
+              axis.ticks = element_blank())
+    
+    # save output
+    # generate outpath
+    distance_opath <- paste0('Z:/users/joshua/Snakebite/output/population_at_risk/decile_',d, '_proportion_of_', loop_vector, '_PAR_per_distance_', Sys.Date(), '.png')
+    ggsave(distance_opath, width = 400, height = 350, units = 'mm', dpi = 300, device = 'png')
     
   }
   
-}
-
-# convert these raw distance-based populations into proportion of total population
-# merge with global pop estimates
-# first, rename dataframe
-names(c1_exposure_pop) <- c("zone",
-                            "total_population",
-                            "iso",
-                            "name",
-                            "haqi",
-                            "decile")
-
-# create matching index
-match_idx1 <- match(combined_c1_frame$zone, c1_exposure_pop$zone)
-
-# sub in total population values, ISO code & decile
-combined_c1_frame$total_population <- c1_exposure_pop$total_population[match_idx1]
-combined_c1_frame$iso <- c1_exposure_pop$iso[match_idx1]
-combined_c1_frame$decile <- c1_exposure_pop$decile[match_idx1]
-
-# generate % fields
-combined_c1_frame$pop_within_1_hours_percent <- (combined_c1_frame$pop_within_1_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_2_hours_percent <- (combined_c1_frame$pop_within_2_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_3_hours_percent <- (combined_c1_frame$pop_within_3_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_4_hours_percent <- (combined_c1_frame$pop_within_4_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_5_hours_percent <- (combined_c1_frame$pop_within_5_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_6_hours_percent <- (combined_c1_frame$pop_within_6_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_7_hours_percent <- (combined_c1_frame$pop_within_7_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_8_hours_percent <- (combined_c1_frame$pop_within_8_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_9_hours_percent <- (combined_c1_frame$pop_within_9_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_10_hours_percent <- (combined_c1_frame$pop_within_10_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_11_hours_percent <- (combined_c1_frame$pop_within_11_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_12_hours_percent <- (combined_c1_frame$pop_within_12_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_13_hours_percent <- (combined_c1_frame$pop_within_13_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_14_hours_percent <- (combined_c1_frame$pop_within_14_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_15_hours_percent <- (combined_c1_frame$pop_within_15_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_16_hours_percent <- (combined_c1_frame$pop_within_16_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_17_hours_percent <- (combined_c1_frame$pop_within_17_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_18_hours_percent <- (combined_c1_frame$pop_within_18_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_19_hours_percent <- (combined_c1_frame$pop_within_19_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_20_hours_percent <- (combined_c1_frame$pop_within_20_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_21_hours_percent <- (combined_c1_frame$pop_within_21_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_22_hours_percent <- (combined_c1_frame$pop_within_22_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_23_hours_percent <- (combined_c1_frame$pop_within_23_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_24_hours_percent <- (combined_c1_frame$pop_within_24_hours/combined_c1_frame$total_population)*100
-combined_c1_frame$pop_within_25_hours_percent <- (combined_c1_frame$pop_within_25_hours/combined_c1_frame$total_population)*100
-
-# drop countries with 0 PAR of exposure
-combined_c1_frame <- combined_c1_frame[!(combined_c1_frame$total_population == 0), ]
-
-# subset to have a raw population dataframe, and a % dataframe
-raw_pop_distance <- combined_c1_frame[c(28:29, 1:27)]
-percent_pop_distance <- combined_c1_frame[c(28:29, 1, 27, 30:54)]
-
-# write this dataframe to disk
-combined_outpath <- paste0('Z:/users/joshua/Snakebite/output/population_at_risk/proportion_of_PAR_within_x_distance_', Sys.Date(), '.csv')
-write.csv(combined_c1_frame,
-          combined_outpath,
-          row.names = FALSE)
-
-# remove countries without a HAQi
-percent_pop_distance <- percent_pop_distance[!is.na(percent_pop_distance$decile), ]
-
-## for each decile, loop through and generate heatmaps
-for(i in 1:10){
-  
-  # subset to get decile
-  decile_frame <- percent_pop_distance[percent_pop_distance$decile == i, ]
-  
-  # drop some variables prior to reshaping
-  decile_frame$zone <- NULL
-  decile_frame$total_population <- NULL
-  decile_frame$decile <- NULL
-  
-  melt_percentage_pop <- melt(decile_frame, id.vars = c('iso'))
-  
-  # rename variables in melted dataframe
-  melt_percentage_pop$variable <- gsub('pop_within_1_hours_percent', '< 1', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_2_hours_percent', '< 2', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_3_hours_percent', '< 3', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_4_hours_percent', '< 4', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_5_hours_percent', '< 5', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_6_hours_percent', '< 6', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_7_hours_percent', '< 7', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_8_hours_percent', '< 8', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_9_hours_percent', '< 9', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_10_hours_percent', '< 10', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_11_hours_percent', '< 11', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_12_hours_percent', '< 12', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_13_hours_percent', '< 13', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_14_hours_percent', '< 14', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_15_hours_percent', '< 15', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_16_hours_percent', '< 16', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_17_hours_percent', '< 17', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_18_hours_percent', '< 18', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_19_hours_percent', '< 19', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_20_hours_percent', '< 20', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_21_hours_percent', '< 21', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_22_hours_percent', '< 22', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_23_hours_percent', '< 23', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_24_hours_percent', '< 24', melt_percentage_pop$variable, fixed = TRUE)
-  melt_percentage_pop$variable <- gsub('pop_within_25_hours_percent', '24 or more', melt_percentage_pop$variable, fixed = TRUE)
-  
-  # round percentages to 2dp
-  melt_percentage_pop$value <- as.numeric(melt_percentage_pop$value)
-  melt_percentage_pop$value <- round(melt_percentage_pop$value, digits = 2)
-  
-  # plot data
-  # define colours
-  colours <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(20)
-  
-  # change variable to an ordered factor...
-  melt_percentage_pop$variable <- factor(melt_percentage_pop$variable, c("< 1", "< 2", "< 3", "< 4",
-                                                                         "< 5", "< 6", "< 7", "< 8",
-                                                                         "< 9", "< 10", "< 11", "< 12",
-                                                                         "< 13", "< 14", "< 15", "< 16",
-                                                                         "< 17", "< 18", "< 19", "< 20",
-                                                                         "< 21", "< 22", "< 23", "< 24", 
-                                                                         "24 or more"))
-  
-  # define title text
-  title_text <- paste0('HAQI Decile ', i)
-  
-  # create plot
-  p <- ggplot(melt_percentage_pop, aes(x = iso, y = variable)) +
-    geom_tile(aes(fill = cut(value, seq(0, 100, 5),
-                             include.lowest=TRUE)), 
-              colour="white", 
-              size = 0.1) + 
-    labs(x = 'Country',
-         y = 'Hours from closest city with population \u2265 50,000') +
-    ggtitle(title_text) +
-    scale_fill_manual(values = colours,
-                      labels = c("0-5",
-                                 "5-10",
-                                 "10-15",
-                                 "15-20",
-                                 "20-25",
-                                 "25-30",
-                                 "30-35",
-                                 "35-40",
-                                 "40-45",
-                                 "45-50",
-                                 "50-55",
-                                 "55-60",
-                                 "60-65",
-                                 "65-70",
-                                 "70-75",
-                                 "75-80",
-                                 "80-85",
-                                 "85-90",
-                                 "90-95",
-                                 "95-100"),
-                      name = "Proportion of population (%)",
-                      drop = FALSE)
-  
-  # rotate x axis labels and remove axis ticks
-  p + theme(axis.text.x = element_text(angle = 90, hjust = 1), 
-            axis.ticks = element_blank())
-  
-  # save output
-  # generate outpath
-  distance_opath <- paste0('Z:/users/joshua/Snakebite/output/population_at_risk/decile_',i, '_proportion_of_c1_PAR_per_distance_', Sys.Date(), '.png')
-  ggsave(distance_opath, width = 400, height = 350, units = 'mm', dpi = 300, device = 'png')
+  rm(exposure_pop,
+     combined_frame)
   
 }
 
