@@ -214,6 +214,11 @@ combined[3] <- NULL
 combined$percent_par <- (combined$par/combined$pop)*100
 combined$remaining <- 100-combined$percent_par
 
+csv_outpath_two <- paste0(outpath_vector[[i]], '_combined_', Sys.Date(), '.csv')
+write.csv(combined,
+          csv_outpath_two,
+          row.names = FALSE)
+
 # new dataframe
 decile_plot_1 <- data.frame(decile = rep(NA, 10),
                             variable = rep(NA, 10),
