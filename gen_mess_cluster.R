@@ -534,7 +534,7 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
          lty = 1,
          lwd = 0.2)
     
-    mess_positive_title <- paste('Suggested ammended range \n(incorporating', nrow(records_oor_pos), 
+    mess_positive_title <- paste('Suggested amended range \n(incorporating', nrow(records_oor_pos), 
                                  'outside of range MESS +ve records)', sep = " ")
   
   } else {
@@ -558,7 +558,7 @@ stage_2 <- foreach(i = 1:length(spp_list)) %dopar% {
          lty = 1,
          lwd = 0.2)
     
-    mess_positive_title <- paste('Suggested ammended range \n(incorporating 0', 
+    mess_positive_title <- paste('Suggested amended range \n(incorporating 0', 
                                  'outside of range MESS +ve records)', sep = " ")
     
   }
