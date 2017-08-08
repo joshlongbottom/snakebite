@@ -28,11 +28,12 @@ png_plots <- gsub('_species_mess_maps_.png', '', png_plots, fixed = TRUE)
 
 # list all species
 snake_list <- read.csv('data/raw/snake_list_cluster.csv',
-                       stringsAsFactors = FALSE)
+                       stringsAsFactors = FALSE,
+                       na.strings = c("NA","NaN", " ", ""))
 
-individual_list <- unique(snake_list$shapefile_path)
-individual_list <- gsub('data/raw/eor/', '', individual_list, fixed = TRUE)
-individual_list <- gsub('.shp', '', individual_list, fixed = TRUE)
+sub_list <- snake_list[!is.na(snake_list$shapefile_path),]
+
+individual_list <- unique(sub_list$split_spp)
 
 # now, list species which have not already been plot, but for which we have a range
 to_plot <- individual_list[!(individual_list %in% png_plots)]
@@ -67,6 +68,9 @@ for(i in 1:length(to_plot)){
       res = 300)
   par(oma = c(2, 2, 2, 2))
   
+  breakpoints <- c(0, 0.5, 1)
+  colours <- c('white', '#f2f2f2', '#f2f2f2')
+  
   plot(glob_ext,
        breaks = breakpoints,
        col = colours,
@@ -84,6 +88,10 @@ for(i in 1:length(to_plot)){
        border = 'gray45',
        lty = 1,
        lwd = 0.2)
+  
+  legend('bottomleft', c("Current EOR"), 
+         pch = c(15),
+         col = c("#c1de29"), bty = 'n', pt.cex = 2)
   
   mtext(bquote(~italic(.(species_sub))), side = 3, line = -1, outer = TRUE, cex = 2, font = 2)
   
