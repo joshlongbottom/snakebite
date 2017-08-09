@@ -17,12 +17,12 @@ c2_antivenom <- raster('Z:/users/joshua/Snakebite/output/antivenom_coverage/No_s
 
 # define lists
 par_list <- c('species_richness', 'c1_species_richness', 'c2_species_richness', 'antivenom', 'c1_antivenom', 'c2_antivenom')
-title_vector <- c('Population at risk of exposure to one or more medically important snake species \nper HAQI decile',
-                  'Population at risk of exposure to one or more Category 1 snake species \nper HAQI decile',
-                  'Population at risk of exposure to one or more Category 2 snake species \nper HAQI decile',
-                  'Population at risk of exposure to one or more medically important snake species \nwith no effective therapy, per HAQI decile',
-                  'Population at risk of exposure to one or more Category 1 snake species \nwith no effective therapy, per HAQI decile',
-                  'Population at risk of exposure to one or more Category 2 snake species \nwith no effective therapy, per HAQI decile')
+title_vector <- c('PARE (all)',
+                  'PARE (category 1)',
+                  'PARE (category 2)',
+                  'PARE (all, no effective therapy)',
+                  'PARE (category 1, no effective therapy)',
+                  'PARE (category 2, no effective therapy)')
 outpath_vector <- c('Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_spp',
                     'Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_c1_spp',
                     'Z:/users/joshua/Snakebite/output/population_at_risk/exposure_to_one_or_more_c2_spp',
@@ -39,13 +39,14 @@ admin_1 <- raster('Z:/users/joshua/Snakebite/rasters/admin_1.tif')
 
 # load in accessibility surface
 # accessibility <- raster('Z:/users/joshua/Snakebite/rasters/accessibility/accessibility_50k+_2017-01-05_final.tif')
-accessibility <- raster('Z:/users/joshua/Snakebite/rasters/accessibility/accessibility_50k+_2017-01-05_aggregate_5k_2017_02_08.tif')
+# accessibility <- raster('Z:/users/joshua/Snakebite/rasters/accessibility/accessibility_50k+_2017-01-05_aggregate_5k_2017_02_08.tif')
+accessibility <- raster('Z:/users/joshua/Snakebite/rasters/accessibility/accessibility_50k+_2017-07-31_aggregate_5k_2017_08_09')
 # # change -9999 to NA
 # accessibility <- reclassify(accessibility, c(-10000, -1, NA))
 # # resample to 5k
 # accessibility <- resample(accessibility, species_richness, method = 'ngb')
-# writeRaster(accessibility, 
-#             file = 'Z:/users/joshua/Snakebite/rasters/accessibility/accessibility_50k+_2017-01-05_aggregate_5k_2017_02_08',
+# writeRaster(accessibility,
+#             file = 'Z:/users/joshua/Snakebite/rasters/accessibility/accessibility_50k+_2017-07-31_aggregate_5k_2017_08_09',
 #             format = 'GTiff',
 #             overwrite = TRUE)
 
@@ -252,7 +253,7 @@ ggplot(combined,
   geom_bar(position = "fill", stat = "identity")+
   scale_x_continuous(breaks = c(seq(0,10,1)))+
   scale_y_continuous(labels = percent) +
-  labs(x = "Decile",
+  labs(x = "HAQI Decile",
        y = "Population (%)")+
   theme(legend.title = element_blank(),
         # panel.background = element_blank(),
