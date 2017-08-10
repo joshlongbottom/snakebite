@@ -40,7 +40,7 @@ admin_1 <- raster('Z:/users/joshua/Snakebite/rasters/admin_1.tif')
 # load in accessibility surface
 # accessibility <- raster('Z:/users/joshua/Snakebite/rasters/accessibility/accessibility_50k+_2017-01-05_final.tif')
 # accessibility <- raster('Z:/users/joshua/Snakebite/rasters/accessibility/accessibility_50k+_2017-01-05_aggregate_5k_2017_02_08.tif')
-accessibility <- raster('Z:/users/joshua/Snakebite/rasters/accessibility/accessibility_50k+_2017-07-31_aggregate_5k_2017_08_09')
+accessibility <- raster('Z:/users/joshua/Snakebite/rasters/accessibility/accessibility_50k+_2017-07-31_aggregate_5k_2017_08_09.tif')
 # # change -9999 to NA
 # accessibility <- reclassify(accessibility, c(-10000, -1, NA))
 # # resample to 5k
@@ -154,6 +154,14 @@ species_presence[species_presence  >= 1] <- 1
 # multiply the population by the binary presence/absence surface
 presence_par <- overlay(pop_dens, species_presence, fun = function(pop_dens, species_presence){
                                                                   (pop_dens*species_presence)})
+
+# # mask for later
+# presence_par[presence_par <= 10] <- 0
+# presence_par[presence_par >= 10] <- 1
+# writeRaster(presence_par, 
+#             file = 'Z:/users/joshua/Snakebite/raster_mask/pop_and_snake_presence_mask_2017_08_10',
+#             format = 'GTiff',
+#             overwrite = TRUE)
 
 # convert this to a national estimate using zonal()
 national_par <- zonal(presence_par, admin_0, fun = 'sum', na.rm = TRUE)
