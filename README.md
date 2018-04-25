@@ -1,15 +1,15 @@
 # Snakebite
-Code for the generation of a venomous snake species richness surface, identifying populations at risk of exposure to venomous snake species.
+Code for the generation of a venomous snake species vulnerability surface, identifying populations at risk of exposure to venomous snake species.
 Project is currently in progress. Main themes of the project:
 - [x] Digitise existing expert opinion range maps for all medically important venomous snake species
-- [ ] Provide recommendations for updates to the range of each of these species
-- [ ] Create a contemporary medically important venomous snake species surface, split by medical importance classification
-- [ ] Compare this species richness surface with disease burden estimates and antivenom availability data
+- [x] Provide recommendations for contemporary updates to the range of each of these species
+- [x] Create a contemporary medically important venomous snake distribution surface, classified by medical importance classification
+- [x] Compare this species distribution surface with population distribution, health care quality and accessibility, antivenom availability and travel time to health care data to identify the most vulnerable populations.
 
 ## Description
 Expert opinion range (EOR) maps for medically important snake species were obtained from the WHO antivenom database (http://apps.who.int/bloodproducts/snakeantivenoms/database/). Each EOR map was digitized, and a shapefile was created for each unique species per map. Utilizing the `spocc` package, available species occurrence data was obtained for each species (n = 277). This species occurrence data was used to generate Multivariate Environmental Similarity Surface (MESS) for each species, highlighting locations which are environmentally similar to locations within the species occurrence data. These MES surfaces were then used to validate any occurrence data located outside of the currently accepted EOR, and to inform a process generating an amended, contemporary species range.
 
-The newly created ranges were then converted to raster format, and stacked to generate a surface giving the count of the number of venomous snake species within each 5 km x 5 km cell across the globe.
+The newly created ranges were then converted to raster format, and stacked to generate a surface identifying the global range of medically important venomous snake species. This surface was combined with population distribution information, a ranking of health care quality and accessibility (HAQ Index), antivenom availability, and travel time to urban centers to identify the most vulnerable populations.
 
 ## Project workflow
 ![Alt text](https://image.ibb.co/mpUiPa/workflow.png "Project workflow (R scripts)")
